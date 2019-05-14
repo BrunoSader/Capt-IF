@@ -37,10 +37,10 @@ int Warning::calculerDonneePrevisionelle (string sensorID, map<string,map<time_t
 	//On trouve notre capteur dans la liste
 
 	map<time_t,map<string,int>> listeMesurebyDate = sensor_it->second;
-	map<time_t,map<string,int>>>::reverse_iterator date_it;
+	map<time_t,map<string,int>>::reverse_iterator date_it;
 	int* values = new int [5];
 	int cpt=0;
-	for (date_it=listeMesurebyDate.rbegin(); date_it!=llisteMesurebyDate.rbegin()+5; ++date_it)
+	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rbegin()+5; ++date_it)
 	{
 		map<string,int>>>::iterator attribut_it;
 		attribut_it = date_it->second.find(lAttribut.attributeId);
@@ -72,7 +72,7 @@ Warning::Warning ( const Warning & unWarning )
 } //----- Fin de Warning (constructeur de copie)
 
 
-Warning::Warning (int type, String attributID)
+Warning::Warning (int type, string attributID)
 // Algorithme :
 //
 {
