@@ -4,7 +4,7 @@
 //--------------------------------------------------- Interfaces utilisées
 #include <string>
 #include <stdio.h>
-#include <Time>
+#include <ctime>
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -34,7 +34,7 @@ public:
 	// Contrat :
 	//
 
-	Mesure(int timestamp, std::string sensorId, std::string attributeId, int value);
+	Mesure(time_t timestamp, std::string sensorId, std::string attributeId, int value);
 	// Mode d'emploi :
 	//
 	// Contrat :
@@ -46,7 +46,7 @@ public:
 	// Contrat :
 	//
 
-	void setTimestamp(Time newTimestamp) { this.timestamp = newTimestamp; }
+	void setTimestamp(time_t newTimestamp) { this.timestamp = newTimestamp; }
 
 	void setSensorId(int newSensorId) { this.sensorId = newSensorId; }
 
@@ -54,7 +54,7 @@ public:
 
 	void setValue(int newvalue) { this.value = newValue; }
 
-	Time getTimestamp() { return timestamp; }
+	time_t getTimestamp() { return timestamp; }
 
 	std::string getSensorId() { return sensorId; }
 
@@ -71,7 +71,7 @@ protected:
 
 	//----------------------------------------------------- Attributs protégés
 
-	Time timestamp;
+	time_t timestamp;
 
 	std::string sensorId;
 
