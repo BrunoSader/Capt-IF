@@ -15,6 +15,9 @@
 #include <vector>
 #include "Attribut.h"
 #include "Decision.h"
+#include <string>
+#include <map>
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -32,17 +35,17 @@ class Warning
 public:
 
 	int type;
-	String attributID;
+	string attributID;
 
 //----------------------------------------------------- M�thodes publiques
 
-		int calculerDonneePrevisionelle(String, Attribut);
+		int calculerDonneePrevisionelle(string sensorID, map<string,map<time_t,map<string,int>>> listeMesurebyCapteur, Attribut lAttribut);
 		// Mode d'emploi :
 		//
 		// Contrat :
 		//
 
-		vector<String> valeurAuDelaSeuil();
+		vector<string> valeurAuDelaSeuil();
 		// Mode d'emploi :
 		//
 		// Contrat :
@@ -59,7 +62,7 @@ public:
 		//
 		// Contrat :
 		//
-		
+
 //------------------------------------------------- Surcharge d'op�rateurs
     Warning & operator = ( const Warning & unWarning );
     // Mode d'emploi :
@@ -75,6 +78,12 @@ public:
     //
 
     Warning ( );
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+		Warning (int type, String attributID);
     // Mode d'emploi :
     //
     // Contrat :

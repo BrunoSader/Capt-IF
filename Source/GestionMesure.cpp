@@ -46,6 +46,8 @@ Warning alerterSurMesure(Mesure uneMesure)
 }
 
 
+
+
 //------------------------------------------------- Surcharge d'op�rateurs
 GestionMesure & GestionMesure::operator = ( const GestionMesure & unGestionMesure )
 // Algorithme :
@@ -84,6 +86,33 @@ GestionMesure::~GestionMesure ( )
 #endif
 } //----- Fin de ~GestionMesure
 
+string GestionMesure::consulterType( )
+{
+    string res; 
+    for(unsigned int i=0; i<listeTypeMesure.size(); ++i)
+    {
+        res += listeTypeMesure[i].getDescription();
+    }
+    return res;
+}
+
+string GestionMesure::consulterMesure( )
+{
+    return "";
+}
+
+
+vector<Mesure> GestionMesure::getMesure(time_t laDate)
+{
+    vector <Mesure> mes;
+    return mes;
+}
+
+
+int GestionMesure::moyenneValAttribut(Attribut at)
+{
+    return 0;
+}
 
 //------------------------------------------------------------------ PRIVE
 
