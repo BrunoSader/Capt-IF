@@ -83,7 +83,7 @@ public:
     // Contrat :
     //
 
-		Warning (int type, String attributID);
+		Warning (int type, string attributID);
     // Mode d'emploi :
     //
     // Contrat :

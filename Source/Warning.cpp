@@ -32,18 +32,18 @@ int Warning::calculerDonneePrevisionelle (string sensorID, map<string,map<time_t
 // Algorithme :
 //
 {
-	map<string,map<string,map<string,int>>>::iterator sensor_it;
+	map<string,map<time_t,map<string,int>>>::iterator sensor_it;
 	sensor_it = listeMesurebyCapteur.find(sensorID);
 	//On trouve notre capteur dans la liste
 
 	map<time_t,map<string,int>> listeMesurebyDate = sensor_it->second;
-	map<time_t,map<string,int>>>::reverse_iterator date_it;
+	map<time_t,map<string,int>>::reverse_iterator date_it;
+	map<string,int>::iterator attribut_it;
 	int* values = new int [5];
 	int cpt=0;
-	for (date_it=listeMesurebyDate.rbegin(); date_it!=llisteMesurebyDate.rbegin()+5; ++date_it)
+	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend(); ++date_it)
 	{
-		map<string,int>>>::iterator attribut_it;
-		attribut_it = date_it->second.find(lAttribut.attributeId);
+		attribut_it = date_it->second.find(lAttribut.getAttributeId());
 		values[cpt] = attribut_it->second;
 		cpt++;
 	}
@@ -72,15 +72,15 @@ Warning::Warning ( const Warning & unWarning )
 } //----- Fin de Warning (constructeur de copie)
 
 
-Warning::Warning (int type, String attributID)
+Warning::Warning (int type, string attributID)
 // Algorithme :
 //
 {
 #ifdef MAP
     cout << "Appel au constructeur de <Warning>" << endl;
 #endif
-	this.type = type;
-	this.attributID = attributID;
+	this->type = type;
+	this->attributID = attributID;
 } //----- Fin de Warning
 
 

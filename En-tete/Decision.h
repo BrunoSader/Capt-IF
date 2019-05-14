@@ -1,7 +1,7 @@
 #if ! defined ( Decision_H )
 #define Decision_H
 
-//--------------------------------------------------- Interfaces utilisées
+//--------------------------------------------------- Interfaces utilisï¿½es
 #include <string>
 #include <stdio.h>
 //------------------------------------------------------------- Constantes
@@ -9,7 +9,7 @@
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Mesure>
+// Rï¿½le de la classe <Mesure>
 //
 //
 //------------------------------------------------------------------------
@@ -45,9 +45,9 @@ public:
 	// Contrat :
 	//
 
-	void setTexte(int newTexte) { this.texte = newTexte; }
+	void setTexte(int newTexte) { this->texte = newTexte; }
 
-	void setNote(int newNote) { this.note = newNote; }
+	void setNote(int newNote) { this->note = newNote; }
 
 	std::string getTexte() { return texte; }
 
@@ -56,9 +56,9 @@ public:
 	//------------------------------------------------------------------ PRIVE
 
 protected:
-	//----------------------------------------------------- Méthodes protégées
+	//----------------------------------------------------- Mï¿½thodes protï¿½gï¿½es
 
-	//----------------------------------------------------- Attributs protégés
+	//----------------------------------------------------- Attributs protï¿½gï¿½s
 
 	std::string texte;
 
@@ -66,7 +66,7 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <Attribut>
+//-------------------------------- Autres dï¿½finitions dï¿½pendantes de <Attribut>
 
 #endif // Attribut_H
 #pragma once

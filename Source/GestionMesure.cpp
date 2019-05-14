@@ -92,20 +92,44 @@ string GestionMesure::consulterType( )
     for(unsigned int i=0; i<listeTypeMesure.size(); ++i)
     {
         res += listeTypeMesure[i].getDescription();
+        res += "\n";
     }
     return res;
 }
 
 string GestionMesure::consulterMesure( )
 {
-    return "";
+    string res;
+   for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+        res += i->first ;
+        res += "\n";
+        for(map<time_t, map<string,int>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) {
+            res += i2->first ;
+            res += "\n";
+             for(map<string,int>::iterator i3=i2->second.begin(); i3!=i2->second.end(); ++i3) {
+                  res += i3->first ;
+                  res += "\n";
+             }
+        }
+    }
+    return res;
 }
 
 
 vector<Mesure> GestionMesure::getMesure(time_t laDate)
 {
-    vector <Mesure> mes;
-    return mes;
+    /*vector <Mesure> res;
+        for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+             map<time_t, map<string,int>>::iterator it;
+        	it = i->second.find(laDate);
+        	if (it != i->second.end())
+	           {
+	               for(map<string,int>::iterator i3=it->second.begin(); i3!=it->second.end(); ++i3) {
+                  res += i3->first ;
+                  res += "\n";
+             }
+	            }*/
+    return res
 }
 
 

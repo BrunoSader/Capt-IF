@@ -33,7 +33,7 @@ class GestionMesure
 
 public:
 
-		map<string, map<string, map<string,int>>> listeMesure;
+		map<string, map<time_t, map<string,int>>> listeMesure;
 		vector<Attribut> listeTypeMesure;
 //----------------------------------------------------- M�thodes publiques
 
