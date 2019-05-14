@@ -118,8 +118,18 @@ string GestionMesure::consulterMesure( )
 
 vector<Mesure> GestionMesure::getMesure(time_t laDate)
 {
-    vector <Mesure> mes;
-    return mes;
+    /*vector <Mesure> res;
+        for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+             map<time_t, map<string,int>>::iterator it;
+        	it = i->second.find(laDate);
+        	if (it != i->second.end())
+	           {
+	               for(map<string,int>::iterator i3=it->second.begin(); i3!=it->second.end(); ++i3) {
+                  res += i3->first ;
+                  res += "\n";
+             }
+	            }*/
+    return res
 }
 
 
