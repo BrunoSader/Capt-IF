@@ -60,8 +60,6 @@ public:
     // Contrat :
     //
 
-
-
 //------------------------------------------------- Surcharge d'op�rateurs
     GestionMesure & operator = ( const GestionMesure & unGestionMesure );
     // Mode d'emploi :
