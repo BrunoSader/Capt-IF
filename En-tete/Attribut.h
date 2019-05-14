@@ -81,4 +81,3 @@ protected:
 //-------------------------------- Autres définitions dépendantes de <Attribut>
 
 #endif // Attribut_H
-#pragma once
