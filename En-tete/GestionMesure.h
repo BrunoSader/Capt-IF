@@ -14,8 +14,9 @@
 #include <iterator>
 #include <map>
 #include <vector>
-#include <time>
-#include "Attribut.h"
+#include <time.h>
+#include<string>
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -32,17 +33,17 @@ class GestionMesure
 
 public:
 
-		map<String, map<String, map<String,int>>> listeMesure;
+		map<string, map<string, map<string,int>>> listeMesure;
 		vector<Attribut> listeTypeMesure;
 //----------------------------------------------------- M�thodes publiques
 
-		String consulterType( );
+		string consulterType( );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		String consulterMesure( );
+		string consulterMesure( );
     // Mode d'emploi :
     //
     // Contrat :
@@ -53,8 +54,6 @@ public:
     //
     // Contrat :
     //
-
-		int getMesure(time_t laDate);
     // Mode d'emploi :
     //
     // Contrat :
@@ -120,3 +119,4 @@ private:
 //----------------------------------------- Types d�pendants de <GestionMesure>
 
 #endif // GESTIONMESURE_H
+

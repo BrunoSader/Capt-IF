@@ -86,25 +86,32 @@ GestionMesure::~GestionMesure ( )
 #endif
 } //----- Fin de ~GestionMesure
 
-String GestionMesure::consulterType( )
+string GestionMesure::consulterType( )
 {
-    //
+    string res; 
+    for(unsigned int i=0; i<listeTypeMesure.size(); ++i)
+    {
+        res += listeTypeMesure[i].getDescription();
+    }
+    return res;
 }
 
-String GestionMesure::consulterMesure( )
+string GestionMesure::consulterMesure( )
 {
-    //
+    return "";
 }
 
 
 vector<Mesure> GestionMesure::getMesure(time_t laDate)
 {
-    //
+    vector <Mesure> mes;
+    return mes;
 }
 
-int GestionMesure::moyenne( )
+
+int GestionMesure::moyenneValAttribut(Attribut at)
 {
-    //
+    return 0;
 }
 
 //------------------------------------------------------------------ PRIVE
