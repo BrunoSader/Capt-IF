@@ -33,6 +33,18 @@ using namespace std;
 //{
 //} //----- Fin de M�thode
 
+Warning alerterSurMesure(Mesure uneMesure)
+{
+ for ( Attribut a : listeTypeMesure )
+ {
+  if ( a.getAttributeId() == uneMesure.getAttributeId() && uneMesure.getValue() > a.getValeurSeuil() ) 
+  {
+   return new Warning(/*a compléter pour le type : pas prévisionnel*/, uneMesure.getAttributeId() );; 
+  }
+ }
+  return null; // à voir si y a pas mieux à faire
+}
+
 
 //------------------------------------------------- Surcharge d'op�rateurs
 GestionMesure & GestionMesure::operator = ( const GestionMesure & unGestionMesure )
