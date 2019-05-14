@@ -15,7 +15,7 @@ e-mail               : $EMAIL$
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "Attribut.h"
+#include "../En-tete/Attribut.h"
 
 
 //------------------------------------------------------------- Constantes
@@ -32,17 +32,18 @@ using namespace std;
 //-------------------------------------------- Constructeurs - destructeur
 Attribut::Attribut(const Attribut & unAttribut)
 {
-	this.attributeId = unAttribut.attributeId;
+	this->attributeId = unAttribut.attributeId;
 
-	this.unit = unAttribut.unit;
+	this->unit = unAttribut.unit;
 
-	this.description = unAttribut.description;
+	this->description = unAttribut.description;
 
-	this.valeurSeuil = unAttribut.valeurSeuil;
+	this->valeurSeuil = unAttribut.valeurSeuil;
 // Mode d'emploi (constructeur de copie) :
 //
 // Contrat :
 //
+}
 
 Attribut::Attribut() {}
 // Mode d'emploi :
@@ -52,20 +53,20 @@ Attribut::Attribut() {}
 
 Attribut::Attribut(string attributeId, string unit, string description, int valeurSeuil)
 {
-	this.attributeId = attributeId;
+	this->attributeId = attributeId;
 
-	this.unit = unit;
+	this->unit = unit;
 
-	this.description = description;
+	this->description = description;
 
-	this.valeurSeuil = valeurSeuil;
-	}
+	this->valeurSeuil = valeurSeuil;
+}
 // Mode d'emploi :
 //
 // Contrat :
 //
 
-virtual Attribut::~Attribut() {}
+Attribut::~Attribut() {}
 // Mode d'emploi :
 //
 // Contrat :
@@ -75,4 +76,3 @@ virtual Attribut::~Attribut() {}
   //------------------------------------------------------------------ PRIVE
 
   //----------------------------------------------------- Méthodes protégées
-

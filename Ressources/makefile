@@ -1,6 +1,6 @@
 CPFLAGS = -Wall -ansi -pedantic -std=c++11  -g
-EXECUTABLE = main.o Warning.o
-ENTETES = ../En-tete/Warning.h
+EXECUTABLE = main.o Warning.o Attribut.o
+ENTETES = ../En-tete/Warning.h ../En-tete/Attribut.h
 
 captair : $(EXECUTABLE)
 	@echo "EDL"

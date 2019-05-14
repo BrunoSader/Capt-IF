@@ -38,16 +38,19 @@ int Warning::calculerDonneePrevisionelle (string sensorID, map<string,map<time_t
 
 	map<time_t,map<string,int>> listeMesurebyDate = sensor_it->second;
 	map<time_t,map<string,int>>::reverse_iterator date_it;
+	//On itere d sur les dates decroissantes
 	map<string,int>::iterator attribut_it;
 	int* values = new int [5];
 	int cpt=0;
 	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend(); ++date_it)
 	{
 		attribut_it = date_it->second.find(lAttribut.getAttributeId());
+		//On trouve l'attribut sur lequel on aimerait calculer les donnees previsionelles
 		values[cpt] = attribut_it->second;
 		cpt++;
 	}
 	int difference = (values[0]-values[1])*0.5 + (values[1]-values[2])*0.25 + (values[2]-values[3])*0.15 + (values[3]-values[4])*0.1;
+	//Calcul de la difference
 	return (values[0]*difference);
 }
  //----- Fin de M�thode
