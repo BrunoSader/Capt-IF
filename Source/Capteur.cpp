@@ -5,11 +5,20 @@
 #include<string>
 using namespace std;
 
-Capteur::Capteur() : sensorId(" "), longitude(-1000), lattitude(-1000), description(" ")
-{}
+Capteur::Capteur() : sensorId(" "), longitude(-1000), latitude(-1000), description(" ")
+{
 
-Capteur::Capteur(string sensorId, int longitude, int lattitude, string description) : sensorId(sensorId), longitude(longitude), lattitude(lattitude), description(description)
-{}
+}
+
+Capteur::Capteur(string sensorId, int longitude, int lattitude, string description) : sensorId(sensorId), longitude(longitude), latitude(lattitude), description(description)
+{
+
+}
+
+Capteur::Capteur(const Capteur & captACopier) : sensorId(captACopier.sensorId), longitude(captACopier.longitude), latitude(captACopier.latitude), description(captACopier.description)
+{
+
+}
 
 void Capteur::setSensorId(string sensorId)
 {
@@ -28,7 +37,7 @@ void Capteur::setDescription(string description)
 
 void Capteur::setLattitude(int lattitude)
 {
-    this->lattitude = lattitude;
+    this->latitude = lattitude;
 }
 
 int Capteur::getLongitude() const
@@ -38,7 +47,7 @@ int Capteur::getLongitude() const
 
 int Capteur::getLattitude() const
 {
-    return this->lattitude;
+    return this->latitude;
 }
 
 string Capteur::getSensorId() const
@@ -61,6 +70,6 @@ void Capteur::afficher() const
 {
     cout << "L'Id est " << this->sensorId << endl;
     cout << "La description est  " << this->description << endl;
-    cout << "La lattitude est " << this->lattitude <<endl;
+    cout << "La lattitude est " << this->latitude <<endl;
     cout << "La longitude est " << this->longitude <<endl;
 }
