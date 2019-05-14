@@ -92,13 +92,27 @@ string GestionMesure::consulterType( )
     for(unsigned int i=0; i<listeTypeMesure.size(); ++i)
     {
         res += listeTypeMesure[i].getDescription();
+        res += "\n";
     }
     return res;
 }
 
 string GestionMesure::consulterMesure( )
 {
-    return "";
+    string res;
+   for(map<string, map<string, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+        res += i->first ;
+        res += "\n";
+        for(map<string, map<string,int>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) {
+            res += i2->first ;
+            res += "\n";
+             for(map<string,int>::iterator i3=i2->second.begin(); i3!=i2->second.end(); ++i3) {
+                  res += i3->first ;
+                  res += "\n";
+             }
+        }
+    }
+    return res;
 }
 
 
