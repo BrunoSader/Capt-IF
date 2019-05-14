@@ -46,6 +46,8 @@ Warning alerterSurMesure(Mesure uneMesure)
 }
 
 
+
+
 //------------------------------------------------- Surcharge d'op�rateurs
 GestionMesure & GestionMesure::operator = ( const GestionMesure & unGestionMesure )
 // Algorithme :
@@ -84,6 +86,26 @@ GestionMesure::~GestionMesure ( )
 #endif
 } //----- Fin de ~GestionMesure
 
+String GestionMesure::consulterType( )
+{
+    //
+}
+
+String GestionMesure::consulterMesure( )
+{
+    //
+}
+
+
+vector<Mesure> GestionMesure::getMesure(time_t laDate)
+{
+    //
+}
+
+int GestionMesure::moyenne( )
+{
+    //
+}
 
 //------------------------------------------------------------------ PRIVE
 

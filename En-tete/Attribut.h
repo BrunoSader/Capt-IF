@@ -45,13 +45,13 @@ public:
 	// Contrat :
 	//
 
-	void setAttributeId(int newattributeId) { this.attributeId = newAttributeId; }
+	void setAttributeId(int newAttributeId) { this->attributeId = newAttributeId; }
 
-	void setUnit(int newUnit) { this.unit = newUnit; }
+	void setUnit(int newUnit) { this->unit = newUnit; }
 
-	void setDescription(int newDescription) { this.description = newDescription; }
+	void setDescription(int newDescription) { this->description = newDescription; }
 
-	void setValeurSeuil(int newValeurSeuil) { this.valeurSeuil = newValeurSeuil; }
+	void setValeurSeuil(int newValeurSeuil) { this->valeurSeuil = newValeurSeuil; }
 
 	std::string getAttributeId() { return attributeId; }
 

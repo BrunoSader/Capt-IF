@@ -46,13 +46,13 @@ public:
 	// Contrat :
 	//
 
-	void setTimestamp(time_t newTimestamp) { this.timestamp = newTimestamp; }
+	void setTimestamp(time_t newTimestamp) { this->timestamp = newTimestamp; }
 
-	void setSensorId(int newSensorId) { this.sensorId = newSensorId; }
+	void setSensorId(int newSensorId) { this->sensorId = newSensorId; }
 
-	void setAttributeId(int newattributeId) { this.attributeId = newAttributeId; }
+	void setAttributeId(int newAttributeId) { this->attributeId = newAttributeId; }
 
-	void setValue(int newvalue) { this.value = newValue; }
+	void setValue(int newValue) { this->value = newValue; }
 
 	time_t getTimestamp() { return timestamp; }
 
@@ -60,7 +60,7 @@ public:
 
 	std::string getAttributeId() { return attributeId; }
 
-	int getValue ( ) { return value }
+	int getValue ( ) { return value; }
 
 	Warning alerterSurMesure();
 
