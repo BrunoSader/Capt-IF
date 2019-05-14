@@ -1,16 +1,16 @@
 /*************************************************************************
 analyser  -  description
 -------------------
-début                : $DATE$
+dÃ©but                : $DATE$
 copyright            : (C) $YEAR$ par $AUTHOR$
 e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <analyser> (fichier Attribut.cpp) ------------
+//---------- RÃ©alisation de la classe <analyser> (fichier Attribut.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
-//-------------------------------------------------------- Include système
+//-------------------------------------------------------- Include systÃ¨me
 #include <iostream>
 using namespace std;
 
@@ -22,12 +22,12 @@ using namespace std;
 
 //----------------------------------------------------------------- PUBLIC
 
-//----------------------------------------------------- Méthodes publiques
-// type analyser::Méthode ( liste des paramètres )
+//----------------------------------------------------- MÃ©thodes publiques
+// type analyser::MÃ©thode ( liste des paramÃ¨tres )
 // Algorithme :
 //
 //{
-//} //----- Fin de Méthode
+//} //----- Fin de MÃ©thode
 
 //-------------------------------------------- Constructeurs - destructeur
 Attribut::Attribut(const Attribut & unAttribut)
@@ -50,7 +50,7 @@ Attribut::Attribut() {}
 // Contrat :
 //
 
-Attribut::Attribut(std::string attributeId, std::string unit, std::string description, int valeurSeuil)
+Attribut::Attribut(string attributeId, string unit, string description, int valeurSeuil)
 {
 	this.attributeId = attributeId;
 
@@ -74,5 +74,5 @@ virtual Attribut::~Attribut() {}
 
   //------------------------------------------------------------------ PRIVE
 
-  //----------------------------------------------------- Méthodes protégées
+  //----------------------------------------------------- MÃ©thodes protÃ©gÃ©es
 
