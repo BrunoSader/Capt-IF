@@ -15,7 +15,8 @@
 #include <vector>
 #include "Attribut.h"
 #include "Decision.h"
-#include<string>
+#include <string>
+#include <map>
 using namespace std;
 //------------------------------------------------------------- Constantes
 
@@ -38,7 +39,7 @@ public:
 
 //----------------------------------------------------- M�thodes publiques
 
-		int calculerDonneePrevisionelle(string, Attribut);
+		int calculerDonneePrevisionelle(string sensorID, map<string,map<time_t,map<string,int>>> listeMesurebyCapteur, Attribut lAttribut);
 		// Mode d'emploi :
 		//
 		// Contrat :
@@ -61,7 +62,7 @@ public:
 		//
 		// Contrat :
 		//
-		
+
 //------------------------------------------------- Surcharge d'op�rateurs
     Warning & operator = ( const Warning & unWarning );
     // Mode d'emploi :
@@ -77,6 +78,12 @@ public:
     //
 
     Warning ( );
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+		Warning (int type, String attributID);
     // Mode d'emploi :
     //
     // Contrat :
