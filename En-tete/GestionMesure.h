@@ -59,6 +59,11 @@ public:
     //
     // Contrat :
     //
+		Warning alerterSurMesure(Mesure uneMesure);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
 //------------------------------------------------- Surcharge d'op�rateurs
     GestionMesure & operator = ( const GestionMesure & unGestionMesure );
