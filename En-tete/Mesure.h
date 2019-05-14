@@ -1,21 +1,21 @@
 #if ! defined ( Mesure_H )
 #define Mesure_H
 
-//--------------------------------------------------- Interfaces utilisées
+//--------------------------------------------------- Interfaces utilisÃ©es
 #include <string>
 #include <stdio.h>
-#include <Time>
+#include <ctime>
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Mesure>
+// RÃ´le de la classe <Mesure>
 //
 //
 //------------------------------------------------------------------------
 
-class analyser
+class Mesure
 {
 	//----------------------------------------------------------------- PUBLIC
 
@@ -34,7 +34,7 @@ public:
 	// Contrat :
 	//
 
-	Mesure(int timestamp, std::string sensorId, std::string attributeId, int value);
+	Mesure(time_t timestamp, std::string sensorId, std::string attributeId, int value);
 	// Mode d'emploi :
 	//
 	// Contrat :
@@ -46,32 +46,32 @@ public:
 	// Contrat :
 	//
 
-	void setTimestamp(Time newTimestamp) { this.timestamp = newTimestamp; }
+	void setTimestamp(time_t newTimestamp) { this->timestamp = newTimestamp; }
 
-	void setSensorId(int newSensorId) { this.sensorId = newSensorId; }
+	void setSensorId(int newSensorId) { this->sensorId = newSensorId; }
 
-	void setAttributeId(int newattributeId) { this.attributeId = newAttributeId; }
+	void setAttributeId(int newAttributeId) { this->attributeId = newAttributeId; }
 
-	void setValue(int newvalue) { this.value = newValue; }
+	void setValue(int newValue) { this->value = newValue; }
 
-	Time getTimestamp() { return timestamp; }
+	time_t getTimestamp() { return timestamp; }
 
 	std::string getSensorId() { return sensorId; }
 
 	std::string getAttributeId() { return attributeId; }
 
-	int getValue ( ) { return value }
+	int getValue ( ) { return value; }
 
 	Warning alerterSurMesure();
 
 	//------------------------------------------------------------------ PRIVE
 
 protected:
-	//----------------------------------------------------- Méthodes protégées
+	//----------------------------------------------------- MÃ©thodes protÃ©gÃ©es
 
-	//----------------------------------------------------- Attributs protégés
+	//----------------------------------------------------- Attributs protÃ©gÃ©s
 
-	Time timestamp;
+	time_t timestamp;
 
 	std::string sensorId;
 
@@ -81,6 +81,6 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <analyser>
+//-------------------------------- Autres dÃ©finitions dÃ©pendantes de <analyser>
 
 #endif // Mesure_H

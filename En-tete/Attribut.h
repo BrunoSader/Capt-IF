@@ -1,7 +1,7 @@
 #if ! defined ( Attribut_H )
 #define Attribut_H
 
-//--------------------------------------------------- Interfaces utilisées
+//--------------------------------------------------- Interfaces utilisÃ©es
 #include <string>
 #include <stdio.h>
 //------------------------------------------------------------- Constantes
@@ -9,12 +9,12 @@
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Mesure>
+// RÃ´le de la classe <Attribut>
 //
 //
 //------------------------------------------------------------------------
 
-class analyser
+class Attribut
 {
 	//----------------------------------------------------------------- PUBLIC
 
@@ -45,13 +45,13 @@ public:
 	// Contrat :
 	//
 
-	void setAttributeId(int newattributeId) { this.attributeId = newAttributeId; }
+	void setAttributeId(int newAttributeId) { this->attributeId = newAttributeId; }
 
-	void setUnit(int newUnit) { this.unit = newUnit; }
+	void setUnit(int newUnit) { this->unit = newUnit; }
 
-	void setDescription(int newDescription) { this.description = newDescription; }
+	void setDescription(int newDescription) { this->description = newDescription; }
 
-	void setValeurSeuil(int newValeurSeuil) { this.valeurSeuil = newValeurSeuil; }
+	void setValeurSeuil(int newValeurSeuil) { this->valeurSeuil = newValeurSeuil; }
 
 	std::string getAttributeId() { return attributeId; }
 
@@ -64,9 +64,9 @@ public:
 	//------------------------------------------------------------------ PRIVE
 
 protected:
-	//----------------------------------------------------- Méthodes protégées
+	//----------------------------------------------------- MÃ©thodes protÃ©gÃ©es
 
-	//----------------------------------------------------- Attributs protégés
+	//----------------------------------------------------- Attributs protÃ©gÃ©s
 
 	std::string attributeId;
 
@@ -78,7 +78,6 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <Attribut>
+//-------------------------------- Autres dÃ©finitions dÃ©pendantes de <Attribut>
 
 #endif // Attribut_H
-#pragma once

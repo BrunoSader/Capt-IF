@@ -1,17 +1,18 @@
 /*************************************************************************
 analyser  -  description
 -------------------
-début                : $DATE$
+dÃ©but                : $DATE$
 copyright            : (C) $YEAR$ par $AUTHOR$
 e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <analyser> (fichier Meusre.cpp) ------------
+//---------- RÃ©alisation de la classe <analyser> (fichier Meusre.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
-//-------------------------------------------------------- Include système
+//-------------------------------------------------------- Include systÃ¨me
 #include <iostream>
+#include <ctime>
 using namespace std;
 
 //------------------------------------------------------ Include personnel
@@ -22,12 +23,12 @@ using namespace std;
 
 //----------------------------------------------------------------- PUBLIC
 
-//----------------------------------------------------- Méthodes publiques
-// type analyser::Méthode ( liste des paramètres )
+//----------------------------------------------------- MÃ©thodes publiques
+// type analyser::MÃ©thode ( liste des paramÃ¨tres )
 // Algorithme :
 //
 //{
-//} //----- Fin de Méthode
+//} //----- Fin de MÃ©thode
 
 //-------------------------------------------- Constructeurs - destructeur
 Mesure::Mesure(const Mesure & uneMesure)
@@ -48,7 +49,7 @@ Mesure::Mesure(const Mesure & uneMesure)
 
 } //----- Fin de analyser (constructeur de copie)
 
-Mesure::Mesure(Time timestamp, std::string sensorId, std::string attributeId, int value)
+Mesure::Mesure(time_t timestamp, string sensorId, string attributeId, int value)
 {
 #ifdef MAP
 	cout << "Appel au constructeur de <Mesure>" << endl;
@@ -89,5 +90,5 @@ Mesure::Warning alerterSurMesure()
 
   //------------------------------------------------------------------ PRIVE
 
-//----------------------------------------------------- Méthodes protégées
+//----------------------------------------------------- MÃ©thodes protÃ©gÃ©es
 

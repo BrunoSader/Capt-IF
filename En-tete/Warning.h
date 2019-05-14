@@ -15,6 +15,8 @@
 #include <vector>
 #include "Attribut.h"
 #include "Decision.h"
+#include<string>
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -32,17 +34,17 @@ class Warning
 public:
 
 	int type;
-	String attributID;
+	string attributID;
 
 //----------------------------------------------------- M�thodes publiques
 
-		int calculerDonneePrevisionelle(String, Attribut);
+		int calculerDonneePrevisionelle(string, Attribut);
 		// Mode d'emploi :
 		//
 		// Contrat :
 		//
 
-		vector<String> valeurAuDelaSeuil();
+		vector<string> valeurAuDelaSeuil();
 		// Mode d'emploi :
 		//
 		// Contrat :

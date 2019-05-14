@@ -59,6 +59,9 @@ public:
     //
     // Contrat :
     //
+
+    int moyenneValAttribut(Attribut at);
+    
 		Warning alerterSurMesure(Mesure uneMesure);
     // Mode d'emploi :
     //
