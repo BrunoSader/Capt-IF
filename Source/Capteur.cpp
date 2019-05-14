@@ -45,7 +45,7 @@ int Capteur::getLongitude() const
     return this->longitude;
 } 
 
-int Capteur::getLattitude() const
+int Capteur::getLatitude() const
 {
     return this->latitude;
 }

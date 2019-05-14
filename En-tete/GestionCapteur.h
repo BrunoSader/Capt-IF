@@ -12,7 +12,11 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include <cstring>
+#include <vector>
+using namespace std;
+
 #include "Capteur.h"
+
 
 class GestionCapteur
 {
@@ -32,7 +36,7 @@ public:
 	// Contrat :
 	//
 
-	bool supprimerCapteur();
+	bool supprimerCapteur(Capteur c);
 	// Mode d'emploi :
 	//
 	// Contrat :
@@ -50,8 +54,27 @@ public:
 	// Contrat :
 	//
 
-	list <Capteur> capteursSimilaires(string SensorId);
+	Capteur rechercherCapteur(int latitude, int longitude) const;
 	// Mode d'emploi :
 	//
 	// Contrat :
 	//
+
+	vector<Capteur> capteursSimilaires(string SensorId);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	//
+
+	//------------------------------------------------------------------ PRIVE
+
+protected:
+	//----------------------------------------------------- Méthodes protégées
+
+	//----------------------------------------------------- Attributs protégés
+	vector<Capteur> listCapteur;
+};
+
+//-------------------------------- Autres définitions dépendantes de <GestionCapteur>
+
+#endif // GESTIONCAPTEUR_H

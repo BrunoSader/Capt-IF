@@ -21,6 +21,7 @@ public:
 	// Constructeurs
 	Capteur();
 	Capteur(string sensorId, int longitude, int latitude, string description);
+	Capteur(const Capteur &);
 
 	//Accesseurs et mutateurs
 	void setSensorId(string sensorId);
@@ -28,7 +29,7 @@ public:
 	void setDescription(string description);
 	void setLattitude(int lattitude);
 	int getLongitude() const;
-	int getLattitude() const;
+	int getLatitude() const;
 	string getSensorId() const;
 	string getDescription() const;
 
@@ -37,7 +38,11 @@ public:
 
 	void afficher() const;
 
-private:
+	//------------------------------------------------- Surcharge d'opérateurs
+
+	bool operator==(const Capteur & c2) const;
+
+protected:
 	string sensorId;
 	int longitude;
 	int latitude;
