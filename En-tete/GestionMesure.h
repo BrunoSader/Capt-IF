@@ -36,7 +36,11 @@ class GestionMesure
 
 public:
 
-		map<string, map<time_t, map<string,int>>> listeMesure;
+		map<string, map<time_t, map<string,double>>> listeMesure;
+		/*SensorId
+		Date
+		AttributeId
+		Valeure*/
 		vector<Attribut> listeTypeMesure;
 //----------------------------------------------------- M�thodes publiques
 
@@ -58,7 +62,7 @@ public:
     // Contrat :
     //
     void ajouterAttribut(string id, string unite, string description);
-
+    void ajouterMesure(time_t timestamp, string sensorId, string attributeId, double value);
     int moyenneValAttribut(Attribut at);
     
     //Warning alerterSurMesure(Mesure uneMesure);

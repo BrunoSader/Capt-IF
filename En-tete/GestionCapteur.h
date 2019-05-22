@@ -13,7 +13,7 @@
 #include <iostream>
 #include <iterator>
 #include <map>
-#include <vector>
+#include <deque>
 #include <time.h>
 #include "../En-tete/Capteur.h"
 #include <string>
@@ -34,7 +34,7 @@ class GestionCapteur
 
 public:
 
-		vector<Capteur> listeCapteur;
+		deque<Capteur> listeCapteur;
 //----------------------------------------------------- M�thodes publiques
 
 		string afficherCapteur( );
@@ -68,7 +68,7 @@ public:
     // Contrat :
     //
 
-		vector<Capteur> capteursSimilaires(string id);
+		deque<Capteur> capteursSimilaires(string id);
 
     // Mode d'emploi :
     //
