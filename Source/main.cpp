@@ -19,8 +19,7 @@
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "../En-tete/GestionCapteur.h"
-#include "../En-tete/GestionMesure.h"
+
 
 int main(int argc, char *argv[])
 { 
