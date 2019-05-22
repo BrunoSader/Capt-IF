@@ -6,8 +6,8 @@
 *************************************************************************/
 
 //---------- Interface de la classe <GestionMesure> (fichier GestionMesure.h) ------
-#if ! defined ( GESTIONMESURE_H )
-#define GESTIONMESURE_H
+#if ! defined ( GESTIONCAPTEUR_H )
+#define GESTIONCAPTEUR_H
 
 //--------------------------------------------------- Interfaces utilis�es
 #include <iostream>
@@ -15,60 +15,61 @@
 #include <map>
 #include <vector>
 #include <time.h>
+#include "Capteur.h"
 #include <string>
-#include "Attribut.h"
-#include "Mesure.h"
-//#include "Warning.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// R�le de la classe <GestionMesure>
+// R�le de la classe <GestionCapteur>
 //
 //
 //------------------------------------------------------------------------
 
-class GestionMesure
+class GestionCapteur
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 
-		map<string, map<time_t, map<string,int>>> listeMesure;
-		vector<Attribut> listeTypeMesure;
+		vector<Capteur> listeCapteur;
 //----------------------------------------------------- M�thodes publiques
 
-		string consulterType( );
+		string afficherCapteur( );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		string consulterMesure( );
+		void ajouterCapteur(string id, int lattitude, int longitude, string description );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		vector<Mesure> getMesure(time_t laDate);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-    void ajouterAttribut(string id, string unite, string description);
-
-    int moyenneValAttribut(Attribut at);
-    
-    //Warning alerterSurMesure(Mesure uneMesure);
+		bool supprimerCapteur(Capteur c );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-//------------------------------------------------- Surcharge d'op�rateurs
-    GestionMesure & operator = ( const GestionMesure & unGestionMesure );
+		bool surveillerCapteur(string id);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+		Capteur rechercherCapteur(string id);
+
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+		vector<Capteur> capteursSimilaires(string id);
+
     // Mode d'emploi :
     //
     // Contrat :
@@ -76,19 +77,19 @@ public:
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    GestionMesure ( const GestionMesure & unGestionMesure );
+    GestionCapteur ( const GestionCapteur & unGestionCapteur );
     // Mode d'emploi (constructeur de copie) :
     //
     // Contrat :
     //
 
-    GestionMesure ( );
+    GestionCapteur ( );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~GestionMesure ( );
+    virtual ~GestionCapteur ( );
     // Mode d'emploi :
     //
     // Contrat :
@@ -96,27 +97,8 @@ public:
 
 //------------------------------------------------------------------ PRIVE
 
-protected:
-//----------------------------------------------------- M�thodes prot�g�es
-
-private:
-//------------------------------------------------------- M�thodes priv�es
-
-protected:
-//----------------------------------------------------- Attributs prot�g�s
-
-private:
-//------------------------------------------------------- Attributs priv�s
-
-//---------------------------------------------------------- Classes amies
-
-//-------------------------------------------------------- Classes priv�es
-
-//----------------------------------------------------------- Types priv�s
-
 };
 
 //----------------------------------------- Types d�pendants de <GestionMesure>
 
-#endif // GESTIONMESURE_H
-
+#endif // GESTIONCAPTEUR_H

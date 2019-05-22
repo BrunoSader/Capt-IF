@@ -5,6 +5,7 @@
 #include <string>
 #include <stdio.h>
 #include <ctime>
+#include "Warning.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -62,7 +63,7 @@ public:
 
 	int getValue ( ) { return value; }
 
-	Warning alerterSurMesure();
+	//Warning* alerterSurMesure();
 
 	//------------------------------------------------------------------ PRIVE
 
