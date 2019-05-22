@@ -32,9 +32,9 @@ using namespace std;
 //-------------------------------------------- Constructeurs - destructeur
 	Decision::Decision(const Decision & uneDecision)
 	{
-		this.texte = uneDecision.texte;
+		this->texte = uneDecision.texte;
 
-		this.note = uneDecision.note;
+		this->note = uneDecision.note;
 	}
 	// Mode d'emploi (constructeur de copie) :
 	//
@@ -49,16 +49,16 @@ using namespace std;
 
 	Decision::Decision(string texte, int note)
 	{
-		this.texte = texte;
+		this->texte = texte;
 
-		this.note = note:
+		this->note = note;
 	}
 	// Mode d'emploi :
 	//
 	// Contrat :
 	//
 
-	virtual Decision::~Decision() {}
+	Decision::~Decision() {}
 	// Mode d'emploi :
 	//
 	// Contrat :

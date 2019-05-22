@@ -39,13 +39,13 @@ Mesure::Mesure(const Mesure & uneMesure)
 	cout << "Appel au constructeur de copie de <Mesure>" << endl;
 #endif
 
-	this.timestamp = uneMesure.timestamp;
+	this->timestamp = uneMesure.timestamp;
 
-	this.sensorId = uneMesure.sensorId;
+	this->sensorId = uneMesure.sensorId;
 
-	this.attributeId = uneMesure.attributeId;
+	this->attributeId = uneMesure.attributeId;
 
-	this.value = uneMesure.value;
+	this->value = uneMesure.value;
 
 } //----- Fin de analyser (constructeur de copie)
 
@@ -55,13 +55,13 @@ Mesure::Mesure(time_t timestamp, string sensorId, string attributeId, int value)
 	cout << "Appel au constructeur de <Mesure>" << endl;
 #endif
 
-	this.timestamp = uneMesure.timestamp;
+	this->timestamp = timestamp;
 
-	this.sensorId = uneMesure.sensorId;
+	this->sensorId = sensorId;
 
-	this.attributeId = uneMesure.attributeId;
+	this->attributeId = attributeId;
 
-	this.value = uneMesure.value;
+	this->value = value;
 }
 
 Mesure::Mesure()
@@ -82,10 +82,12 @@ Mesure::~Mesure()
 #endif
 } //----- Fin de ~analyser
 
-Mesure::Warning alerterSurMesure()
+/*Warning* Mesure:: alerterSurMesure()
 {
-
-}
+	Warning *w = new Warning(0, "id");
+	/*code ici*/
+/*	return w;
+}*/
 
 
   //------------------------------------------------------------------ PRIVE
