@@ -2,7 +2,7 @@
                            GestionMesure  -  description
                              -------------------
     d�but                : ${date}
-    copyright            : (C) ${year} par ${user}
+    copyright            : (C) ${year} par B. Sader, S. Butruille, B. Vachez, L. Clémenceau, R. Gall
 *************************************************************************/
 
 //---------- R�alisation de la classe <GestionMesure> (fichier GestionMesure.cpp) --
@@ -138,6 +138,8 @@ void GestionMesure::ajouterAttribut(string id, string unite, string description)
 {
 	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
 }
+
+// Test
 
 //------------------------------------------------------------------ PRIVE
 
