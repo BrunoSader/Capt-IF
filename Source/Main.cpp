@@ -15,19 +15,18 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include "../En-tete/main.h"
 
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-
-
 int main(int argc, char *argv[])
-{ 
-	//le premier argument correspond au nom du fichier avec les différents types d'attributs 
+{
+	//le premier argument correspond au nom du fichier avec les différents types d'attributs
 	string nomFichierAttribut = string(argv[1]);
 	//le second correspond à la description de capteurs
 	string nomFichierDescriptionCapteur = string(argv[2]);
-	//le dernier correspond aux des données capteurs 
+	//le dernier correspond aux des données capteurs
 	string nomFichierDonnesCapteur = string(argv[3]);
 
 	//**********Stockage des Attributs dans le tableau de gestion mesure
@@ -72,11 +71,11 @@ int main(int argc, char *argv[])
 			int longitude;
 			string description;
 			getline(ss, id, ';');
-			ss >> lattitude; 
+			ss >> lattitude;
 			getline(ss, sacrifie, ';');
 			ss >> longitude;
 			getline(ss, sacrifie, ';');
-			getline(ss, description, ';'); 
+			getline(ss, description, ';');
 			gc->ajouterCapteur(id, lattitude, longitude, description);
 		}
 	}else{
@@ -84,7 +83,7 @@ int main(int argc, char *argv[])
 	}
 	//cout<<gc->afficherCapteur()<<endl;
 
-	//**********Stockage des données des capteurs 
+	//**********Stockage des données des capteurs
 
 	return 0;
 } //----- fin de main
