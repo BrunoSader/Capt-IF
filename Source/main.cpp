@@ -187,58 +187,10 @@ int getChoice (int start, int end, const string& prompt)
     }
 } //----- Fin de getChoice
 
-void paramDonnees()
+void paramDonnees() 
 {
 #ifdef MAP
-    cout << "Appel à la méthode paramDonnées de <main>" << endl;
-#endif
-    string prompt("Veuillez choisir une des fonctionnalités suivantes :");
-    string choice1("Consulter la liste des capteurs");
-    string choice2("Ajouter un capteur");
-    string choice3("Supprimer un capteur");
-    string choice4("Surveiller un capteur");
-    string choice5("Rechercher un capteur");
-    string choice6("Capteurs similaires");
-    string choice7("Retour au menu de départ");
-    string choices[7] = {choice1, choice2, choice3, choice4, choice5, choice6, choice7};
-    
-    bool run = true;
-    while (run) {
-        int choice = getChoice(7, prompt, choices);
-        bool b;
-        switch (choice) {
-            case 1: 
-                
-                break;
-            case 2:
-                
-                break;
-            case 3:
-                
-                break;
-            case 4:
-                
-                break;
-            case 5:
-                
-                break;
-            case 6:
-                
-                break;
-            case 7:
-                run = false;
-                promptConsole("Retour au menu", VERT);
-                cout << endl << endl;
-                break;
-        }
-        cout << endl << endl;
-    }
-} //----- Fin de paramDonnées 
-
-void menuGestionCapteur() 
-{
-#ifdef MAP
-    cout << "Appel à la méthode menuGestionCapteur de <main>" << endl;
+    cout << "Appel à la méthode paramDonnees de <main>" << endl;
 #endif
     
     string * arg = new string[7];
@@ -260,14 +212,22 @@ void menuGestionCapteur()
     string choice6("Valider la recherche de mesures");
     string choices[6] = {choice1, choice2, choice3, choice4, choice5, choice6};
     
-    bool run = true;
-    while (run) {
+    bool runParam = true;
+    while (runParam) {
         int choice = getChoice(6, prompt, choices);
         bool b;
         switch (choice) {
             case 1: 
+            {
                 boolTab[0]=1;
+
+                string sensorId;
+                string prompt("Veuillez renseigner le sensorId : ");
+                getInput(prompt, BLEU, sensorId);
                 
+                cout<<sensorId;
+                
+            }
                 break;
             case 2:
                 boolTab[1]=1;
@@ -291,6 +251,54 @@ void menuGestionCapteur()
         }
         cout << endl << endl;
     }
+} //----- Fin de paramDonnees
+
+void menuGestionCapteur()
+{
+#ifdef MAP
+    cout << "Appel à la méthode menuGestionCapteur de <main>" << endl;
+#endif
+    string prompt("Veuillez choisir une des fonctionnalités suivantes :");
+    string choice1("Consulter la liste des capteurs");
+    string choice2("Ajouter un capteur");
+    string choice3("Supprimer un capteur");
+    string choice4("Surveiller un capteur");
+    string choice5("Rechercher un capteur");
+    string choice6("Capteurs similaires");
+    string choice7("Retour au menu de départ");
+    string choices[7] = {choice1, choice2, choice3, choice4, choice5, choice6, choice7};
+    
+    bool runCapteur = true;
+    while (runCapteur) {
+        int choice = getChoice(7, prompt, choices);
+        bool b;
+        switch (choice) {
+            case 1: 
+                
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                
+                break;
+            case 5:
+                
+                break;
+            case 6:
+                
+                break;
+            case 7:
+                runCapteur = false;
+                promptConsole("Retour au menu", VERT);
+                cout << endl << endl;
+                break;
+        }
+        cout << endl << endl;
+    }
 } //----- Fin de menuGestionCapteur
 
 void menuGestionMesure() 
@@ -307,8 +315,8 @@ void menuGestionMesure()
     string choice6("Retour au Menu de départ");
     string choices[6] = {choice1, choice2, choice3, choice4, choice5, choice6};
     
-    bool run = true;
-    while (run) {
+    bool runMesure = true;
+    while (runMesure) {
         int choice = getChoice(6, prompt, choices);
         bool b;
         switch (choice) {
@@ -316,19 +324,19 @@ void menuGestionMesure()
                 
                 break;
             case 2:
-                paramDonnees();                
+                               
                 break;
             case 3:
                 
                 break;
             case 4:
-                
+                paramDonnees(); 
                 break;
             case 5:
                 
                 break;
             case 6:
-                run = false;
+                runMesure = false;
                 promptConsole("Retour au menu", VERT);
                 cout << endl << endl;
                 break;
