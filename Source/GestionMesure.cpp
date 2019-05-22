@@ -96,13 +96,13 @@ string GestionMesure::consulterType( )
 string GestionMesure::consulterMesure( )
 {
     string res;
-   for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+   for(map<string, map<time_t, map<string,double>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
         res += i->first ;
         res += "\n";
-        for(map<time_t, map<string,int>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) {
+        for(map<time_t, map<string,double>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) {
             res += i2->first ;
             res += "\n";
-             for(map<string,int>::iterator i3=i2->second.begin(); i3!=i2->second.end(); ++i3) {
+             for(map<string,double>::iterator i3=i2->second.begin(); i3!=i2->second.end(); ++i3) {
                   res += i3->first ;
                   res += "\n";
              }
@@ -137,6 +137,11 @@ int GestionMesure::moyenneValAttribut(Attribut at)
 void GestionMesure::ajouterAttribut(string id, string unite, string description)
 {
 	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
+}
+
+vector<Mesure> getMesureCapteur(int * boolTab, string * arg) {
+    
+    
 }
 
 // Test
