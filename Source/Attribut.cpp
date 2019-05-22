@@ -15,7 +15,8 @@ e-mail               : $EMAIL$
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "Attribut.h"
+#include "../En-tete/Attribut.h"
+
 
 
 //------------------------------------------------------------- Constantes

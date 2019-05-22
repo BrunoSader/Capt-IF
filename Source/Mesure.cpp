@@ -16,7 +16,7 @@ e-mail               : $EMAIL$
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "Mesure.h"
+#include "../En-tete/Mesure.h"
 
 
 //------------------------------------------------------------- Constantes

@@ -15,7 +15,7 @@ e-mail               : $EMAIL$
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "Decision.h"
+#include "../En-tete/Decision.h"
 
 
 //------------------------------------------------------------- Constantes

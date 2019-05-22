@@ -14,7 +14,7 @@ using namespace std;
 #include <iostream>
 
 //------------------------------------------------------ Include personnel
-#include "GestionMesure.h"
+#include "../En-tete/GestionMesure.h"
 
 
 //------------------------------------------------------------- Constantes
