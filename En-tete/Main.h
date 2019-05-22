@@ -17,6 +17,8 @@
 //--------------------------------------------------- Interfaces utilisées
 #include <iostream>
 #include "Warning.h"
+#include "GestionMesure.h"
+#include "GestionCapteur.h"
 
 class Main
 {
