@@ -94,16 +94,32 @@ void GestionCapteur::ajouterCapteur(string id, int lattitude, int longitude, str
 
 bool GestionCapteur::supprimerCapteur(Capteur c )
 {
-    	/*bool res = listeCapteur.erase(c);
-	return res;*/
-	return true;
+	bool supp = false;	
+	int compte = 0;
+	deque<Capteur> :: iterator it;
+    	
+	for(it = listeCapteur.begin(); it != listeCapteur.end(); it++){
+		if(listeCapteur[compte].getSensorId() == c.getSensorId()){
+			listeCapteur.erase(it);
+			supp = true;
+		}
+		compte++;
+	}
+	return supp;
 }
 
 
 bool GestionCapteur::surveillerCapteur(string id )
 {
     	bool res = true;
-/*code ici*/
+/*On vérifie d'abord si les valeurs ne sont pas extrêmes 
+	03 entre 0 et 300
+	S02 entre 0 et 600
+	NO2 entre 0 et 500
+	PM10 entre 0 et 200*/
+	
+
+/*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
 	return res;
 }
 
@@ -118,15 +134,9 @@ Capteur GestionCapteur::rechercherCapteur(string id )
 	return c;
 }
 
-vector<Capteur> GestionCapteur::capteursSimilaires(string id )
+deque<Capteur> GestionCapteur::capteursSimilaires(string id )
 {
 	/*code ici*/
-	vector<Capteur> c;
+	deque<Capteur> c;
 	return c;
 }
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- M�thodes prot�g�es
-
-//------------------------------------------------------- M�thodes priv�es

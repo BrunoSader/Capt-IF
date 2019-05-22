@@ -2,7 +2,7 @@
                            GestionMesure  -  description
                              -------------------
     d�but                : ${date}
-    copyright            : (C) ${year} par B. Sader, S. Butruille, B. Vachez, L. Clémenceau, R. Gall
+    copyright            : (C) ${year} par ${user}
 *************************************************************************/
 
 //---------- R�alisation de la classe <GestionMesure> (fichier GestionMesure.cpp) --
@@ -139,6 +139,7 @@ void GestionMesure::ajouterAttribut(string id, string unite, string description)
 	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
 }
 
+<<<<<<< HEAD
 vector<Mesure> getMesureCapteur(int * boolTab, string * arg) {
     
     
@@ -146,6 +147,41 @@ vector<Mesure> getMesureCapteur(int * boolTab, string * arg) {
 
 // Test
 
+void GestionMesure::ajouterMesure(time_t timestamp, string sensorId, string attributeId, double value)
+{
+	//map<string, map<time_t, map<string,double>>> listeMesure;
+
+	/*SensorId
+	Date
+	AttributeId
+	Valeure*/
+	/*map<string, map<time_t, map<string,double>>>::iterator it = listeMesure.find(sensorId);
+	for(int i = 0; i < listeMesure.size(); i++){
+		if(it == listeMesure.end()){
+			map<string, double> mp;
+			mp.insert(make_pair(attributeId, value));
+			map<time_t, map<string,double>> mp2;
+			mp2.insert(make_pair(timestamp, mp));
+			listeMesure.insert(make_pair(sensorId, mp2));
+		} else{
+			it = listeMesure.begin();
+			for(int i2 = 0; i2 < it->second.size(); i2++){
+			map<time_t, map<string,double>> it2 = it->second.find(time_t);
+			if(it2 == it->second.end()){
+				map<time_t, map<string,double>> mp2;
+				mp2.insert(make_pair(timestamp, it->second));
+				it->second.insert(make_pair(sensorId, mp2));
+			}else{
+				
+				it->second.insert(make_pair(sensorId, it->second));
+			}
+		it2++;
+		}
+		it++;*/
+
+			
+				
+}
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- M�thodes prot�g�es

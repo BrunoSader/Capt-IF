@@ -37,29 +37,32 @@ class GestionMesure
 public:
 
 		map<string, map<time_t, map<string,double>>> listeMesure;
-		// sensorId, date, attributeId, valeur
+		/*SensorId
+		Date
+		AttributeId
+		Valeure*/
 		vector<Attribut> listeTypeMesure;
 //----------------------------------------------------- M�thodes publiques
 
-	string consulterType( );
+		string consulterType( );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-	string consulterMesure( );
+		string consulterMesure( );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-	vector<Mesure> getMesure(time_t laDate);
+		vector<Mesure> getMesure(time_t laDate);
     // Mode d'emploi :
     //
     // Contrat :
     //
     void ajouterAttribut(string id, string unite, string description);
-
+    void ajouterMesure(time_t timestamp, string sensorId, string attributeId, double value);
     int moyenneValAttribut(Attribut at);
     
     //Warning alerterSurMesure(Mesure uneMesure);
@@ -67,8 +70,6 @@ public:
     //
     // Contrat :
     //
-
-	vector<Mesure> getMesureCapteur(int * boolTab, string * arg);
 
 //------------------------------------------------- Surcharge d'op�rateurs
     GestionMesure & operator = ( const GestionMesure & unGestionMesure );
@@ -101,8 +102,6 @@ public:
 
 protected:
 //----------------------------------------------------- M�thodes prot�g�es
-
-
 
 private:
 //------------------------------------------------------- M�thodes priv�es
