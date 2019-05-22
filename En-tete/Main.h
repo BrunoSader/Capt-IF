@@ -1,35 +1,25 @@
 /*************************************************************************
-						   Main  -  description
-							 -------------------
-	début                : 14/05/2019
-	copyright            : (C) 2019 par GALL Roxane
-	e-mail               : roxane.gall@insa-lyon.fr
+					  main  -  description
+				 -------------------
+	dÃ©but        :
+	copyright    :
+	e-mail       :
 *************************************************************************/
 
-//------------- Interface de <Application> ------------------------------
+//---------- Interface du module <main> (fichier main.h) ----------------
 #if ! defined ( MAIN_H )
 #define MAIN_H
-//---------------------------------------------------------------- INCLUDE
 
-//-------------------------------------------------------- Include système
+// RÃ´le du module <main>
+// ReprÃ©sente seulement la classe permettant d'appeler l'interface
+// crÃ©Ã©e dans la classe Interface afin d'afficher un visuel pour l'utilisateur
 
-//------------------------------------------------------------- Constantes
+//--------------------------------------------------- Interfaces utilisÃ©es
+#include <iostream>
+#include "Warning.h"
 
-//------------------------------------------------------------------ Types
-
-//------------------------------------------------------------------------
-// Rôle de <Main>
-// Contient la fonction main, première fonction appelée 
-// à l'exécution.
-
-//------------------------------------------------------------------------
-//----------------------------------------------------------------- PUBLIC
-//---------------------------------------------------- Fonctions publiques
-
-int main();
-// Mode d'emploi :
-// Cette méthode est le point d'entrée de l'application.
-// Contrat:
-//
-
+class Main
+{
+	int main();
+};
 #endif // MAIN_H

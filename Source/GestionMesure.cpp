@@ -16,6 +16,7 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "GestionMesure.h"
 
+
 //------------------------------------------------------------- Constantes
 
 //---------------------------------------------------- Variables de classe
@@ -33,17 +34,12 @@ using namespace std;
 //{
 //} //----- Fin de M�thode
 
-Warning alerterSurMesure(Mesure uneMesure)
+/*Warning GestionMesure::alerterSurMesure(Mesure uneMesure)
 {
- for ( Attribut a : listeTypeMesure )
- {
-  if ( a.getAttributeId() == uneMesure.getAttributeId() && uneMesure.getValue() > a.getValeurSeuil() ) 
-  {
-   return new Warning(/*a compléter pour le type : pas prévisionnel*/, uneMesure.getAttributeId() );; 
-  }
- }
-  return null; // à voir si y a pas mieux à faire
-}
+ Warning wa;
+  if ( a.getAttributeId() == uneMesure.getAttributeId() && uneMesure.getValue() > a.getValeurSeuil() ) */
+ /*return wa;
+}*/
 
 
 
@@ -118,8 +114,8 @@ string GestionMesure::consulterMesure( )
 
 vector<Mesure> GestionMesure::getMesure(time_t laDate)
 {
-    /*vector <Mesure> res;
-        for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+    vector <Mesure> res;
+      /*  for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
              map<time_t, map<string,int>>::iterator it;
         	it = i->second.find(laDate);
         	if (it != i->second.end())
@@ -129,13 +125,18 @@ vector<Mesure> GestionMesure::getMesure(time_t laDate)
                   res += "\n";
              }
 	            }*/
-    return res
+    return res;
 }
 
 
 int GestionMesure::moyenneValAttribut(Attribut at)
 {
     return 0;
+}
+
+void GestionMesure::ajouterAttribut(string id, string unite, string description)
+{
+	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
 }
 
 //------------------------------------------------------------------ PRIVE

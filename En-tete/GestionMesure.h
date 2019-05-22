@@ -15,7 +15,10 @@
 #include <map>
 #include <vector>
 #include <time.h>
-#include<string>
+#include <string>
+#include "Attribut.h"
+#include "Mesure.h"
+//#include "Warning.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 
@@ -54,14 +57,11 @@ public:
     //
     // Contrat :
     //
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    void ajouterAttribut(string id, string unite, string description);
 
     int moyenneValAttribut(Attribut at);
     
-		Warning alerterSurMesure(Mesure uneMesure);
+    //Warning alerterSurMesure(Mesure uneMesure);
     // Mode d'emploi :
     //
     // Contrat :

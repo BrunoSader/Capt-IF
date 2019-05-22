@@ -42,22 +42,26 @@ void Capteur::setLattitude(int lattitude)
 
 int Capteur::getLongitude() const
 {
-    return this->longitude;
+    return longitude;
 } 
 
 int Capteur::getLatitude() const
 {
+<<<<<<< HEAD
     return this->latitude;
+=======
+    return lattitude;
+>>>>>>> 53a0ae5d333d37c659bbae42608dbb316434e22e
 }
 
 string Capteur::getSensorId() const
 {
-    return this->sensorId;
+    return sensorId;
 } 
 
 string Capteur::getDescription() const
 {
-    return this->description;
+    return description;
 } 
 
 string Capteur:: caracteristiqueDeLair() const
