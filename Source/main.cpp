@@ -30,7 +30,7 @@ using namespace std;
 #include "../En-tete/GestionMesure.h"
 #include "../En-tete/Mesure.h"
 
-void menu() ;
+void menu(GestionCapteur* gc, GestionMesure* gm) ;
 
 int main(int argc, char *argv[])
 { 
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 	
 
 
-    	menu();
+    	menu(gc, gm);
     	delete gm;
 	delete gc;
 	return 0;
@@ -322,7 +322,7 @@ void paramDonnees()
     }
 } //----- Fin de paramDonnees
 
-void menuGestionCapteur()
+void menuGestionCapteur(GestionCapteur* gc)
 {
 #ifdef MAP
     cout << "Appel à la méthode menuGestionCapteur de <main>" << endl;
@@ -343,10 +343,20 @@ void menuGestionCapteur()
         bool b;
         switch (choice) {
             case 1: 
-                
+                cout<<gc->afficherCapteur()<<endl;
                 break;
             case 2:
-                
+		/*segmentation fault ici
+		int longitude;
+		int lattitude;
+		char* description; 
+		cout<<"Entrer la longitude"<<endl;	
+		cin>>longitude;
+		cout<<"Entrer la lattitude"<<endl;	
+		cin>>lattitude;
+		cout<<"Entrer une description"<<endl;	
+		cin>>description;
+                gc->ajouterCapteur(lattitude, longitude, description); */
                 break;
             case 3:
                 
@@ -370,7 +380,7 @@ void menuGestionCapteur()
     }
 } //----- Fin de menuGestionCapteur
 
-void menuGestionMesure() 
+void menuGestionMesure(GestionMesure* gm) 
 {
 #ifdef MAP
     cout << "Appel à la méthode menuGestionMesure de <main>" << endl;
@@ -414,7 +424,7 @@ void menuGestionMesure()
     }
 } //----- Fin de menuGestionMesure
 
-void menu() 
+void menu(GestionCapteur* gc, GestionMesure* gm) 
 {
 #ifdef MAP
     cout << "Appel à la méthode menu de <main>" << endl;
@@ -433,11 +443,11 @@ void menu()
         switch (choice) {
             case 1: 
                 cout << endl << endl;
-                menuGestionCapteur();
+                menuGestionCapteur(gc);
                 break;
             case 2:
                 cout << endl << endl;
-                menuGestionMesure();
+                menuGestionMesure(gm);
                 break;
             case 3:
                 

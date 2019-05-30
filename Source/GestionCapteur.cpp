@@ -80,7 +80,10 @@ string GestionCapteur::afficherCapteur( )
     string res; 
     for(unsigned int i=0; i<listeCapteur.size(); ++i)
     {
-        res += listeCapteur[i].getSensorId();
+        res += listeCapteur[i].getSensorId() + "	";
+	res += to_string(listeCapteur[i].getLattitude());
+	res += "		";
+	res += to_string(listeCapteur[i].getLongitude());
         res += "\n";
     }
     return res;
@@ -88,6 +91,13 @@ string GestionCapteur::afficherCapteur( )
 
 void GestionCapteur::ajouterCapteur(string id, int lattitude, int longitude, string description )
 { 
+	listeCapteur.push_back(Capteur(id, lattitude, longitude, description)); 
+	//L'ajouter aussi dans le fichier qu'on nous fourni ?
+}
+
+void GestionCapteur::ajouterCapteur(int lattitude, int longitude, string description )
+{ 
+	string id = "Sensor" + to_string(listeCapteur.size());
 	listeCapteur.push_back(Capteur(id, lattitude, longitude, description)); 
 }
 

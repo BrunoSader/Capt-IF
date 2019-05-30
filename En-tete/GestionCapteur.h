@@ -48,6 +48,12 @@ public:
     //
     // Contrat :
     //
+	
+		void ajouterCapteur(int lattitude, int longitude, string description );
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
 		bool supprimerCapteur(Capteur c );
     // Mode d'emploi :
