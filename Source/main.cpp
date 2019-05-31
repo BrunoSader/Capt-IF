@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
 		}
 	}
-	cout<<gm->consulterMesure()<<endl;
+	//cout<<gm->consulterMesure()<<endl;
 	
 
 
@@ -442,10 +442,10 @@ void menuGestionMesure(GestionMesure* gm)
         bool b;
         switch (choice) {
             case 1: 
-                
+                cout<<gm->consulterType()<<endl;
                 break;
             case 2:
-                               
+                cout<<gm->consulterMesure()<<endl;          
                 break;
             case 3:
                 

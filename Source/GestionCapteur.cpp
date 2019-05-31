@@ -133,6 +133,8 @@ bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, 
 		id = c.getSensorId();
 	}
 	map<struct tm, map<string,double>> valeur = gm->getMesure(id);
+	if(valeur.empty()) return false;
+	else{
 /*On vérifie d'abord si les valeurs ne sont pas extrêmes 
 	03 entre 0 et 300
 	S02 entre 0 et 600
@@ -159,7 +161,8 @@ bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, 
 			compteur ++;
 		}
 	}
-	if(compteur < 7) res = false;		
+	if(compteur < 7) res = false;	
+	}	
 
 	return res;
 }
