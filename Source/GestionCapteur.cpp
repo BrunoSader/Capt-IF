@@ -18,6 +18,7 @@ using namespace std;
 #include "../En-tete/GestionCapteur.h"
 #include "../En-tete/GestionMesure.h"
 #include "../En-tete/Mesure.h"
+#include <math.h>
 
 //------------------------------------------------------------- Constantes
 
@@ -185,8 +186,8 @@ Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
 	for(uint i = 0; i < listeCapteur.size(); i++){
 		if(listeCapteur[i].getLattitude() == lattitude && listeCapteur[i].getLongitude() == longitude){
 			return listeCapteur[i];
-		} else if(indice > ( abs(listeCapteur[i].getLattitude() - lattitude) + abs (listeCapteur[i].getLongitude() - longitude))){
-			indice = abs(listeCapteur[i].getLattitude() - lattitude) + abs (listeCapteur[i].getLongitude() - longitude);
+		} else if(indice > ( sqrt((listeCapteur[i].getLattitude() - lattitude)*(listeCapteur[i].getLattitude() - lattitude) + (listeCapteur[i].getLongitude() - longitude)*(listeCapteur[i].getLongitude() - longitude)))){
+			indice = sqrt((listeCapteur[i].getLattitude() - lattitude)*(listeCapteur[i].getLattitude() - lattitude) + (listeCapteur[i].getLongitude() - longitude)*(listeCapteur[i].getLongitude() - longitude));
 			c = listeCapteur[i];
 		}
 	}

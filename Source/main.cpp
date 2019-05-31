@@ -344,7 +344,7 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 	int rep;
 	int lattitude = 0;
 	int longitude = 0;
-	string id = " "; 
+	string texte = " "; 
         switch (choice) {
             case 1: 
                 cout<<gc->afficherCapteur()<<endl;
@@ -355,8 +355,8 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 		cout<<"Entrer la lattitude"<<endl;	
 		cin>>lattitude;
 		cout<<"Entrer une description"<<endl;	
-		cin>>id;
-                gc->ajouterCapteur(lattitude, longitude, id); 
+		cin>>texte;
+                gc->ajouterCapteur(lattitude, longitude, texte); 
                 break;
             case 3:
 		
@@ -367,12 +367,12 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 			cin >> lattitude;
 			cout << "Veuillez rentrer la longitude"<<endl;
 			cin >> longitude;
-			if(gc->supprimerCapteur(1, lattitude, longitude, id)) cout<<"Le capteur a bien été supprimé"<<endl;
+			if(gc->supprimerCapteur(1, lattitude, longitude, texte)) cout<<"Le capteur a bien été supprimé"<<endl;
 			else cout<<"erreur lors de la suppression du capteur"<<endl;
 		} else if(rep == 2){
 			cout << "Veuillez rentrer l'Id du capteur" <<endl;
-			cin >> id;
-			if(gc->supprimerCapteur(2, lattitude, longitude, id)) cout<<"le capteur a bien été supprimé"<<endl;
+			cin >> texte;
+			if(gc->supprimerCapteur(2, lattitude, longitude, texte)) cout<<"le capteur a bien été supprimé"<<endl;
 			else cout<<"erreur lors de la suppression"<<endl;
 		} else cout <<"numéro invalide"<<endl;
                 
@@ -386,11 +386,11 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 			cin >> lattitude;
 			cout << "Veuillez rentrer la longitude"<<endl;
 			cin >> longitude;
-			cout<<gc->surveillerCapteur(1, lattitude, longitude, id, gm)<<endl; 
+			cout<<gc->surveillerCapteur(1, lattitude, longitude, texte, gm)<<endl; 
 		} else if(rep == 2){
 			cout << "Veuillez rentrer l'Id du capteur" <<endl;
-			cin >> id;
-			cout<<gc->surveillerCapteur(2, lattitude, longitude, id, gm)<<endl; 
+			cin >> texte;
+			cout<<gc->surveillerCapteur(2, lattitude, longitude, texte, gm)<<endl; 
 		} else cout <<"numéro invalide"<<endl;
                 
                 break;
@@ -405,11 +405,13 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 			gc->rechercherCapteur(lattitude, longitude);
 		} else if(rep == 2){
 			cout << "Veuillez rentrer l'Id du capteur" <<endl;
-			cin >> id;
-			gc->rechercherCapteur(id);
+			cin >> texte;
+			gc->rechercherCapteur(texte);
 		} else cout <<"numéro invalide"<<endl;
                 break;
             case 6:
+		cout<<"Veuillez entrer un intervalle de confiance"<<endl;
+		cin >> rep; 
                 
                 break;
             case 7:
