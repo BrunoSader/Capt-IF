@@ -16,6 +16,7 @@
 #include <deque>
 #include <time.h>
 #include "../En-tete/Capteur.h"
+#include "../En-tete/GestionMesure.h"
 #include <string>
 using namespace std;
 //------------------------------------------------------------- Constantes
@@ -55,19 +56,20 @@ public:
     // Contrat :
     //
 
-		bool supprimerCapteur(Capteur c );
+		bool supprimerCapteur(int choix, int lattitude, int longitude, string id);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		bool surveillerCapteur(string id);
+		bool surveillerCapteur(int choix, int lattitude, int longitude, string id, GestionMesure* gm);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
 		Capteur rechercherCapteur(string id);
+		Capteur rechercherCapteur(int lattitude, int longitude);
 
     // Mode d'emploi :
     //

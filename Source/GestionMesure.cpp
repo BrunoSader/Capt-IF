@@ -98,8 +98,8 @@ string GestionMesure::consulterMesure( )
         res += "\n";
         for(map<struct tm, map<string,double>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) {
 	    res += "	Date : \n";
-	    res += "	" + to_string(i2->first.tm_mday+1) + "/";
-	    res += to_string(i2->first.tm_mon+1) + "/";
+	    res += "	" + to_string(i2->first.tm_mday) + "/";
+	    res += to_string(i2->first.tm_mon) + "/";
 	    res += to_string(i2->first.tm_year) + "\n	Heure \n";
 	    res += "	" + to_string(i2->first.tm_hour) + ":";
 	    res += to_string(i2->first.tm_min) + ":";
@@ -116,19 +116,15 @@ string GestionMesure::consulterMesure( )
 }
 
 
-vector<Mesure> GestionMesure::getMesure(time_t laDate)
+map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
 {
-    vector <Mesure> res;
-      /*  for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
-             map<time_t, map<string,int>>::iterator it;
-        	it = i->second.find(laDate);
-        	if (it != i->second.end())
-	           {
-	               for(map<string,int>::iterator i3=it->second.begin(); i3!=it->second.end(); ++i3) {
-                  res += i3->first ;
-                  res += "\n";
-             }
-	            }*/
+    map<struct tm, map<string,double>> res;
+   for(map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+        	if(i->first == id) {
+			return i->second;
+		}
+    }
+
     return res;
 }
 

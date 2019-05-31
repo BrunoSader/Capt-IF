@@ -56,7 +56,7 @@ public:
     // Contrat :
     //
 
-		vector<Mesure> getMesure(time_t laDate);
+		map<struct tm, map<string,double>> getMesure(string id);
     // Mode d'emploi :
     //
     // Contrat :

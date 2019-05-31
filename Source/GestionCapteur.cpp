@@ -16,6 +16,8 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "../En-tete/Capteur.h"
 #include "../En-tete/GestionCapteur.h"
+#include "../En-tete/GestionMesure.h"
+#include "../En-tete/Mesure.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -102,8 +104,11 @@ void GestionCapteur::ajouterCapteur(int lattitude, int longitude, string descrip
 }
 
 
-bool GestionCapteur::supprimerCapteur(Capteur c )
+bool GestionCapteur::supprimerCapteur(int choix, int lattitude, int longitude, string id)
 {
+	Capteur c;
+	if(choix == 1) c = rechercherCapteur(lattitude, longitude);
+	if(choix == 2) c = rechercherCapteur(id);
 	bool supp = false;	
 	int compte = 0;
 	deque<Capteur> :: iterator it;
@@ -119,17 +124,43 @@ bool GestionCapteur::supprimerCapteur(Capteur c )
 }
 
 
-bool GestionCapteur::surveillerCapteur(string id )
+bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, string id, GestionMesure* gm)
 {
     	bool res = true;
+	Capteur c;
+	if(choix == 1){
+		c = rechercherCapteur(lattitude, longitude); 
+		id = c.getSensorId();
+	}
+	map<struct tm, map<string,double>> valeur = gm->getMesure(id);
 /*On vérifie d'abord si les valeurs ne sont pas extrêmes 
 	03 entre 0 et 300
 	S02 entre 0 et 600
 	NO2 entre 0 et 500
 	PM10 entre 0 et 200*/
-	
+	for(map<struct tm, map<string,double>>::iterator i=valeur.begin(); i!=valeur.end(); ++i) {
+		for(map<string,double>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2){
+			if(i2->first == "O3" && (i2->second > 300 || i2->second < 0)) res = false;
+			if(i2->first == "SO2" && (i2->second > 600 || i2->second < 0)) res = false;
+			if(i2->first == "NO2" && (i2->second > 500 || i2->second < 0)) res = false;
+			if(i2->first == "PM10" && (i2->second > 200 || i2->second < 0)) res = false;
+		}
+	}
 
 /*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
+	map<struct tm, map<string,double>> :: iterator i = valeur.end();	
+	i--;
+	int jour = i->first.tm_mday ;  
+	int compteur = 0;
+	 for(i = valeur.end(); i != valeur.begin(); i--){
+		if(compteur == 7) break;
+		if(i->first.tm_mday == jour) {
+			jour = jour - 1;  
+			compteur ++;
+		}
+	}
+	if(compteur < 7) res = false;		
+
 	return res;
 }
 
@@ -139,6 +170,21 @@ Capteur GestionCapteur::rechercherCapteur(string id )
 	for(uint i = 0; i < listeCapteur.size(); i++){
 		if(listeCapteur[i].getSensorId() == id){
 			return listeCapteur[i];
+		}
+	}
+	return c;
+}
+
+Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
+{
+	Capteur c;
+	int indice = 1000;
+	for(uint i = 0; i < listeCapteur.size(); i++){
+		if(listeCapteur[i].getLattitude() == lattitude && listeCapteur[i].getLongitude() == longitude){
+			return listeCapteur[i];
+		} else if(indice > ( abs(listeCapteur[i].getLattitude() - lattitude) + abs (listeCapteur[i].getLongitude() - longitude))){
+			indice = abs(listeCapteur[i].getLattitude() - lattitude) + abs (listeCapteur[i].getLongitude() - longitude);
+			c = listeCapteur[i];
 		}
 	}
 	return c;

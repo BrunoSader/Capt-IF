@@ -141,8 +141,8 @@ int main(int argc, char *argv[])
 			getline(ss, sacrifie, ';');
 			struct tm tm;
 			tm.tm_year = annee;
-			tm.tm_mon = mois - 1;
-			tm.tm_mday = jour - 1;
+			tm.tm_mon = mois ;
+			tm.tm_mday = jour ;
 			tm.tm_hour = heure;
 			tm.tm_min = minutes;
 			tm.tm_sec = secondes;	
@@ -322,7 +322,7 @@ void paramDonnees()
     }
 } //----- Fin de paramDonnees
 
-void menuGestionCapteur(GestionCapteur* gc)
+void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 {
 #ifdef MAP
     cout << "Appel à la méthode menuGestionCapteur de <main>" << endl;
@@ -332,7 +332,7 @@ void menuGestionCapteur(GestionCapteur* gc)
     string choice2("Ajouter un capteur");
     string choice3("Supprimer un capteur");
     string choice4("Surveiller un capteur");
-    string choice5("Rechercher un capteur");
+    string choice5("Rechercher un capteur");	//On en fait quoi du capteur qu'il a rechercher ? on affiche ses infos? ses mesures ?
     string choice6("Capteurs similaires");
     string choice7("Retour au menu de départ");
     string choices[7] = {choice1, choice2, choice3, choice4, choice5, choice6, choice7};
@@ -341,31 +341,73 @@ void menuGestionCapteur(GestionCapteur* gc)
     while (runCapteur) {
         int choice = getChoice(7, prompt, choices);
         bool b;
+	int rep;
+	int lattitude = 0;
+	int longitude = 0;
+	string id = " "; 
         switch (choice) {
             case 1: 
                 cout<<gc->afficherCapteur()<<endl;
                 break;
-            case 2:
-		/*segmentation fault ici
-		int longitude;
-		int lattitude;
-		char* description; 
+            case 2:  
 		cout<<"Entrer la longitude"<<endl;	
 		cin>>longitude;
 		cout<<"Entrer la lattitude"<<endl;	
 		cin>>lattitude;
 		cout<<"Entrer une description"<<endl;	
-		cin>>description;
-                gc->ajouterCapteur(lattitude, longitude, description); */
+		cin>>id;
+                gc->ajouterCapteur(lattitude, longitude, id); 
                 break;
             case 3:
+		
+		cout<<"Voulez-vous supprimer un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+		cin>>rep;
+                if(rep == 1){
+			cout <<"Veuillez rentrer la lattiude"<<endl;
+			cin >> lattitude;
+			cout << "Veuillez rentrer la longitude"<<endl;
+			cin >> longitude;
+			if(gc->supprimerCapteur(1, lattitude, longitude, id)) cout<<"Le capteur a bien été supprimé"<<endl;
+			else cout<<"erreur lors de la suppression du capteur"<<endl;
+		} else if(rep == 2){
+			cout << "Veuillez rentrer l'Id du capteur" <<endl;
+			cin >> id;
+			if(gc->supprimerCapteur(2, lattitude, longitude, id)) cout<<"le capteur a bien été supprimé"<<endl;
+			else cout<<"erreur lors de la suppression"<<endl;
+		} else cout <<"numéro invalide"<<endl;
                 
                 break;
+		
             case 4:
+		cout<<"Voulez-vous surveiller un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+		cin>>rep;
+                if(rep == 1){
+			cout <<"Veuillez rentrer la lattiude"<<endl;
+			cin >> lattitude;
+			cout << "Veuillez rentrer la longitude"<<endl;
+			cin >> longitude;
+			cout<<gc->surveillerCapteur(1, lattitude, longitude, id, gm)<<endl; 
+		} else if(rep == 2){
+			cout << "Veuillez rentrer l'Id du capteur" <<endl;
+			cin >> id;
+			cout<<gc->surveillerCapteur(2, lattitude, longitude, id, gm)<<endl; 
+		} else cout <<"numéro invalide"<<endl;
                 
                 break;
             case 5:
-                
+		cout<<"Voulez-vous rechercher un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+		cin>>rep;
+                if(rep == 1){
+			cout <<"Veuillez rentrer la lattiude"<<endl;
+			cin >> lattitude;
+			cout << "Veuillez rentrer la longitude"<<endl;
+			cin >> longitude;
+			gc->rechercherCapteur(lattitude, longitude);
+		} else if(rep == 2){
+			cout << "Veuillez rentrer l'Id du capteur" <<endl;
+			cin >> id;
+			gc->rechercherCapteur(id);
+		} else cout <<"numéro invalide"<<endl;
                 break;
             case 6:
                 
@@ -443,7 +485,7 @@ void menu(GestionCapteur* gc, GestionMesure* gm)
         switch (choice) {
             case 1: 
                 cout << endl << endl;
-                menuGestionCapteur(gc);
+                menuGestionCapteur(gc, gm);
                 break;
             case 2:
                 cout << endl << endl;
