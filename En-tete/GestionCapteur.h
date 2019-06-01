@@ -76,7 +76,7 @@ public:
     // Contrat :
     //
 
-		deque<Capteur> capteursSimilaires(string id);
+		string capteursSimilaires(int choix, int lattitude, int longitude, string id, GestionMesure* gm, double confiance);
 
     // Mode d'emploi :
     //

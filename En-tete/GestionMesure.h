@@ -63,7 +63,8 @@ public:
     //
     void ajouterAttribut(string id, string unite, string description);
     void ajouterMesure(struct tm tm, string sensorId, string attributeId, double value);
-    int moyenneValAttribut(Attribut at);
+    double moyenneValAttribut(string attributId, string sensorId);
+    vector<Attribut> getListeAttribut();
     
     //Warning alerterSurMesure(Mesure uneMesure);
     // Mode d'emploi :

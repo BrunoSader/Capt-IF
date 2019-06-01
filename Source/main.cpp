@@ -97,10 +97,7 @@ int main(int argc, char *argv[])
 	}else{
 		cout<<"marche pas"<<endl;
 	}
-	cout<<gc->afficherCapteur()<<endl; 
-	/*Capteur c = gc->rechercherCapteur("Sensor0");
-	gc->supprimerCapteur(c);
-	cout<<gc->afficherCapteur()<<endl;*/
+	cout<<gc->afficherCapteur()<<endl;  
 
 	//**********Stockage des données des capteurs 
 
@@ -150,8 +147,6 @@ int main(int argc, char *argv[])
 		}
 	}
 	//cout<<gm->consulterMesure()<<endl;
-	
-
 
     	menu(gc, gm);
     	delete gm;
@@ -322,7 +317,7 @@ void paramDonnees()
     }
 } //----- Fin de paramDonnees
 
-void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc){
+void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double confiance){
 	int rep;
 	int lattitude = 0;
 	int longitude = 0;
@@ -340,6 +335,7 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc){
 			}
 			if(numero == 4) cout<<gc->surveillerCapteur(1, lattitude, longitude, texte, gm)<<endl;
 			if(numero == 5) gc->rechercherCapteur(lattitude, longitude);
+			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else if(rep == 2){
 			cout << "Veuillez rentrer l'Id du capteur" <<endl;
 			cin >> texte;
@@ -349,6 +345,7 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc){
 			}
 			if (numero == 4) cout<<gc->surveillerCapteur(2, lattitude, longitude, texte, gm)<<endl; 
 			if (numero == 5) gc->rechercherCapteur(texte);
+			if (numero == 6) cout<<gc->capteursSimilaires(2, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else cout <<"numéro invalide"<<endl;
 }
 	
@@ -372,7 +369,7 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
     while (runCapteur) {
         int choice = getChoice(7, prompt, choices);
         bool b;
-	int rep;
+	double rep = 0;
 	int lattitude = 0;
 	int longitude = 0;
 	string texte = " "; 
@@ -390,18 +387,18 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
                 gc->ajouterCapteur(lattitude, longitude, texte); 
                 break;
             case 3:
-		choixCapteur(3, gm, gc);
+		choixCapteur(3, gm, gc, rep);
                 break;
             case 4:
-		choixCapteur(4, gm, gc);
+		choixCapteur(4, gm, gc, rep);
                 break;
             case 5:
-		choixCapteur(5, gm, gc);
+		choixCapteur(5, gm, gc, rep);
                 break;
             case 6:
-		cout<<"Veuillez entrer un intervalle de confiance"<<endl;
+		cout<<"Veuillez entrer le poucentage de precision que vous souhaitez (entre 0 et 1)"<<endl;
 		cin >> rep; 
-                
+                choixCapteur(6, gm, gc, rep);
                 break;
             case 7:
                 runCapteur = false;

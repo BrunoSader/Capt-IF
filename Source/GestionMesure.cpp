@@ -119,19 +119,34 @@ string GestionMesure::consulterMesure( )
 map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
 {
     map<struct tm, map<string,double>> res;
-   for(map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
-        	if(i->first == id) {
-			return i->second;
-		}
-    }
-
+    struct tm tm;
+    map<string, double> res2;
+    res2.insert(make_pair(" ", 0.0));
+    res.insert(make_pair(tm, res2));
+    map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.find(id);
+    if(i != listeMesure.end()) return i->second; 
     return res;
 }
 
 
-int GestionMesure::moyenneValAttribut(Attribut at)
+
+double GestionMesure::moyenneValAttribut(string attributId, string sensorId)
 {
-    return 0;
+    map<struct tm, map<string,double>> valeur = getMesure(sensorId);
+    double somme = 0;
+    double nombre = 0;
+    double res = 0;
+    if(valeur.empty()) res = -10;
+    else{
+	for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
+		map<string,double> :: iterator i2 = i->second.find(attributId); 
+		somme += i2->second;
+		nombre++; 
+	}
+   }
+   res = somme/nombre;
+   if(res == 0) res = -10;
+    return res;
 }
 
 void GestionMesure::ajouterAttribut(string id, string unite, string description)
@@ -176,6 +191,10 @@ void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attribut
 
 			
 				
+}
+
+vector<Attribut> GestionMesure::getListeAttribut(){
+	return listeTypeMesure;
 }
 //------------------------------------------------------------------ PRIVE
 

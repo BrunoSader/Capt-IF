@@ -194,9 +194,54 @@ Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
 	return c;
 }
 
-deque<Capteur> GestionCapteur::capteursSimilaires(string id )
-{
-	/*code ici*/
-	deque<Capteur> c;
-	return c;
+string GestionCapteur::capteursSimilaires(int choix, int lattitude, int longitude, string id, GestionMesure* gm, double confiance)
+{ 
+	//Possible de faire bien mieux avec un intervalle de confiance et tout !!
+	//Obligé de changer la manière de vérifier car pour l'instant toutes les moyennes sont vraiment très proches ce n'est pas un bon moyen de comparaison.
+	string res = "";
+	Capteur ca; 
+	Capteur comp;
+	int size = gm->getListeAttribut().size() -1;
+	double tabref [size];
+	double valeurComp = 0;
+	bool similaire = true;
+	if(choix == 1){
+		ca = rechercherCapteur(lattitude, longitude); 
+		id = ca.getSensorId();
+	} 
+	//On vérifie si le capteur a bien des mesures renseignées
+	if(gm->getMesure(id).empty()) {
+		res = "Le Capteur renseigné n'a pas de mesures, et donc pas de capteur similaire"; 
+		return res;
+	}  else{
+		//on calcule les moyennes pour chaque attribut
+		for(int i = 0; i < size; i++){
+			tabref[i] = gm->moyenneValAttribut(gm->getListeAttribut()[i].getAttributeId(), id);
+			cout<<"tabref"<<i<<" = "<<tabref[i]<<endl;
+		} 
+		for(uint i = 0; i < listeCapteur.size() -1; i++){
+			similaire = true;
+			comp = listeCapteur[i];
+			//On va regarder pour chaque capteur si il convient
+			if(listeCapteur[i].getSensorId() != id){ 
+				//le -1 est censé être enlevé, il est la à cause d'erreur à la lecture du fichier
+				//Pour chaque attribut on calucle sa moyenne et on compare avec celle de la référence
+				for(uint i2 = 0; i2 < gm->getListeAttribut().size() -1; i2++){
+					if(similaire == true){
+						valeurComp = gm->moyenneValAttribut(gm->getListeAttribut()[i2].getAttributeId(), comp.getSensorId());
+						if(valeurComp > tabref[i2] && (tabref[i2]/valeurComp) < confiance) similaire = false;
+						if(valeurComp < tabref[i2] && (valeurComp/tabref[i2]) < confiance) similaire = false; 
+					cout<<"Pour l'attribut "<< gm->getListeAttribut()[i2].getAttributeId() <<" avec le capteur "<<comp.getSensorId() << " similaire vaut "<<similaire<<" les valeurs comparées sont "<< valeurComp<<" "<<" et "<<tabref[i2]<<endl;
+					cout<<(valeurComp > tabref[i2]) <<" " << (tabref[i2]/valeurComp)<<" " <<((tabref[i2]/valeurComp) < confiance) << " "<<confiance<<endl;
+					}
+				} 
+			if(similaire == false) res += "Le capteur " + comp.getSensorId() + " n'est pas similaire au capteur que vous avez demandé" + "\n";
+			else res += "Le capteur " + comp.getSensorId() + " est similaire au capteur que vous avez demandé" +"\n";
+				
+			}
+			
+		}
+	}
+				
+	return res;
 }
