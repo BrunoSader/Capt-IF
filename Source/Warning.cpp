@@ -21,6 +21,8 @@ using namespace std;
 
 //----------------------------------------------------------- Types priv�s
 
+//------------------------------------------------- Surcharge d'op�rateurs
+
 //----------------------------------------------------------------- PUBLIC
 //-------------------------------------------------------- Fonctions amies
 
@@ -30,7 +32,7 @@ void Warning::entrerDecision(Decision laDecision,double valeur)
 // Algorithme :
 //
 {
-	map<Decision,double>::iterator decision_exist;
+	map<Decision,double,DecisionCompare>::iterator decision_exist;
 	decision_exist = listeDecision.find(laDecision);
 	if (decision_exist == listeDecision.end())
 	//Decision n'existe pas
@@ -79,17 +81,17 @@ void Warning::evaluerDecision(double valeurActuel)
 }
 
 
-double Warning::calculerDonneePrevisionelle (string sensorID, map<string,map<time_t,map<string,double>>> listeMesurebyCapteur, Attribut lAttribut)
+double Warning::calculerDonneePrevisionelle (string sensorID, map<string, map<struct tm, map<string,double>>>listeMesurebyCapteur, Attribut lAttribut)
 // Algorithme :
 //
 {
-	map<string,map<time_t,map<string,double>>>::iterator sensor_it;
+	map<string, map<struct tm, map<string,double>>>::iterator sensor_it;
 	sensor_it = listeMesurebyCapteur.find(sensorID);
 	//On trouve notre capteur dans la liste
 	if (sensor_it != listeMesurebyCapteur.end())
 	{
-		map<time_t,map<string,double>> listeMesurebyDate = sensor_it->second;
-		map<time_t,map<string,double>>::reverse_iterator date_it;
+		 map<struct tm, map<string,double>> listeMesurebyDate = sensor_it->second;
+		 map<struct tm, map<string,double>>::reverse_iterator date_it;
 		//On itere d sur les dates decroissantes
 		map<string,double>::iterator attribut_it;
 		double* values = new double [5];
@@ -107,15 +109,6 @@ double Warning::calculerDonneePrevisionelle (string sensorID, map<string,map<tim
 	}else return -1;
 }
 //----- Fin de M�thode
-
-
-//------------------------------------------------- Surcharge d'op�rateurs
-Warning & Warning::operator = ( const Warning & unWarning )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
-
 
 //-------------------------------------------- Constructeurs - destructeur
 Warning::Warning ( const Warning & unWarning )

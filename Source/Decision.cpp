@@ -22,18 +22,10 @@ using namespace std;
 
 //----------------------------------------------------------------- PUBLIC
 
-//----------------------------------------------------- M�thodes publiques
-// type analyser::M�thode ( liste des param�tres )
-// Algorithme :
-//
-//{
-//} //----- Fin de M�thode
-
 //-------------------------------------------- Constructeurs - destructeur
 	Decision::Decision(const Decision & uneDecision)
 	{
 		this->action = uneDecision.action;
-
 		this->note = uneDecision.note;
 	}
 	// Mode d'emploi (constructeur de copie) :

@@ -18,7 +18,7 @@
 #include <string>
 #include "Attribut.h"
 #include "Mesure.h"
-//#include "Warning.h"
+#include "Warning.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 
@@ -65,7 +65,7 @@ public:
     void ajouterMesure(struct tm tm, string sensorId, string attributeId, double value);
     double moyenneValAttribut(string attributId, string sensorId);
     vector<Attribut> getListeAttribut();
-    
+
     //Warning alerterSurMesure(Mesure uneMesure);
     // Mode d'emploi :
     //
@@ -124,4 +124,3 @@ private:
 //----------------------------------------- Types d�pendants de <GestionMesure>
 
 #endif // GESTIONMESURE_H
-

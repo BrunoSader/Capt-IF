@@ -15,5 +15,5 @@ main.o : $(ENTETES)
 clean :
 	rm *.o
 
-run :
-	./captair
+test :
+	./captair AttributeType.csv Sensors.csv FichierTest.csv

@@ -27,14 +27,32 @@ using namespace std;
 //
 //
 //------------------------------------------------------------------------
+inline bool operator == (const struct tm & tm1, const struct tm & tm2)
+{
+	if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min) return true;
+	else return false;
+}
+inline bool operator < (const struct tm & tm1, const struct tm & tm2)
+{
+	if(tm1.tm_year < tm2.tm_year || tm1.tm_mon < tm2.tm_mon || tm1.tm_mday < tm2.tm_mday || tm1.tm_hour < tm2.tm_hour || tm1.tm_min < tm2.tm_min) return true;
+	else return false;
+}
 
 class Warning
 {
 //----------------------------------------------------------------- PUBLIC
 
+struct DecisionCompare
+{
+   bool operator() (const Decision& decision1, const Decision& decision2) const
+   {
+       return decision1.getNote() < decision2.getNote();
+   }
+};
+
 public:
 
-	map<Decision,double> listeDecision;
+	map<Decision,double,DecisionCompare> listeDecision;
 
 //----------------------------------------------------- M�thodes publiques
 
@@ -50,7 +68,7 @@ public:
 		// Contrat :
 		//
 
-		double calculerDonneePrevisionelle(string sensorID, map<string,map<time_t,map<string,double>>> listeMesurebyCapteur, Attribut lAttribut);
+		double calculerDonneePrevisionelle(string sensorID, map<string, map<struct tm, map<string,double>>>listeMesurebyCapteur, Attribut lAttribut);
 		// Mode d'emploi :
 		//
 		// Contrat :

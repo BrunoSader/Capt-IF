@@ -37,18 +37,6 @@ using namespace std;
 
 //------------------------------------------------- Surcharge d'op�rateurs
 
-bool operator == (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min) return true;
-	else return false;
-}
-
-bool operator < (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year < tm2.tm_year || tm1.tm_mon < tm2.tm_mon || tm1.tm_mday < tm2.tm_mday || tm1.tm_hour < tm2.tm_hour || tm1.tm_min < tm2.tm_min) return true;
-	else return false;
-}
-
 //-------------------------------------------- Constructeurs - destructeur
 GestionMesure::GestionMesure ( const GestionMesure & unGestionMesure )
 // Algorithme :
@@ -81,11 +69,11 @@ GestionMesure::~GestionMesure ( )
 
 string GestionMesure::consulterType( )
 {
-    string res; 
+    string res;
     for(unsigned int i=0; i<listeTypeMesure.size(); ++i)
     {
         res += listeTypeMesure[i].getDescription();
-        res += "\n"; 
+        res += "\n";
     }
     return res;
 }
@@ -124,7 +112,7 @@ map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
     res2.insert(make_pair(" ", 0.0));
     res.insert(make_pair(tm, res2));
     map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.find(id);
-    if(i != listeMesure.end()) return i->second; 
+    if(i != listeMesure.end()) return i->second;
     return res;
 }
 
@@ -139,9 +127,9 @@ double GestionMesure::moyenneValAttribut(string attributId, string sensorId)
     if(valeur.empty()) res = -10;
     else{
 	for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
-		map<string,double> :: iterator i2 = i->second.find(attributId); 
+		map<string,double> :: iterator i2 = i->second.find(attributId);
 		somme += i2->second;
-		nombre++; 
+		nombre++;
 	}
    }
    res = somme/nombre;
@@ -151,7 +139,7 @@ double GestionMesure::moyenneValAttribut(string attributId, string sensorId)
 
 void GestionMesure::ajouterAttribut(string id, string unite, string description)
 {
-	listeTypeMesure.push_back(Attribut(id, unite, description, 0)); 
+	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
 }
 
 void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attributeId, double value)
@@ -169,28 +157,28 @@ void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attribut
 			map<struct tm, map<string,double>> mp2;
 			mp2.insert(make_pair(tm, mp));
 			listeMesure.insert(make_pair(sensorId, mp2));
-		} else{ 
+		} else{
 			map<struct tm, map<string,double>>::iterator it2 = it->second.end();
 			//recodage de .find
 			 for(map<struct tm, map<string,double>>::iterator it3=it->second.begin(); it3!=it->second.end(); ++it3) {
-				if(it3->first.tm_mday+1 == tm.tm_mday+1 && it3->first.tm_mon+1 == tm.tm_mon+1 && it3->first.tm_hour == tm.tm_hour){ 
+				if(it3->first.tm_mday+1 == tm.tm_mday+1 && it3->first.tm_mon+1 == tm.tm_mon+1 && it3->first.tm_hour == tm.tm_hour){
 					it2 = it3;
 					break;
 				}
 			}
-             
+
 			if(it2 == it->second.end()){
 				map<string, double> mp2;
 				mp2.insert(make_pair(attributeId, value));
 				it->second.insert(make_pair(tm, mp2));
 			}else{
-				
+
 				it2->second.insert(make_pair(attributeId, value));
 			}
 		}
 
-			
-				
+
+
 }
 
 vector<Attribut> GestionMesure::getListeAttribut(){

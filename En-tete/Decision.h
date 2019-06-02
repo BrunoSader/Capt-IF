@@ -46,6 +46,8 @@ public:
 	//
 
 	void setNote(const int x) {note = x;}
+	int getNote() const {return note;}
+	bool* getAction() const {return action;}
 
 
 	//------------------------------------------------------------------ PRIVE
@@ -54,8 +56,7 @@ protected:
 	//----------------------------------------------------- M�thodes prot�g�es
 
 	//----------------------------------------------------- Attributs prot�g�s
-
-	bool *action;
+	bool* action;
 	int note;
 
 };
