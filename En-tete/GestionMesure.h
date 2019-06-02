@@ -36,7 +36,7 @@ class GestionMesure
 
 public:
 
-		map<string, map<time_t, map<string,double>>> listeMesure;
+		map<string, map<struct tm, map<string,double>>> listeMesure;
 		/*SensorId
 		Date
 		AttributeId
@@ -56,14 +56,15 @@ public:
     // Contrat :
     //
 
-		vector<Mesure> getMesure(time_t laDate);
+		map<struct tm, map<string,double>> getMesure(string id);
     // Mode d'emploi :
     //
     // Contrat :
     //
     void ajouterAttribut(string id, string unite, string description);
-    void ajouterMesure(time_t timestamp, string sensorId, string attributeId, double value);
-    int moyenneValAttribut(Attribut at);
+    void ajouterMesure(struct tm tm, string sensorId, string attributeId, double value);
+    double moyenneValAttribut(string attributId, string sensorId);
+    vector<Attribut> getListeAttribut();
     
     //Warning alerterSurMesure(Mesure uneMesure);
     // Mode d'emploi :

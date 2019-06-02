@@ -31,26 +31,23 @@ using namespace std;
 // type GestionMesure::M�thode ( liste de param�tres )
 // Algorithme :
 //
-//{
-//} //----- Fin de M�thode
-
-/*Warning GestionMesure::alerterSurMesure(Mesure uneMesure)
-{
- Warning wa;
-  if ( a.getAttributeId() == uneMesure.getAttributeId() && uneMesure.getValue() > a.getValeurSeuil() ) */
- /*return wa;
-}*/
 
 
 
 
 //------------------------------------------------- Surcharge d'op�rateurs
-GestionMesure & GestionMesure::operator = ( const GestionMesure & unGestionMesure )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
 
+bool operator == (const struct tm & tm1, const struct tm & tm2)
+{
+	if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min) return true;
+	else return false;
+}
+
+bool operator < (const struct tm & tm1, const struct tm & tm2)
+{
+	if(tm1.tm_year < tm2.tm_year || tm1.tm_mon < tm2.tm_mon || tm1.tm_mday < tm2.tm_mday || tm1.tm_hour < tm2.tm_hour || tm1.tm_min < tm2.tm_min) return true;
+	else return false;
+}
 
 //-------------------------------------------- Constructeurs - destructeur
 GestionMesure::GestionMesure ( const GestionMesure & unGestionMesure )
@@ -88,7 +85,7 @@ string GestionMesure::consulterType( )
     for(unsigned int i=0; i<listeTypeMesure.size(); ++i)
     {
         res += listeTypeMesure[i].getDescription();
-        res += "\n";
+        res += "\n"; 
     }
     return res;
 }
@@ -96,14 +93,21 @@ string GestionMesure::consulterType( )
 string GestionMesure::consulterMesure( )
 {
     string res;
-   for(map<string, map<time_t, map<string,double>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
-        res += i->first ;
+   for(map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
+        res += "SensorId : " + i->first ;
         res += "\n";
-        for(map<time_t, map<string,double>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) {
-            res += i2->first ;
+        for(map<struct tm, map<string,double>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) {
+	    res += "	Date : \n";
+	    res += "	" + to_string(i2->first.tm_mday) + "/";
+	    res += to_string(i2->first.tm_mon) + "/";
+	    res += to_string(i2->first.tm_year) + "\n	Heure \n";
+	    res += "	" + to_string(i2->first.tm_hour) + ":";
+	    res += to_string(i2->first.tm_min) + ":";
+	    res += to_string(i2->first.tm_sec) ;
             res += "\n";
              for(map<string,double>::iterator i3=i2->second.begin(); i3!=i2->second.end(); ++i3) {
-                  res += i3->first ;
+                  res += "		Attribut : 	" + i3->first  + "\n";
+		  res += "		Valeur : 	"+ to_string(i3->second);
                   res += "\n";
              }
         }
@@ -112,42 +116,45 @@ string GestionMesure::consulterMesure( )
 }
 
 
-vector<Mesure> GestionMesure::getMesure(time_t laDate)
+map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
 {
-    vector <Mesure> res;
-      /*  for(map<string, map<time_t, map<string,int>>>::iterator i=listeMesure.begin(); i!=listeMesure.end(); ++i) {
-             map<time_t, map<string,int>>::iterator it;
-        	it = i->second.find(laDate);
-        	if (it != i->second.end())
-	           {
-	               for(map<string,int>::iterator i3=it->second.begin(); i3!=it->second.end(); ++i3) {
-                  res += i3->first ;
-                  res += "\n";
-             }
-	            }*/
+    map<struct tm, map<string,double>> res;
+    struct tm tm;
+    map<string, double> res2;
+    res2.insert(make_pair(" ", 0.0));
+    res.insert(make_pair(tm, res2));
+    map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.find(id);
+    if(i != listeMesure.end()) return i->second; 
     return res;
 }
 
 
-int GestionMesure::moyenneValAttribut(Attribut at)
+
+double GestionMesure::moyenneValAttribut(string attributId, string sensorId)
 {
-    return 0;
+    map<struct tm, map<string,double>> valeur = getMesure(sensorId);
+    double somme = 0;
+    double nombre = 0;
+    double res = 0;
+    if(valeur.empty()) res = -10;
+    else{
+	for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
+		map<string,double> :: iterator i2 = i->second.find(attributId); 
+		somme += i2->second;
+		nombre++; 
+	}
+   }
+   res = somme/nombre;
+   if(res == 0) res = -10;
+    return res;
 }
 
 void GestionMesure::ajouterAttribut(string id, string unite, string description)
 {
-	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
+	listeTypeMesure.push_back(Attribut(id, unite, description, 0)); 
 }
 
-<<<<<<< HEAD
-vector<Mesure> getMesureCapteur(int * boolTab, string * arg) {
-    
-    
-}
-
-// Test
-
-void GestionMesure::ajouterMesure(time_t timestamp, string sensorId, string attributeId, double value)
+void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attributeId, double value)
 {
 	//map<string, map<time_t, map<string,double>>> listeMesure;
 
@@ -155,32 +162,39 @@ void GestionMesure::ajouterMesure(time_t timestamp, string sensorId, string attr
 	Date
 	AttributeId
 	Valeure*/
-	/*map<string, map<time_t, map<string,double>>>::iterator it = listeMesure.find(sensorId);
-	for(int i = 0; i < listeMesure.size(); i++){
+	map<string, map<struct tm, map<string,double>>>::iterator it = listeMesure.find(sensorId);
 		if(it == listeMesure.end()){
 			map<string, double> mp;
 			mp.insert(make_pair(attributeId, value));
-			map<time_t, map<string,double>> mp2;
-			mp2.insert(make_pair(timestamp, mp));
+			map<struct tm, map<string,double>> mp2;
+			mp2.insert(make_pair(tm, mp));
 			listeMesure.insert(make_pair(sensorId, mp2));
-		} else{
-			it = listeMesure.begin();
-			for(int i2 = 0; i2 < it->second.size(); i2++){
-			map<time_t, map<string,double>> it2 = it->second.find(time_t);
+		} else{ 
+			map<struct tm, map<string,double>>::iterator it2 = it->second.end();
+			//recodage de .find
+			 for(map<struct tm, map<string,double>>::iterator it3=it->second.begin(); it3!=it->second.end(); ++it3) {
+				if(it3->first.tm_mday+1 == tm.tm_mday+1 && it3->first.tm_mon+1 == tm.tm_mon+1 && it3->first.tm_hour == tm.tm_hour){ 
+					it2 = it3;
+					break;
+				}
+			}
+             
 			if(it2 == it->second.end()){
-				map<time_t, map<string,double>> mp2;
-				mp2.insert(make_pair(timestamp, it->second));
-				it->second.insert(make_pair(sensorId, mp2));
+				map<string, double> mp2;
+				mp2.insert(make_pair(attributeId, value));
+				it->second.insert(make_pair(tm, mp2));
 			}else{
 				
-				it->second.insert(make_pair(sensorId, it->second));
+				it2->second.insert(make_pair(attributeId, value));
 			}
-		it2++;
 		}
-		it++;*/
 
 			
 				
+}
+
+vector<Attribut> GestionMesure::getListeAttribut(){
+	return listeTypeMesure;
 }
 //------------------------------------------------------------------ PRIVE
 

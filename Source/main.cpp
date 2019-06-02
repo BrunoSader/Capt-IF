@@ -25,25 +25,23 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 
-int main(int argc, char ** argv)
-{
-	//le premier argument correspond au nom du fichier avec les différents types d'attributs
 
 #include "../En-tete/GestionCapteur.h"
 #include "../En-tete/GestionMesure.h"
 #include "../En-tete/Mesure.h"
 
+void menu(GestionCapteur* gc, GestionMesure* gm) ;
+
 int main(int argc, char *argv[])
 { 
-	/*
-    
-    //le premier argument correspond au nom du fichier avec les différents types d'attributs 
-    
+	//le premier argument correspond au nom du fichier avec les différents types d'attributs 
 	string nomFichierAttribut = string(argv[1]);
 	//le second correspond à la description de capteurs
 	string nomFichierDescriptionCapteur = string(argv[2]);
 	//le dernier correspond aux des données capteurs 
 	string nomFichierDonnesCapteur = string(argv[3]);
+
+	/*rajouter le code qui execute cette commande dans le terminal : iconv -f utf-16 -t utf-8 fichier_original > nouveaufichier*/
 
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
@@ -53,9 +51,9 @@ int main(int argc, char *argv[])
 	fichier.open(nomFichierAttribut, ios::in);
 	if (fichier)
 	{
-		getline(fichier, chaine);
+		getline(fichier, chaine); 
 		while (!fichier.eof())
-		{
+		{ 
 			stringstream ss;
 			getline(fichier, chaine);
 			ss << chaine;
@@ -67,8 +65,10 @@ int main(int argc, char *argv[])
 			getline(ss, description, ';');
 			gm->ajouterAttribut(id, unite, description);
 		}
+	}else{
+		cout<<"marche pas"<<endl;
 	}
-	// cout<<gm->consulterType()<<endl;
+	cout<<gm->consulterType()<<endl; 
 
 	//**********Stockage des Capteurs dans le tableau de gestion capteur
 	GestionCapteur *gc = new GestionCapteur();
@@ -97,11 +97,7 @@ int main(int argc, char *argv[])
 	}else{
 		cout<<"marche pas"<<endl;
 	}
-	//cout<<gc->afficherCapteur()<<endl;
-	//cout<<" "<<endl;
-	Capteur c = gc->rechercherCapteur("Sensor0");
-	gc->supprimerCapteur(c);
-	//cout<<gc->afficherCapteur()<<endl;
+	cout<<gc->afficherCapteur()<<endl;  
 
 	//**********Stockage des données des capteurs 
 
@@ -109,34 +105,52 @@ int main(int argc, char *argv[])
 	fichier3.open(nomFichierDonnesCapteur, ios::in);
 	if (fichier3)
 	{
-		getline(fichier3, chaine);
+		for(int i = 0; i < 15; getline(fichier3, chaine), i++){}
 		while (!fichier3.eof())
 		{
 			stringstream ss;
 			getline(fichier3, chaine);
 			ss << chaine;
-			string timestampS1;
-			string timestampS2;
+			int annee;
+			int mois;
+			int jour;
+			int heure;
+			int minutes;
+			double secondes;
     			string sensorId;
     			string attributeId;    			
 			double valueS;
-			getline(ss, timestampS1, 'T');
-			getline(ss, timestampS2, ';');
+			ss >> annee; 
+			getline(ss, sacrifie, '-');
+			ss >> mois; 
+			getline(ss, sacrifie, '-');
+			ss >> jour;
+			getline(ss, sacrifie, 'T');
+			ss >> heure;
+			getline(ss, sacrifie, ':');
+			ss >> minutes;
+			getline(ss, sacrifie, ':');
+			ss >> secondes;
+			getline(ss, sacrifie, ';');
 			getline(ss, sensorId, ';');
 			getline(ss, attributeId, ';');
 			ss >> valueS; 
 			getline(ss, sacrifie, ';');
 			struct tm tm;
-			istringstream st(timestampS1+'-'+timestampS2);
-    			st >> std::get_time(&tm, "%F-%T");
-    			time_t timestamp = mktime(&tm);
-			gm->ajouterMesure(timestamp, sensorId, attributeId, valueS);
+			tm.tm_year = annee;
+			tm.tm_mon = mois ;
+			tm.tm_mday = jour ;
+			tm.tm_hour = heure;
+			tm.tm_min = minutes;
+			tm.tm_sec = secondes;	
+			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
 		}
 	}
-	cout<<gm->consulterMesure()<<endl; */
+	//cout<<gm->consulterMesure()<<endl;
 
-    menu();
-    
+    	menu(gc, gm);
+    	delete gm;
+	delete gc;
 	return 0;
 } //----- fin de main
 
@@ -145,14 +159,14 @@ void promptConsole (const string& prompt, const string& color) {
 #ifdef MAP
     cout << "Appel à la méthode promptConsole de <Application>" << endl;
 #endif
-    cout << color << prompt << RESET << endl;
+    cout << color << prompt << /*RESET <<*/ endl;
 } //----- Fin de prompt
 
 void promptConsole (const char* prompt, const string& color) {
 #ifdef MAP
     cout << "Appel à la méthode promptConsole de <Application>" << endl;
 #endif
-    cout << color << prompt << RESET << endl;
+    cout << color << prompt << /*RESET << */endl;
 } //----- Fin de prompt
 
 void getInput(const string& prompt, const string& color, string& result)
@@ -161,7 +175,7 @@ void getInput(const string& prompt, const string& color, string& result)
     cout << "Appel à la méthode getInput de <Application>" << endl;
 #endif
     while (true) {
-        cout << color << prompt << RESET << endl << "> ";
+        cout << color << prompt << /*RESET <<*/ endl << "> ";
         getline(cin, result);
         if (!result.empty())
             return;
@@ -170,7 +184,7 @@ void getInput(const string& prompt, const string& color, string& result)
             return;
         }
         else
-            promptConsole("Entree Vide\n", ROUGE);
+            promptConsole("Entree Vide\n", "ROUGE");
     }
 } //----- Fin de getInput
 
@@ -181,10 +195,10 @@ int getChoice (int range, const string& prompt, string* choices)
     cout << "Appel à la méthode getChoice de <Application>" << endl;
 #endif
     while (true) {
-        promptConsole(prompt, BLEU);
+        promptConsole(prompt, "BLEU");
         if (choices != NULL) {
             for (int i = 0; i < range; i++) {
-                promptConsole(to_string(i + 1) + ". " + choices[i]);
+                promptConsole(to_string(i + 1) + ". " + choices[i], "Couleur");
             }
         }
         cout << "> ";
@@ -200,7 +214,7 @@ int getChoice (int range, const string& prompt, string* choices)
             return -1;
         }
         else {
-            promptConsole("Entrée invalide veuillez réessayer\n", ROUGE);
+            promptConsole("Entrée invalide veuillez réessayer\n", "ROUGE");
             cin.clear();
             cin.ignore(INT8_MAX, '\n');
         }
@@ -215,7 +229,7 @@ int getChoice (int start, int end, const string& prompt)
     cout << "Appel à la méthode getChoice de <main>" << endl;
 #endif
     while (true) {
-        promptConsole(prompt, BLEU);
+        promptConsole(prompt, "BLEU");
         cout << "> ";
         int n;
         cin >> n;
@@ -229,7 +243,7 @@ int getChoice (int start, int end, const string& prompt)
             return INT8_MIN;
         }
         else {
-            promptConsole("Entrée invalide, veuillez réessayer \n", ROUGE);
+            promptConsole("Entrée invalide, veuillez réessayer \n", "ROUGE");
             cin.clear();
             cin.ignore(INT8_MAX, '\n');
         }
@@ -273,7 +287,7 @@ void paramDonnees()
 
                 string sensorId;
                 string prompt("Veuillez renseigner le sensorId : ");
-                getInput(prompt, BLEU, sensorId);
+                getInput(prompt, "BLEU", sensorId);
                 
                 cout<<sensorId;
                 
@@ -303,7 +317,40 @@ void paramDonnees()
     }
 } //----- Fin de paramDonnees
 
-void menuGestionCapteur()
+void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double confiance){
+	int rep;
+	int lattitude = 0;
+	int longitude = 0;
+	string texte = " "; 
+	cout<<"Voulez-vous supprimer un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+		cin>>rep;
+                if(rep == 1){
+			cout <<"Veuillez rentrer la lattiude"<<endl;
+			cin >> lattitude;
+			cout << "Veuillez rentrer la longitude"<<endl;
+			cin >> longitude;
+			if(numero == 3){
+				if(gc->supprimerCapteur(1, lattitude, longitude, texte)) cout<<"Le capteur a bien été supprimé"<<endl;
+				else cout<<"erreur lors de la suppression du capteur"<<endl;
+			}
+			if(numero == 4) cout<<gc->surveillerCapteur(1, lattitude, longitude, texte, gm)<<endl;
+			if(numero == 5) gc->rechercherCapteur(lattitude, longitude);
+			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
+		} else if(rep == 2){
+			cout << "Veuillez rentrer l'Id du capteur" <<endl;
+			cin >> texte;
+			if(numero == 3){
+				if(gc->supprimerCapteur(2, lattitude, longitude, texte)) cout<<"le capteur a bien été supprimé"<<endl;
+				else cout<<"erreur lors de la suppression"<<endl;
+			}
+			if (numero == 4) cout<<gc->surveillerCapteur(2, lattitude, longitude, texte, gm)<<endl; 
+			if (numero == 5) gc->rechercherCapteur(texte);
+			if (numero == 6) cout<<gc->capteursSimilaires(2, lattitude, longitude, texte, gm, confiance)<<endl;
+		} else cout <<"numéro invalide"<<endl;
+}
+	
+
+void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 {
 #ifdef MAP
     cout << "Appel à la méthode menuGestionCapteur de <main>" << endl;
@@ -313,7 +360,7 @@ void menuGestionCapteur()
     string choice2("Ajouter un capteur");
     string choice3("Supprimer un capteur");
     string choice4("Surveiller un capteur");
-    string choice5("Rechercher un capteur");
+    string choice5("Rechercher un capteur");	//On en fait quoi du capteur qu'il a rechercher ? on affiche ses infos? ses mesures ?
     string choice6("Capteurs similaires");
     string choice7("Retour au menu de départ");
     string choices[7] = {choice1, choice2, choice3, choice4, choice5, choice6, choice7};
@@ -322,28 +369,40 @@ void menuGestionCapteur()
     while (runCapteur) {
         int choice = getChoice(7, prompt, choices);
         bool b;
+	double rep = 0;
+	int lattitude = 0;
+	int longitude = 0;
+	string texte = " "; 
         switch (choice) {
             case 1: 
-                
+                cout<<gc->afficherCapteur()<<endl;
                 break;
-            case 2:
-                
+            case 2:  
+		cout<<"Entrer la longitude"<<endl;	
+		cin>>longitude;
+		cout<<"Entrer la lattitude"<<endl;	
+		cin>>lattitude;
+		cout<<"Entrer une description"<<endl;	
+		cin>>texte;
+                gc->ajouterCapteur(lattitude, longitude, texte); 
                 break;
             case 3:
-                
+		choixCapteur(3, gm, gc, rep);
                 break;
             case 4:
-                
+		choixCapteur(4, gm, gc, rep);
                 break;
             case 5:
-                
+		choixCapteur(5, gm, gc, rep);
                 break;
             case 6:
-                
+		cout<<"Veuillez entrer le poucentage de precision que vous souhaitez (entre 0 et 1)"<<endl;
+		cin >> rep; 
+                choixCapteur(6, gm, gc, rep);
                 break;
             case 7:
                 runCapteur = false;
-                promptConsole("Retour au menu", VERT);
+                promptConsole("Retour au menu", "VERT");
                 cout << endl << endl;
                 break;
         }
@@ -351,7 +410,7 @@ void menuGestionCapteur()
     }
 } //----- Fin de menuGestionCapteur
 
-void menuGestionMesure() 
+void menuGestionMesure(GestionMesure* gm) 
 {
 #ifdef MAP
     cout << "Appel à la méthode menuGestionMesure de <main>" << endl;
@@ -371,10 +430,10 @@ void menuGestionMesure()
         bool b;
         switch (choice) {
             case 1: 
-                
+                cout<<gm->consulterType()<<endl;
                 break;
             case 2:
-                               
+                cout<<gm->consulterMesure()<<endl;          
                 break;
             case 3:
                 
@@ -387,7 +446,7 @@ void menuGestionMesure()
                 break;
             case 6:
                 runMesure = false;
-                promptConsole("Retour au menu", VERT);
+                promptConsole("Retour au menu", "VERT");
                 cout << endl << endl;
                 break;
         }
@@ -395,7 +454,7 @@ void menuGestionMesure()
     }
 } //----- Fin de menuGestionMesure
 
-void menu() 
+void menu(GestionCapteur* gc, GestionMesure* gm) 
 {
 #ifdef MAP
     cout << "Appel à la méthode menu de <main>" << endl;
@@ -414,18 +473,18 @@ void menu()
         switch (choice) {
             case 1: 
                 cout << endl << endl;
-                menuGestionCapteur();
+                menuGestionCapteur(gc, gm);
                 break;
             case 2:
                 cout << endl << endl;
-                menuGestionMesure();
+                menuGestionMesure(gm);
                 break;
             case 3:
                 
                 break;
             case 4:
                 run = false; 
-                promptConsole("A bientôt", VERT);
+                promptConsole("A bientôt", "VERT");
                 break;
         }
         cout << endl << endl;
