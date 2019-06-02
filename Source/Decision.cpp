@@ -1,16 +1,16 @@
 /*************************************************************************
 analyser  -  description
 -------------------
-début                : $DATE$
+dï¿½but                : $DATE$
 copyright            : (C) $YEAR$ par $AUTHOR$
 e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <analyser> (fichier Decision.cpp) ------------
+//---------- Rï¿½alisation de la classe <analyser> (fichier Decision.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
-//-------------------------------------------------------- Include système
+//-------------------------------------------------------- Include systï¿½me
 #include <iostream>
 using namespace std;
 
@@ -22,17 +22,17 @@ using namespace std;
 
 //----------------------------------------------------------------- PUBLIC
 
-//----------------------------------------------------- Méthodes publiques
-// type analyser::Méthode ( liste des paramètres )
+//----------------------------------------------------- Mï¿½thodes publiques
+// type analyser::Mï¿½thode ( liste des paramï¿½tres )
 // Algorithme :
 //
 //{
-//} //----- Fin de Méthode
+//} //----- Fin de Mï¿½thode
 
 //-------------------------------------------- Constructeurs - destructeur
 	Decision::Decision(const Decision & uneDecision)
 	{
-		this->texte = uneDecision.texte;
+		this->action = uneDecision.action;
 
 		this->note = uneDecision.note;
 	}
@@ -41,16 +41,9 @@ using namespace std;
 	// Contrat :
 	//
 
-	Decision::Decision() {}
-	// Mode d'emploi :
-	//
-	// Contrat :
-	//
-
-	Decision::Decision(string texte, int note)
+	Decision::Decision(bool *action, int note)
 	{
-		this->texte = texte;
-
+		this->action = action;
 		this->note = note;
 	}
 	// Mode d'emploi :
@@ -64,8 +57,6 @@ using namespace std;
 	// Contrat :
 	//
 
-
 	//------------------------------------------------------------------ PRIVE
 
-	//----------------------------------------------------- Méthodes protégées
-
+	//----------------------------------------------------- Mï¿½thodes protï¿½gï¿½es

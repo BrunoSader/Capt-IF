@@ -10,13 +10,13 @@
 #define WARNING_H
 
 //--------------------------------------------------- Interfaces utilis�es
-#include <iostream>
 #include <iterator>
 #include <vector>
 #include "Attribut.h"
 #include "Decision.h"
 #include <string>
 #include <map>
+#include <ctime>
 using namespace std;
 //------------------------------------------------------------- Constantes
 
@@ -34,24 +34,29 @@ class Warning
 
 public:
 
-	int type;
-	string attributID;
+	map<Decision,double> listeDecision;
 
 //----------------------------------------------------- M�thodes publiques
 
-		int calculerDonneePrevisionelle(string sensorID, map<string,map<time_t,map<string,int>>> listeMesurebyCapteur, Attribut lAttribut);
+		void entrerDecision(Decision laDecision,double valeur);
+		// Mode d'emploi :
+		//
+		// Contrat :
+		//
+
+		void evaluerDecision(double valeurActuel);
+		// Mode d'emploi :
+		//
+		// Contrat :
+		//
+
+		double calculerDonneePrevisionelle(string sensorID, map<string,map<time_t,map<string,double>>> listeMesurebyCapteur, Attribut lAttribut);
 		// Mode d'emploi :
 		//
 		// Contrat :
 		//
 
 		vector<string> valeurAuDelaSeuil();
-		// Mode d'emploi :
-		//
-		// Contrat :
-		//
-
-		int evaluerDecision(Decision);
 		// Mode d'emploi :
 		//
 		// Contrat :
@@ -78,12 +83,6 @@ public:
     //
 
     Warning ( );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-		Warning (int type, string attributID);
     // Mode d'emploi :
     //
     // Contrat :

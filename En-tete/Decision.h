@@ -33,7 +33,7 @@ public:
 	// Contrat :
 	//
 
-	Decision(std::string texte, int note);
+	Decision(bool *action, int note);
 	// Mode d'emploi :
 	//
 	// Contrat :
@@ -45,13 +45,8 @@ public:
 	// Contrat :
 	//
 
-	void setTexte(int newTexte) { this->texte = newTexte; }
+	void setNote(const int x) {note = x;}
 
-	void setNote(int newNote) { this->note = newNote; }
-
-	std::string getTexte() { return texte; }
-
-	int getNote() { return note; }
 
 	//------------------------------------------------------------------ PRIVE
 
@@ -60,8 +55,7 @@ protected:
 
 	//----------------------------------------------------- Attributs prot�g�s
 
-	std::string texte;
-
+	bool *action;
 	int note;
 
 };
