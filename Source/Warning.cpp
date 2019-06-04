@@ -123,7 +123,8 @@ double Warning::calculerDonneePrevisionelle (string sensorID, map<string, map<st
 		}
 		double difference = (values[0]-values[1])*0.5 + (values[1]-values[2])*0.25 + (values[2]-values[3])*0.15 + (values[3]-values[4])*0.1;
 		//Calcul de la difference
-		valeurAuDelaSeuil(string attribut, double val, bool type)values[0]*difference);
+		valeurAuDelaSeuil("O3", values[0]*difference, false);
+		return difference;
 	}else return -1;
 }
 //----- Fin de M�thode
