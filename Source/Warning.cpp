@@ -14,7 +14,6 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 #include "../En-tete/Warning.h"
-
 //------------------------------------------------------------- Constantes
 
 //---------------------------------------------------- Variables de classe
@@ -27,6 +26,24 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
+string Warning::valeurAuDelaSeuil(string attribut, double val, bool type)
+{
+	if(type)
+	{
+		if(attribut == "O3")
+		{
+			if(val>=180)
+			{
+				return "WARNING !!! Votre capteur renvoi une valeur au-dela du seuil d'O3";
+			} else if (attribut == "NO2")
+			{
+				return "WARNING !!! Votre capteur renvoi une valeur au-dela du seuil d'NO2";
+			} else return NULL;
+		} else return NULL;
+	} else {
+		return NULL;
+	};
+}
 
 void Warning::entrerDecision(Decision laDecision,double valeur)
 // Algorithme :

@@ -16,4 +16,4 @@ clean :
 	rm *.o
 
 test :
-	./captair AttributeType.csv Sensors.csv FichierTest.csv
+	./captair AttributeType.csv Sensors.csv new2.csv

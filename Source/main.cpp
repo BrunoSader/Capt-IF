@@ -29,7 +29,7 @@ using namespace std;
 #include "../En-tete/GestionCapteur.h"
 #include "../En-tete/GestionMesure.h"
 #include "../En-tete/Mesure.h"
-//#include "../En-tete/Warning.h"
+#include "../En-tete/Warning.h"
 
 void menu(GestionCapteur* gc, GestionMesure* gm) ;
 
@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 	/*rajouter le code qui execute cette commande dans le terminal : iconv -f utf-16 -t utf-8 fichier_original > nouveaufichier*/
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
+	Warning *warning = new Warning();
 	string chaine;
 	string sacrifie;
 	fstream fichier;
@@ -143,12 +144,13 @@ int main(int argc, char *argv[])
 			tm.tm_min = minutes;
 			tm.tm_sec = secondes;
 			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+			cout<<warning->valeurAuDelaSeuil(attributeId, valueS, true)<<endl;
 		}
 	}
 	//cout<<gm->consulterMesure()<<endl;
 
-    	menu(gc, gm);
-    	delete gm;
+	menu(gc, gm);
+	delete gm;
 	delete gc;
 	return 0;
 } //----- fin de main

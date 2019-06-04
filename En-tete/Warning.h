@@ -74,8 +74,8 @@ public:
 		// Contrat :
 		//
 
-		vector<string> valeurAuDelaSeuil();
-		// Mode d'emploi :
+		string valeurAuDelaSeuil(string attribut, double val, bool type);
+		// Mode d'emploi : Type true signifie que c'est pas previsionelles
 		//
 		// Contrat :
 		//
