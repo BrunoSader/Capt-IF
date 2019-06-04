@@ -14,6 +14,7 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 #include "../En-tete/Warning.h"
+#include <string>
 //------------------------------------------------------------- Constantes
 
 //---------------------------------------------------- Variables de classe
@@ -26,7 +27,7 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-string Warning::valeurAuDelaSeuil(string attribut, double val, bool type)
+bool Warning::valeurAuDelaSeuil(string attribut, double val, bool type)
 {
 	if(type)
 	{
@@ -34,14 +35,14 @@ string Warning::valeurAuDelaSeuil(string attribut, double val, bool type)
 		{
 			if(val>=180)
 			{
-				return "WARNING !!! Votre capteur renvoi une valeur au-dela du seuil d'O3";
+				return true;
 			} else if (attribut == "NO2")
 			{
-				return "WARNING !!! Votre capteur renvoi une valeur au-dela du seuil d'NO2";
-			} else return NULL;
-		} else return NULL;
+				return true;
+			} else return false;
+		} else return false;
 	} else {
-		return NULL;
+		return false;
 	};
 }
 
@@ -122,7 +123,7 @@ double Warning::calculerDonneePrevisionelle (string sensorID, map<string, map<st
 		}
 		double difference = (values[0]-values[1])*0.5 + (values[1]-values[2])*0.25 + (values[2]-values[3])*0.15 + (values[3]-values[4])*0.1;
 		//Calcul de la difference
-		return (values[0]*difference);
+		valeurAuDelaSeuil(string attribut, double val, bool type)values[0]*difference);
 	}else return -1;
 }
 //----- Fin de M�thode
