@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 			tm.tm_mday = jour ;
 			tm.tm_hour = heure;
 			tm.tm_min = minutes;
-			tm.tm_sec = secondes;4
+			tm.tm_sec = secondes;
 			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
 			if(warning->valeurAuDelaSeuil(attributeId, valueS)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;}
 			else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;}
@@ -353,7 +353,13 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 				if(gc->supprimerCapteur(1, lattitude, longitude, texte)) cout<<"Le capteur a bien été supprimé"<<endl;
 				else cout<<"erreur lors de la suppression du capteur"<<endl;
 			}
-			if(numero == 4) cout<<gc->surveillerCapteur(1, lattitude, longitude, texte, gm)<<endl;
+			if(numero == 4) {
+				if(gc->surveillerCapteur(1, lattitude, longitude, texte, gm)){
+					cout<<"Le Capteur est ne présente pas d'anomalie"<<endl;
+				} else {
+					cout<<"Le Capteur n'est pas conforme et présente des anomalies."<<endl;
+				}
+			}
 			if(numero == 5) cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
 			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else if(rep == 2){
@@ -363,7 +369,13 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 				if(gc->supprimerCapteur(2, lattitude, longitude, texte)) cout<<"le capteur a bien été supprimé"<<endl;
 				else cout<<"erreur lors de la suppression"<<endl;
 			}
-			if (numero == 4) cout<<gc->surveillerCapteur(2, lattitude, longitude, texte, gm)<<endl;
+			if (numero == 4) {
+				if(gc->surveillerCapteur(2, lattitude, longitude, texte, gm)){
+					cout<<"Le Capteur ne présente pas d'anomalie"<<endl;
+				} else {
+					cout<<"Le Capteur n'est pas conforme et présente des anomalies"<<endl;
+				}
+			}
 			if (numero == 5) cout<<"La lattitude du capteur ayant l'identifiant que vous avez renseignés est " <<gc->rechercherCapteur(texte).getLattitude() << " et sa longitude est "<<gc->rechercherCapteur(texte).getLongitude();
 			if (numero == 6) cout<<gc->capteursSimilaires(2, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else cout <<"numéro invalide"<<endl;
