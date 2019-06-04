@@ -15,6 +15,7 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "../En-tete/Warning.h"
 #include <string>
+#include <iostream>
 //------------------------------------------------------------- Constantes
 
 //---------------------------------------------------- Variables de classe
@@ -34,28 +35,31 @@ bool Warning::valeurAuDelaSeuil(string attribut, double val)
 		if(val>=180)
 		{
 			return true;
-		} else if (attribut == "NO2")
+		}
+	}
+	if (attribut == "NO2")
+	{
+		if(val>=200)
 		{
-			if(val>=200)
-			{
-				return true;
-			}
-		} else if (attribut == "SO2")
+			return true;
+		}
+	}
+	if (attribut == "SO2")
+	{
+		if(val>=300)
 		{
-			if(val>=300)
-			{
-				return true;
-			}
-	} else if (attribut == "PM10")
+			return true;
+		}
+	}
+	if (attribut == "PM10")
 	{
 		if(val>=50)
 		{
 			return true;
 		}
-	} else {
-		return false;
-		}
 	}
+	return false;
+
 }
 
 void Warning::entrerDecision(Decision laDecision,double valeur)
@@ -115,24 +119,24 @@ bool Warning::calculerDonneePrevisionelle (map<struct tm, map<string,double>>lis
 // Algorithme :
 //
 {
-	 map<struct tm, map<string,double>>::reverse_iterator date_it;
+	map<struct tm, map<string,double>>::reverse_iterator date_it;
 	//On itere d sur les dates decroissantes
 	map<string,double>::iterator attribut_it;
 	double* values = new double [5];
 	int cpt=0;
-	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend(); ++date_it)
+	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend() && cpt<6; ++date_it)
 	{
 		attribut_it = date_it->second.find(lAttribut);
 		//On trouve l'attribut sur lequel on aimerait calculer les donnees previsionelles
 		values[cpt] = attribut_it->second;
 		cpt++;
 	}
-	double coef = (values[4]-values[0])/5;
-	double ordo_ori = values[4]-(coef*5);
-	double valeur_futur= coef*10+ordo_ori;
-	//Calcul de la difference
-	if(valeurAuDelaSeuil(lAttribut, valeur_futur)){ return true;}
-	else return false;
+	if(cpt>=5){
+		double coef = (values[0]-values[4])/5;
+		double ordo_ori = values[0]-(coef*5);
+		double valeur_futur= coef*10+ordo_ori;
+		return valeurAuDelaSeuil(lAttribut, valeur_futur);
+	}else return false;
 }
 //----- Fin de M�thode
 
