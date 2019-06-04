@@ -19,6 +19,7 @@
 #include <vector>
 #include <cstring>
 #include <iomanip>
+#include <unistd.h>
 #include <algorithm>
 
 using namespace std;
@@ -29,7 +30,7 @@ using namespace std;
 #include "../En-tete/GestionCapteur.h"
 #include "../En-tete/GestionMesure.h"
 #include "../En-tete/Mesure.h"
-#include "../En-tete/Warning.h"
+//#include "../En-tete/Warning.h"
 
 void menu(GestionCapteur* gc, GestionMesure* gm) ;
 
@@ -42,11 +43,11 @@ int main(int argc, char *argv[])
 	string nomFichierDescriptionCapteur = string(argv[2]);
 	//le dernier correspond aux des données capteurs
 	string nomFichierDonnesCapteur = string(argv[3]);
-
 	/*rajouter le code qui execute cette commande dans le terminal : iconv -f utf-16 -t utf-8 fichier_original > nouveaufichier*/
+	execl("iconv", "-f",  "utf-16", "-t",  "utf-8", "../Ressources/FichierTest.csv", ">", "new3.csv");
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
-	Warning *warning = new Warning();
+	//Warning *warning = new Warning();
 	string chaine;
 	string sacrifie;
 	fstream fichier;
@@ -144,7 +145,7 @@ int main(int argc, char *argv[])
 			tm.tm_min = minutes;
 			tm.tm_sec = secondes;
 			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-			cout<<warning->valeurAuDelaSeuil(attributeId, valueS, true)<<endl;
+		//	cout<<warning->valeurAuDelaSeuil(attributeId, valueS, true)<<endl;
 		}
 	}
 	//cout<<gm->consulterMesure()<<endl;
@@ -322,7 +323,10 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 	int lattitude = 0;
 	int longitude = 0;
 	string texte = " ";
-	cout<<"Voulez-vous supprimer un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 3) cout<<"Voulez-vous supprimer un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 4) cout<<"Voulez-vous surveiller un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 5) cout<<"Voulez-vous rechercher un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 6) cout<<"Voulez-vous trouver les capteurs similaires à l'aide des coordonnées (1) de votre capteur ou son Id (2) ?"<<endl;
 		cin>>rep;
                 if(rep == 1){
 			cout <<"Veuillez rentrer la lattiude"<<endl;
@@ -334,7 +338,7 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 				else cout<<"erreur lors de la suppression du capteur"<<endl;
 			}
 			if(numero == 4) cout<<gc->surveillerCapteur(1, lattitude, longitude, texte, gm)<<endl;
-			if(numero == 5) gc->rechercherCapteur(lattitude, longitude);
+			if(numero == 5) cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
 			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else if(rep == 2){
 			cout << "Veuillez rentrer l'Id du capteur" <<endl;
@@ -344,7 +348,7 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 				else cout<<"erreur lors de la suppression"<<endl;
 			}
 			if (numero == 4) cout<<gc->surveillerCapteur(2, lattitude, longitude, texte, gm)<<endl;
-			if (numero == 5) gc->rechercherCapteur(texte);
+			if (numero == 5) cout<<"La lattitude du capteur ayant l'identifiant que vous avez renseignés est " <<gc->rechercherCapteur(texte).getLattitude() << " et sa longitude est "<<gc->rechercherCapteur(texte).getLongitude();
 			if (numero == 6) cout<<gc->capteursSimilaires(2, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else cout <<"numéro invalide"<<endl;
 }
@@ -355,7 +359,7 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 #ifdef MAP
     cout << "Appel à la méthode menuGestionCapteur de <main>" << endl;
 #endif
-    string prompt("Veuillez choisir une des fonctionnalités suivantes :");
+    string prompt("Veuillez choisir une des suivantes :");
     string choice1("Consulter la liste des capteurs");
     string choice2("Ajouter un capteur");
     string choice3("Supprimer un capteur");
