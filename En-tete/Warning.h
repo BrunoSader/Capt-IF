@@ -27,20 +27,6 @@ using namespace std;
 //
 //
 //------------------------------------------------------------------------
-inline bool operator == (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min) return true;
-	else return false;
-}
-inline bool operator < (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year < tm2.tm_year){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon < tm2.tm_mon){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday < tm2.tm_mday){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour < tm2.tm_hour){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min < tm2.tm_min){return true;}
-	else return false;
-}
 
 class Warning
 {
@@ -72,13 +58,13 @@ public:
 		// Contrat :
 		//
 
-		double calculerDonneePrevisionelle(string sensorID, map<string, map<struct tm, map<string,double>>>listeMesurebyCapteur, Attribut lAttribut);
+		bool calculerDonneePrevisionelle(map<struct tm, map<string,double>>listeMesurebyDate, string lAttribut);
 		// Mode d'emploi :
 		//
 		// Contrat :
 		//
 
-		bool valeurAuDelaSeuil(string attribut, double val, bool type);
+		bool valeurAuDelaSeuil(string attribut, double val);
 		// Mode d'emploi : Type true signifie que c'est pas previsionelles
 		//
 		// Contrat :

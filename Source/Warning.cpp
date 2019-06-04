@@ -27,23 +27,35 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-bool Warning::valeurAuDelaSeuil(string attribut, double val, bool type)
+bool Warning::valeurAuDelaSeuil(string attribut, double val)
 {
-	if(type)
+	if(attribut == "O3")
 	{
-		if(attribut == "O3")
+		if(val>=180)
 		{
-			if(val>=180)
+			return true;
+		} else if (attribut == "NO2")
+		{
+			if(val>=200)
 			{
 				return true;
-			} else if (attribut == "NO2")
+			}
+		} else if (attribut == "SO2")
+		{
+			if(val>=300)
 			{
 				return true;
-			} else return false;
-		} else return false;
+			}
+	} else if (attribut == "PM10")
+	{
+		if(val>=50)
+		{
+			return true;
+		}
 	} else {
 		return false;
-	};
+		}
+	}
 }
 
 void Warning::entrerDecision(Decision laDecision,double valeur)
@@ -99,33 +111,28 @@ void Warning::evaluerDecision(double valeurActuel)
 }
 
 
-double Warning::calculerDonneePrevisionelle (string sensorID, map<string, map<struct tm, map<string,double>>>listeMesurebyCapteur, Attribut lAttribut)
+bool Warning::calculerDonneePrevisionelle (map<struct tm, map<string,double>>listeMesurebyDate, string lAttribut)
 // Algorithme :
 //
 {
-	map<string, map<struct tm, map<string,double>>>::iterator sensor_it;
-	sensor_it = listeMesurebyCapteur.find(sensorID);
-	//On trouve notre capteur dans la liste
-	if (sensor_it != listeMesurebyCapteur.end())
+	 map<struct tm, map<string,double>>::reverse_iterator date_it;
+	//On itere d sur les dates decroissantes
+	map<string,double>::iterator attribut_it;
+	double* values = new double [5];
+	int cpt=0;
+	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend(); ++date_it)
 	{
-		 map<struct tm, map<string,double>> listeMesurebyDate = sensor_it->second;
-		 map<struct tm, map<string,double>>::reverse_iterator date_it;
-		//On itere d sur les dates decroissantes
-		map<string,double>::iterator attribut_it;
-		double* values = new double [5];
-		int cpt=0;
-		for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend(); ++date_it)
-		{
-			attribut_it = date_it->second.find(lAttribut.getAttributeId());
-			//On trouve l'attribut sur lequel on aimerait calculer les donnees previsionelles
-			values[cpt] = attribut_it->second;
-			cpt++;
-		}
-		double difference = (values[0]-values[1])*0.5 + (values[1]-values[2])*0.25 + (values[2]-values[3])*0.15 + (values[3]-values[4])*0.1;
-		//Calcul de la difference
-		valeurAuDelaSeuil("O3", values[0]*difference, false);
-		return difference;
-	}else return -1;
+		attribut_it = date_it->second.find(lAttribut);
+		//On trouve l'attribut sur lequel on aimerait calculer les donnees previsionelles
+		values[cpt] = attribut_it->second;
+		cpt++;
+	}
+	double coef = (values[4]-values[0])/5;
+	double ordo_ori = values[4]-(coef*5);
+	double valeur_futur= coef*10+ordo_ori;
+	//Calcul de la difference
+	if(valeurAuDelaSeuil(lAttribut, valeur_futur)){ return true;}
+	else return false;
 }
 //----- Fin de M�thode
 

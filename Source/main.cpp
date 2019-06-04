@@ -30,9 +30,24 @@ using namespace std;
 #include "../En-tete/GestionCapteur.h"
 #include "../En-tete/GestionMesure.h"
 #include "../En-tete/Mesure.h"
-//#include "../En-tete/Warning.h"
+#include "../En-tete/Warning.h"
 
 void menu(GestionCapteur* gc, GestionMesure* gm) ;
+
+bool operator == (const struct tm & tm1, const struct tm & tm2)
+{
+	if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min) return true;
+	else return false;
+}
+bool operator < (const struct tm & tm1, const struct tm & tm2)
+{
+	if(tm1.tm_year < tm2.tm_year){return true;}
+	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon < tm2.tm_mon){return true;}
+	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday < tm2.tm_mday){return true;}
+	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour < tm2.tm_hour){return true;}
+	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min < tm2.tm_min){return true;}
+	else return false;
+}
 
 int main(int argc, char *argv[])
 {
@@ -47,7 +62,7 @@ int main(int argc, char *argv[])
 	execl("iconv", "-f",  "utf-16", "-t",  "utf-8", "../Ressources/FichierTest.csv", ">", "new3.csv");
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
-	//Warning *warning = new Warning();
+	Warning *warning = new Warning();
 	string chaine;
 	string sacrifie;
 	fstream fichier;
@@ -143,9 +158,10 @@ int main(int argc, char *argv[])
 			tm.tm_mday = jour ;
 			tm.tm_hour = heure;
 			tm.tm_min = minutes;
-			tm.tm_sec = secondes;
+			tm.tm_sec = secondes;4
 			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-		//	cout<<warning->valeurAuDelaSeuil(attributeId, valueS, true)<<endl;
+			if(warning->valeurAuDelaSeuil(attributeId, valueS)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;}
+			else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;}
 		}
 	}
 	//cout<<gm->consulterMesure()<<endl;
