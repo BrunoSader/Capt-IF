@@ -47,6 +47,7 @@ public:
 
 	void setNote(const int x) {note = x;}
 	int getNote() const {return note;}
+	string getSensorId() const {return sensorID;}
 	bool* getAction() const {return action;}
 
 
@@ -58,6 +59,7 @@ protected:
 	//----------------------------------------------------- Attributs prot�g�s
 	bool* action;
 	int note;
+	string sensorID;
 
 };
 

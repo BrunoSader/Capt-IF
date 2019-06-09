@@ -12,8 +12,18 @@ copyright            : (C) 2019 par CLEMENCEAU
 
 //--------------------------------------------------- Interfaces utilis�es
 #include <iostream>
-#include "main.h"
 #include <string>
+#include <map>
+#include <ctime>
+#include <fstream>
+#include <sstream>
+#include <regex>
+#include <vector>
+#include <cstring>
+#include <iomanip>
+#include <unistd.h>
+#include <algorithm>
+
 using namespace std;
 //------------------------------------------------------------- Constantes
 

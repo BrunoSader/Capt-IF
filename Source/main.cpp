@@ -21,6 +21,7 @@
 #include <iomanip>
 #include <unistd.h>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -124,51 +125,74 @@ int main(int argc, char *argv[])
 	//**********Stockage des données des capteurs
 	fstream fichier3;
 	fichier3.open(nomFichierDonnesCapteur, ios::in);
-	if (fichier3)
+	ofstream myfile;
+  myfile.open ("lectureAleatoire.csv");
+	for(int k=10; k<100000000; k=k*5)
 	{
-		for(int i = 0; i < 15; getline(fichier3, chaine), i++){}
-		while (!fichier3.eof())
+		if (fichier3)
 		{
-			stringstream ss;
-			getline(fichier3, chaine);
-			ss << chaine;
-			int annee;
-			int mois;
-			int jour;
-			int heure;
-			int minutes;
-			double secondes;
-			string sensorId;
-			string attributeId;
-			double valueS;
-			ss >> annee;
-			getline(ss, sacrifie, '-');
-			ss >> mois;
-			getline(ss, sacrifie, '-');
-			ss >> jour;
-			getline(ss, sacrifie, 'T');
-			ss >> heure;
-			getline(ss, sacrifie, ':');
-			ss >> minutes;
-			getline(ss, sacrifie, ':');
-			ss >> secondes;
-			getline(ss, sacrifie, ';');
-			getline(ss, sensorId, ';');
-			getline(ss, attributeId, ';');
-			ss >> valueS;
-			getline(ss, sacrifie, ';');
-			struct tm tm {};
-			tm.tm_year = annee;
-			tm.tm_mon = mois ;
-			tm.tm_mday = jour ;
-			tm.tm_hour = heure;
-			tm.tm_min = minutes;
-			tm.tm_sec = secondes;
-			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-			if(warning->valeurAuDelaSeuil(attributeId, valueS)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;}
-			else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;}
+			int i=0;
+			while (!fichier3.eof() && i<k)
+			{
+				stringstream ss;
+				getline(fichier3, chaine);
+				ss << chaine;
+				int annee;
+				int mois;
+				int jour;
+				int heure;
+				int minutes;
+				double secondes;
+				string sensorId;
+				string attributeId;
+				double valueS;
+				ss >> annee;
+				getline(ss, sacrifie, '-');
+				ss >> mois;
+				getline(ss, sacrifie, '-');
+				ss >> jour;
+				getline(ss, sacrifie, 'T');
+				ss >> heure;
+				getline(ss, sacrifie, ':');
+				ss >> minutes;
+				getline(ss, sacrifie, ':');
+				ss >> secondes;
+				getline(ss, sacrifie, ';');
+				getline(ss, sensorId, ';');
+				getline(ss, attributeId, ';');
+				ss >> valueS;
+				getline(ss, sacrifie, ';');
+				struct tm tm {};
+				tm.tm_year = annee;
+				tm.tm_mon = mois ;
+				tm.tm_mday = jour ;
+				tm.tm_hour = heure;
+				tm.tm_min = minutes;
+				tm.tm_sec = secondes;
+				gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+				//if(warning->valeurAuDelaSeuil(attributeId, valueS)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;}
+				//else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;}
+				i++;
+			}
+			/*
+			int nb_sensor = gc->listeCapteur.size();
+			double time = 0;
+			int j;
+			for (j = 0; j < i/2; j++) {
+				int num = rand() % nb_sensor;
+				std::string id = std::to_string(num);
+				auto start = chrono::steady_clock::now();
+				gm->getMesure(id);
+				auto end = chrono::steady_clock::now();
+				time = time + chrono::duration_cast<chrono::microseconds>(end - start).count();
+			}
+			time = time/(j);
+			cout << "Writing to file for n = " <<i<< "and average time is : "<<time<<endl;
+			myfile <<"microseconds: "<<time<<" | N: "<<i<< endl;
+			*/
 		}
 	}
+	myfile.close();
 	//cout<<gm->consulterMesure()<<endl;
 
 	menu(gc, gm);
