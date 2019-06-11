@@ -33,27 +33,9 @@ using namespace std;
 #include "../En-tete/Mesure.h"
 #include "../En-tete/Warning.h"
 
-
-
- /*bool operator == (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min) return true;
-	else return false;
-}
- bool operator < (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year < tm2.tm_year){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon < tm2.tm_mon){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday < tm2.tm_mday){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour < tm2.tm_hour){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min < tm2.tm_min){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min && tm1.tm_sec < tm2.tm_sec){return true;}
-	else return false;
-}*/
-
 void menu(GestionCapteur* gc, GestionMesure* gm) ;
 
-
+void gestionDesDecisions(Warning* wr, double valeur, string sensorId);
 
 int main(int argc, char *argv[])
 {
@@ -170,26 +152,16 @@ int main(int argc, char *argv[])
 				tm.tm_min = minutes;
 				tm.tm_sec = secondes;
 				gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-				//if(warning->valeurAuDelaSeuil(attributeId, valueS)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;}
-				//else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;}
+				if(warning->valeurAuDelaSeuil(attributeId, valueS)){
+					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
+					gestionDesDecisions(warning, valueS, sensorId);
+				}
+				else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){
+					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;
+					gestionDesDecisions(warning, valueS, sensorId);
+				} else	warning->evaluerDecision(sensorId, valueS);
 				i++;
 			}
-			/*
-			int nb_sensor = gc->listeCapteur.size();
-			double time = 0;
-			int j;
-			for (j = 0; j < i/2; j++) {
-				int num = rand() % nb_sensor;
-				std::string id = std::to_string(num);
-				auto start = chrono::steady_clock::now();
-				gm->getMesure(id);
-				auto end = chrono::steady_clock::now();
-				time = time + chrono::duration_cast<chrono::microseconds>(end - start).count();
-			}
-			time = time/(j);
-			cout << "Writing to file for n = " <<i<< "and average time is : "<<time<<endl;
-			myfile <<"microseconds: "<<time<<" | N: "<<i<< endl;
-			*/
 		}
 	}
 	myfile.close();
@@ -548,3 +520,66 @@ void menu(GestionCapteur* gc, GestionMesure* gm)
         cout << endl << endl;
     }
 } //----- Fin de menu
+
+void gestionDesDecisions (Warning *wr, double valeur, string sensorId)
+{
+	string read;
+	bool aucuneDecision = true;
+	cout<<"Voulez vous qu'on vous propose une solution? (oui)"<<endl;
+	cin>>read;
+	if(read=="oui")
+	{
+		Decision decision_propose=wr->proposerDecision();
+		if(decision_propose.getNote()>2)
+		{
+			bool* action = decision_propose.getAction();
+			cout<<"---On vous propose---"<<endl;
+			if(action[0]) cout<<"Alterner les voitures d'imatriculation paire ou impaire"<<endl;
+			if(action[1]) cout<<"Transport en commun gratuit pour tous pendant 3 jours"<<endl;
+			if(action[2]) cout<<"Favoriser le co-voiturage avec des payages gratuits"<<endl;
+			if(action[3]) cout<<"Augmenter les prix des polluants"<<endl;
+			aucuneDecision = false;
+		} else cout<<"Aucune proposition ne peut etre faite a ce moment"<<endl;
+	}
+		if(aucuneDecision){
+		cout<<"Voulez vous entrer une decision? (oui)"<<endl;
+		cin>>read;
+		if(read=="oui")
+		{
+			bool *action = new bool[4];
+			cout<<"Alterner les voitures d'imatriculation paire ou impaire (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[0]=true;
+			cout<<"Transport en commun gratuit pour tous pendant 3 jours (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[1]=true;
+			cout<<"Favoriser le co-voiturage avec des payages gratuits (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[2]=true;
+			cout<<"Augmenter les prix des polluants (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[3]=true;
+			Decision *laDecision = new Decision(action,sensorId);
+			wr->entrerDecision(*laDecision,valeur);
+		}
+	}
+}
+
+
+////////// CODE TEST ///////////
+/*
+int nb_sensor = gc->listeCapteur.size();
+double time = 0;
+int j;
+for (j = 0; j < i/2; j++) {
+	int num = rand() % nb_sensor;
+	std::string id = std::to_string(num);
+	auto start = chrono::steady_clock::now();
+	gm->getMesure(id);
+	auto end = chrono::steady_clock::now();
+	time = time + chrono::duration_cast<chrono::microseconds>(end - start).count();
+}
+time = time/(j);
+cout << "Writing to file for n = " <<i<< "and average time is : "<<time<<endl;
+myfile <<"microseconds: "<<time<<" | N: "<<i<< endl;
+*/

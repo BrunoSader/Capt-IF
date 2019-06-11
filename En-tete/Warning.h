@@ -36,7 +36,11 @@ struct DecisionCompare
 {
    bool operator() (const Decision& decision1, const Decision& decision2) const
    {
-       return decision1.getNote() < decision2.getNote();
+		 if(decision1.getAction()[0]==decision2.getAction()[0] && decision1.getAction()[1]==decision2.getAction()[1] && decision1.getAction()[2]==decision2.getAction()[2] && decision1.getAction()[3]==decision2.getAction()[3])
+		 {
+       return decision1.getAction() == decision2.getAction();
+		 }
+		 return decision1.getAction() < decision2.getAction();
    }
 };
 
@@ -52,7 +56,7 @@ public:
 		// Contrat :
 		//
 
-		void evaluerDecision(double valeurActuel);
+		void evaluerDecision(string sensorId, double valeurActuel);
 		// Mode d'emploi :
 		//
 		// Contrat :

@@ -72,45 +72,59 @@ void Warning::entrerDecision(Decision laDecision,double valeur)
 	//Decision n'existe pas
 	{
 		listeDecision.insert(std::pair<Decision,double>(laDecision,valeur));
-	}
+	} else cout <<"Decision existe deja"<<endl;
 }
 
-void Warning::evaluerDecision(double valeurActuel)
+void Warning::evaluerDecision(string sensorId, double valeurActuel)
 // Algorithme :
 //
 {
-	map<Decision,double>::iterator decision_it;
-	for (decision_it=listeDecision.begin(); decision_it!=listeDecision.end() || decision_it->second>-1; ++decision_it){}
-	map<Decision,double>::iterator decision_exist;
-	Decision laDecision = decision_it->first;
-	decision_exist = listeDecision.find(laDecision);
-	if(decision_exist==listeDecision.end())
-	//Decision n'existe pas
+	map<Decision,double,DecisionCompare>::iterator decision_it;
+	for (decision_it=listeDecision.begin();decision_it!=listeDecision.end() && decision_it->first.getSensorId()!=sensorId; ++decision_it){}
+	if(decision_it!=listeDecision.end())
 	{
+		Decision *laDecision = new Decision(decision_it->first);
 		double difference = valeurActuel - decision_it->second;
 		if(difference<0)
 		{
-			laDecision.setNote(5);
+			laDecision->setNote(5);
 		} else if(difference==0){
-			laDecision.setNote(4);
+			laDecision->setNote(4);
 		} else {
 			double evolution = difference/decision_it->second;
 			if(evolution>0.99)
 			{
-				laDecision.setNote(0);
+				laDecision->setNote(0);
 			}else if(evolution>0.66)
 			{
-				laDecision.setNote(1);
+				laDecision->setNote(1);
 			}else if(evolution>0.33)
 			{
-				laDecision.setNote(2);
+				laDecision->setNote(2);
 			}
 			else if(evolution>0)
 			{
-				laDecision.setNote(2);
+				laDecision->setNote(3);
 			}
 		}
-		decision_it->second = -1;
+		listeDecision.erase(decision_it);
+		listeDecision.insert(std::pair<Decision,double>(*laDecision,-1));
+		cout<<"Decision prise pour capteur "<<laDecision->getSensorId()<<" et sa note est de "<<laDecision->getNote()<<endl;
+	}
+}
+
+Decision Warning::proposerDecision()
+{
+	if(listeDecision.size()>0)
+	{
+		map<Decision,double,DecisionCompare>::iterator decision_it;
+		decision_it=listeDecision.begin();
+		//cout<<"la note"<<decision_it->first.getNote()<<endl;
+		return decision_it->first;
+	} else {
+		bool* action = new bool[4];
+		Decision *mauvaiseDecision = new Decision(action,"",0);
+		return *mauvaiseDecision;
 	}
 }
 

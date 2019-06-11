@@ -33,7 +33,7 @@ public:
 	// Contrat :
 	//
 
-	Decision(bool *action, int note);
+	Decision(bool *action, string sensorID, int note=0);
 	// Mode d'emploi :
 	//
 	// Contrat :
