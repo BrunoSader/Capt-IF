@@ -46,8 +46,6 @@ struct DecisionCompare
 
 public:
 
-	map<Decision,double,DecisionCompare> listeDecision;
-
 //----------------------------------------------------- M�thodes publiques
 
 		void entrerDecision(Decision laDecision,double valeur);
@@ -110,7 +108,7 @@ public:
 
 protected:
 //----------------------------------------------------- M�thodes prot�g�es
-
+map<Decision,double,DecisionCompare> listeDecision;
 private:
 //------------------------------------------------------- M�thodes priv�es
 
