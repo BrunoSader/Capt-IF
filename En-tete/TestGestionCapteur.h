@@ -12,6 +12,7 @@ copyright            : (C) 2019 par CLEMENCEAU
 
 //--------------------------------------------------- Interfaces utilis�es
 #include <string>
+#include "GestionCapteur.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 
