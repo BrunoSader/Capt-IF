@@ -115,7 +115,6 @@ void TestGestionMesure::testUnitaire(string filename1, string filename2)
 
 //----------------------------------------------------- Méthodes protégées
 
-
 void TestGestionMesure::testAjouterAtt() // Quand est-ce qu'on change le seuil d'un attribut ajouté comme ça ?
 {
     string ids[] = {"02", "", "03", "02", "SO4"};

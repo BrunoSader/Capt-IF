@@ -230,7 +230,7 @@ void TestGestionCapteur::testRechercheLatLng()
     }
     float lats[] = {0, 30, 30, 70, -20};
     float longs[] = {0, 30, 30, 70, -20};
-    string attendus[] = {"FAIL", "SUCCESS", "SUCCESS", "FAIL", "FAIL"};
+    string attendus[] = {"SUCCESS", "SUCCESS", "SUCCESS", "SUCCESS", "SUCCESS"}; // On ne peut pas ne rien trouver
     string resString; Capteur c;
     for (int i = 0; i < 5; ++i)
     {
