@@ -279,14 +279,14 @@ void paramDonnees()
     cout << "Appel à la méthode paramDonnees de <main>" << endl;
 #endif
 
-    string * arg = new string[7];
+    string * arg = new string[10];
     int taille = 5;
     int * boolTab = new int[taille];
     for (int i = 0; i<taille; i++) {
         boolTab[i]=0;
     }
 
-    string prompt("Choisissez les paramètres que vous souhaitez renseigner \n Sachant que vous pouvez renseigner un sensorId OU des coordonnées OU un intervalle de coordonnées mais pas une combinaison de ces paramètres");
+    string prompt("Choisissez les paramètres que vous souhaitez renseigner \r\n Vous pouvez renseigner soit sensorId soit des coordonnées soit un intervalle de coordonnées.");
     cout << endl;
     string choice1("sensorId");
     string choice2("coordonnées");
@@ -296,42 +296,141 @@ void paramDonnees()
     string choice5("attributeId");
     cout << endl;
     string choice6("Valider la recherche de mesures");
-    string choices[6] = {choice1, choice2, choice3, choice4, choice5, choice6};
+    string choice7("Annuler recherche");
+    string choices[7] = {choice1, choice2, choice3, choice4, choice5, choice6, choice7};
 
+    bool valide; // utilisé pour valider les entrées
+    
     bool runParam = true;
     while (runParam) {
-        int choice = getChoice(6, prompt, choices);
+        int choice = getChoice(7, prompt, choices);
         switch (choice) {
             case 1:
             {
                 boolTab[0]=1;
 
-                string sensorId;
-                string prompt("Veuillez renseigner le sensorId : ");
-                getInput(prompt, BLEU, sensorId);
-
-                cout<<sensorId;
-
+                string prompt("Veuillez renseigner le sensorId (ex. : Sensor2) : ");
+                getInput(prompt, BLEU, arg[0]); // arg[0] correspond au SensorId renseigné
             }
                 break;
             case 2:
                 boolTab[1]=1;
 
+                promptConsole("Veuillez renseigner les coordonnées (ex. : latitude=38, longitude =-89) : ",BLEU);
+                
+                do { 
+                    
+                    valide = true;
+                    
+                    string promptLat("Latitude (comprise entre -90 et +90) :");
+                    getInput(promptLat, RESET, arg[0]); // arg[0] correspond à la latitude renseignée
+                    string promptLon("Longitude (comprise entre -90 et +90) :");
+                    getInput(promptLon, RESET, arg[1]); // arg[0] correspond à la longitude renseignée
+                    
+                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-90 || stof(arg[1])>90) {
+                            promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90",ROUGE);
+                            valide = false;
+                    }
+                } while (!valide);
+
                 break;
             case 3:
                 boolTab[2]=1;
-
+                
+                promptConsole("Veuillez renseigner l'intervalle de coordonées (sachant que la latitude et la longitude sont comprises entre -90 et +90) : ",BLEU);
+                
+                do {
+                    valide = true;
+                    
+                    string promptLatMin("Latitude min :");
+                    getInput(promptLatMin, RESET, arg[0]); // arg[0] correspond à la latitude min
+                    string promptLatMax("Latitude max :");
+                    getInput(promptLatMax, RESET, arg[1]); // arg[1] correspond à la latitude max
+                    string promptLonMin("Longitude min :");
+                    getInput(promptLonMin, RESET, arg[2]); // arg[2] correspond à la longitude min
+                    string promptLongMax("Longitude max :");
+                    getInput(promptLongMax, RESET, arg[3]); // arg[3] correspond à la longitude max
+                    
+                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-90 || stof(arg[1])>90 || stof(arg[2])<-90 || stof(arg[2])>90 || stof(arg[3])<-90 || stof(arg[3])>90) {
+                        promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90",ROUGE);
+                        valide = false;
+                    }
+                    else if (stof(arg[0]) >= stof(arg[1]) && stof(arg[2]) >= stof(arg[3])) {
+                        promptConsole("Attention les coordonnées min doivent être strictement inférieures aux coordonnées max",ROUGE);
+                        valide = false;
+                    }
+                    
+                } while (!valide);
+                
                 break;
-            case 4:
+            case 4: // dates
+                
                 boolTab[3]=1;
+                promptConsole("Veuillez renseigner les deux dates entre lesquelles vous voulez considérer les mesures en précisant les entiers correspondant à l'année, le mois et le jour : ",BLEU);
+                
+                do {
+                    valide = true;
+                    promptConsole("Date de début: ",BLEU);
+                    string promptAnnee("Année (1900-020) :");
+                    getInput(promptAnnee, RESET, arg[4]); // arg[4] correspond à l'année de début
+                    string promptMois("Mois (1-12) :");
+                    getInput(promptMois, RESET, arg[5]); // arg[5] mois début
+                    string promptJour("Jour (1-31):");
+                    getInput(promptJour, RESET, arg[6]); // arg[6] jour début
+                    
+                    promptConsole("Date de fin: ",BLEU);
+                    string promptAnneeF("Année (1900-020) :");
+                    getInput(promptAnneeF, RESET, arg[7]); // arg[7] correspond à l'année de fin
+                    string promptMoisF("Mois (1-12) :");
+                    getInput(promptMoisF, RESET, arg[8]); // arg[8] mois fin
+                    string promptJourF("Jour (1-31):");
+                    getInput(promptJourF, RESET, arg[9]); // arg[9] jour fin
+                    
+                    if (stoi(arg[4]) < 1900 || stoi(arg[4]) > 2020 || stoi(arg[7]) < 1900 || stoi(arg[7]) > 2020 // vérif année
+                        || stoi(arg[5]) < 1 || stoi(arg[5]) > 12 || stoi(arg[8]) < 1 || stoi(arg[8]) > 12 // vérif mois 
+                        || stoi(arg[6]) < 1 || stoi(arg[6]) > 31 || stoi(arg[9]) < 1 || stoi(arg[9]) > 31) 
+                    {
+                        valide = false;
+                        promptConsole("Format de date invalide, veuillez réessayer");
+                    }
+                    else if (stoi(arg[4]) > stoi(arg[7])) {
+                        valide = false;
+                        promptConsole("La date de début doit être avant la date de fin");
+                    }
+                    else if (stoi(arg[5]) > stoi(arg[8])) {
+                        valide = false;
+                        promptConsole("La date de début doit être avant la date de fin");
+                    }
+                    else if (stoi(arg[6]) > stoi(arg[9])) {
+                        valide = false;
+                        promptConsole("La date de début doit être avant la date de fin");
+                    }
+                    
+                } while (!valide);
+                
 
                 break;
-            case 5:
-                boolTab[4]=1;
-
+            case 5: // attributeId
+                { boolTab[4]=1;
+                string prompt("Veuillez renseigner l'attributeId (ex. : O3) :");
+                getInput(prompt, BLEU, arg[10]); // arg[10] correspond à l'attributeId
+                }
                 break;
-            case 6:
-
+            case 6: //valider
+                { 
+                    if ((boolTab[0]==1 && boolTab[1]==1) || (boolTab[0]==1 && boolTab[2]==1) || (boolTab[1]==1 && boolTab[2]==1)) {
+                        promptConsole("Vous ne pouvez pas combiner une recherche par SensorId et coordonnées ou par intervalle de coordonnées et coordonnées. \r\n Veuillez annuler votre opération et recommencer");
+                    }
+                    else {
+                        //vector <Mesure> result = gm->getMesureCapteur();
+                        
+                        // affichage du résultat
+                    }
+                }
+                break;
+            case 7: //annuler
+                {
+                }
                 break;
         }
         cout << endl << endl;
