@@ -64,6 +64,9 @@ public:
     void ajouterAttribut(string id, string unite, string description);
 
     void ajouterMesure(struct tm tm, string sensorId, string attributeId, double value);
+	
+	
+    void ajouterAttribut(string id, string unite, string description, int seuil);
 
     double moyenneValAttribut(string attributId, string sensorId);
 
