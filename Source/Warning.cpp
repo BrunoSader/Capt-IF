@@ -170,6 +170,7 @@ bool Warning::calculerDonneePrevisionelle (map<struct tm, map<string,double>>lis
 		double valeur_futur= coef*10+ordo_ori;
 		return valeurAuDelaSeuil(lAttribut, valeur_futur, listeTypeMesure);
 	}else return false;
+}
 //----- Fin de M�thode
 
 //-------------------------------------------- Constructeurs - destructeur
