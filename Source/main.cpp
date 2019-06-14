@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 	fichier.open(nomFichierAttribut, ios::in);
 	if (fichier)
 	{
+		int seuil;
 		getline(fichier, chaine);
 		while (!fichier.eof())
 		{
@@ -70,7 +71,24 @@ int main(int argc, char *argv[])
 			getline(ss, id, ';');
 			getline(ss, unite, ';');
 			getline(ss, description, ';');
-			gm->ajouterAttribut(id, unite, description);
+			    if ("O3"==id)
+			    {
+				seuil=180;
+			    }
+			    else if ("NO2"==id)
+			    {
+				seuil=200;
+				    }
+			    else if ("SO2"==id)
+			    {
+				seuil=300;
+			    }
+			    else if ("PM10"==id)
+			    {
+				seuil=50;
+			    }
+			    else{ seuil = 0; }
+			gm->ajouterAttribut(id, unite, description, seuil);
 		}
 	}else{
 		cout<<"Ne fonctionne pas"<<endl;
