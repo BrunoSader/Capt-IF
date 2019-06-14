@@ -172,11 +172,11 @@ int main(int argc, char *argv[])
 				tm.tm_min = minutes;
 				tm.tm_sec = secondes;
 				gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-				if(warning->valeurAuDelaSeuil(attributeId, valueS)){
+				if(warning->valeurAuDelaSeuil(attributeId, valueS, gm->getListeAttribut())){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
 				}
-				else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){
+				else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId, gm->getListeAttribut())){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
 				} else	warning->evaluerDecision(sensorId, valueS);
