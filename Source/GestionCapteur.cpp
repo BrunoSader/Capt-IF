@@ -80,7 +80,7 @@ GestionCapteur::~GestionCapteur ( )
 
 string GestionCapteur::afficherCapteur( )
 {
-    string res; 
+    string res;
     for(unsigned int i=0; i<listeCapteur.size(); ++i)
     {
         res += listeCapteur[i].getSensorId() + "	";
@@ -93,15 +93,15 @@ string GestionCapteur::afficherCapteur( )
 }
 
 void GestionCapteur::ajouterCapteur(string id, int lattitude, int longitude, string description )
-{ 
-	listeCapteur.push_back(Capteur(id, lattitude, longitude, description)); 
+{
+	listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
 	//L'ajouter aussi dans le fichier qu'on nous fourni ?
 }
 
 void GestionCapteur::ajouterCapteur(int lattitude, int longitude, string description )
-{ 
+{
 	string id = "Sensor" + to_string(listeCapteur.size());
-	listeCapteur.push_back(Capteur(id, lattitude, longitude, description)); 
+	listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
 }
 
 
@@ -110,10 +110,10 @@ bool GestionCapteur::supprimerCapteur(int choix, int lattitude, int longitude, s
 	Capteur c;
 	if(choix == 1) c = rechercherCapteur(lattitude, longitude);
 	if(choix == 2) c = rechercherCapteur(id);
-	bool supp = false;	
+	bool supp = false;
 	int compte = 0;
 	deque<Capteur> :: iterator it;
-    	
+
 	for(it = listeCapteur.begin(); it != listeCapteur.end(); it++){
 		if(listeCapteur[compte].getSensorId() == c.getSensorId()){
 			listeCapteur.erase(it);
@@ -130,13 +130,13 @@ bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, 
     	bool res = true;
 	Capteur c;
 	if(choix == 1){
-		c = rechercherCapteur(lattitude, longitude); 
+		c = rechercherCapteur(lattitude, longitude);
 		id = c.getSensorId();
 	}
 	map<struct tm, map<string,double>> valeur = gm->getMesure(id);
 	if(valeur.empty()) return false;
 	else{
-/*On vérifie d'abord si les valeurs ne sont pas extrêmes 
+/*On vérifie d'abord si les valeurs ne sont pas extrêmes
 	03 entre 0 et 300
 	S02 entre 0 et 600
 	NO2 entre 0 et 500
@@ -151,26 +151,26 @@ bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, 
 	}
 
 /*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
-	map<struct tm, map<string,double>> :: iterator i = valeur.end();	
+	map<struct tm, map<string,double>> :: iterator i = valeur.end();
 	i--;
-	int jour = i->first.tm_mday ;  
+	int jour = i->first.tm_mday ;
 	int compteur = 0;
 	 for(i = valeur.end(); i != valeur.begin(); i--){
 		if(compteur == 7) break;
 		if(i->first.tm_mday == jour) {
-			jour = jour - 1;  
+			jour = jour - 1;
 			compteur ++;
 		}
 	}
-	if(compteur < 7) res = false;	
-	}	
+	if(compteur < 7) res = false;
+	}
 
 	return res;
 }
 
-Capteur GestionCapteur::rechercherCapteur(string id )
+Capteur GestionCapteur::rechercherCapteur(string id)
 {
-	Capteur c;
+	Capteur c ("null", 0, 0, "null");
 	for(uint i = 0; i < listeCapteur.size(); i++){
 		if(listeCapteur[i].getSensorId() == id){
 			return listeCapteur[i];
@@ -181,7 +181,7 @@ Capteur GestionCapteur::rechercherCapteur(string id )
 
 Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
 {
-	Capteur c;
+	Capteur c ("null", 0, 0, "null");
 	int indice = 1000;
 	for(uint i = 0; i < listeCapteur.size(); i++){
 		if(listeCapteur[i].getLattitude() == lattitude && listeCapteur[i].getLongitude() == longitude){
@@ -195,53 +195,36 @@ Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
 }
 
 string GestionCapteur::capteursSimilaires(int choix, int lattitude, int longitude, string id, GestionMesure* gm, double confiance)
-{ 
-	//Possible de faire bien mieux avec un intervalle de confiance et tout !!
-	//Obligé de changer la manière de vérifier car pour l'instant toutes les moyennes sont vraiment très proches ce n'est pas un bon moyen de comparaison.
+{
+
 	string res = "";
-	Capteur ca; 
+	Capteur ca;
 	Capteur comp;
-	int size = gm->getListeAttribut().size() -1;
+	int size = gm->getListeAttribut().size();
 	double tabref [size];
-	double valeurComp = 0;
 	bool similaire = true;
 	if(choix == 1){
-		ca = rechercherCapteur(lattitude, longitude); 
+		ca = rechercherCapteur(lattitude, longitude);
 		id = ca.getSensorId();
-	} 
-	//On vérifie si le capteur a bien des mesures renseignées
-	if(gm->getMesure(id).empty()) {
-		res = "Le Capteur renseigné n'a pas de mesures, et donc pas de capteur similaire"; 
+	}
+  ca = rechercherCapteur(id);
+	//On vérifie si le capteur a bien des mesures renseignées et qu'il existe
+	if(gm->getMesure(id).empty() || ca.getSensorId() == "null") {
+		res = "Le Capteur renseigné n'a pas de mesures ou n'existe pas, et donc pas de capteur similaire";
 		return res;
 	}  else{
 		//on calcule les moyennes pour chaque attribut
-		for(int i = 0; i < size; i++){
-			tabref[i] = gm->moyenneValAttribut(gm->getListeAttribut()[i].getAttributeId(), id);
-			cout<<"tabref"<<i<<" = "<<tabref[i]<<endl;
-		} 
-		for(uint i = 0; i < listeCapteur.size() -1; i++){
-			similaire = true;
-			comp = listeCapteur[i];
-			//On va regarder pour chaque capteur si il convient
-			if(listeCapteur[i].getSensorId() != id){ 
-				//le -1 est censé être enlevé, il est la à cause d'erreur à la lecture du fichier
-				//Pour chaque attribut on calucle sa moyenne et on compare avec celle de la référence
-				for(uint i2 = 0; i2 < gm->getListeAttribut().size() -1; i2++){
-					if(similaire == true){
-						valeurComp = gm->moyenneValAttribut(gm->getListeAttribut()[i2].getAttributeId(), comp.getSensorId());
-						if(valeurComp > tabref[i2] && (tabref[i2]/valeurComp) < confiance) similaire = false;
-						if(valeurComp < tabref[i2] && (valeurComp/tabref[i2]) < confiance) similaire = false; 
-					cout<<"Pour l'attribut "<< gm->getListeAttribut()[i2].getAttributeId() <<" avec le capteur "<<comp.getSensorId() << " similaire vaut "<<similaire<<" les valeurs comparées sont "<< valeurComp<<" "<<" et "<<tabref[i2]<<endl;
-					cout<<(valeurComp > tabref[i2]) <<" " << (tabref[i2]/valeurComp)<<" " <<((tabref[i2]/valeurComp) < confiance) << " "<<confiance<<endl;
-					}
-				} 
-			if(similaire == false) res += "Le capteur " + comp.getSensorId() + " n'est pas similaire au capteur que vous avez demandé" + "\n";
-			else res += "Le capteur " + comp.getSensorId() + " est similaire au capteur que vous avez demandé" +"\n";
-				
-			}
-			
-		}
-	}
-				
+    for(uint i = 0; i < listeCapteur.size(); i++){
+      similaire = true;
+  	   for(int j = 0; j < size; j++){
+  			    if(gm->capteurProches(id, listeCapteur[i].getSensorId(), confiance,  gm->getListeAttribut()[j].getAttributeId()))
+              	cout<<"Pour l'attribut "<< gm->getListeAttribut()[j].getAttributeId() <<" avec le capteur "<<listeCapteur[i].getSensorId() << " similaire vaut true "<<endl;
+            else {cout<<"Pour l'attribut "<< gm->getListeAttribut()[j].getAttributeId() <<" avec le capteur "<<listeCapteur[i].getSensorId() << " similaire vaut false "<<endl;
+            similaire = false;}
+       }
+       if(similaire == true) res += "Le capteur " + listeCapteur[i].getSensorId() + " est similaire au capteur que vous avez demandé\n";
+       else res += "Le capteur " + listeCapteur[i].getSensorId() + " n'est pas similaire au capteur que vous avez demandé\n";
+     }
+   }
 	return res;
 }

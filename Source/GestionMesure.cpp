@@ -13,9 +13,10 @@
 using namespace std;
 #include <iostream>
 #include <stdlib.h>
+#include <math.h>
 
 //------------------------------------------------------ Include personnel
-#include "../En-tete/GestionMesure.h" 
+#include "../En-tete/GestionMesure.h"
 
 bool operator == (const struct tm & tm1, const struct tm & tm2)
 {
@@ -123,10 +124,6 @@ string GestionMesure::consulterMesure( )
 map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
 {
     map<struct tm, map<string,double>> res;
-    struct tm tm;
-    map<string, double> res2;
-    res2.insert(make_pair(" ", 0.0));
-    res.insert(make_pair(tm, res2));
     map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.find(id);
     if(i != listeMesure.end()) return i->second;
     return res;
@@ -134,23 +131,49 @@ map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
 
 
 
-double GestionMesure::moyenneValAttribut(string attributId, string sensorId)
+struct tab GestionMesure::moyenneValAttribut(string attributId, string sensorId)
 {
     map<struct tm, map<string,double>> valeur = getMesure(sensorId);
     double somme = 0;
     double nombre = 0;
-    double res = 0;
+    struct tab res;
+		double borneInf = 1000;
+		double borneSup = 0;
+		res.moyenne = -10;
+		res.etendue = -10;
+    if(!valeur.empty()){
+				for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
+						map<string,double> :: iterator i2 = i->second.find(attributId);
+						somme += i2->second;
+						if(i2->second > borneSup) borneSup = i2->second;
+						if(i2->second < borneInf) borneInf = i2->second;
+						nombre++;
+					}
+				 if(nombre == 0) nombre = 1;
+				 if(somme/nombre == 0 )res.moyenne = -10;
+			 	 else res.moyenne = somme/nombre;
+			 	 res.etendue = borneSup-borneInf;
+   }
+   cout<<"pour le capteur "<<sensorId<< " avec l'attribut "<<attributId<<" la moyenne est "<< somme<<" " <<nombre<<" et l'étendue est "<<res.etendue<<endl;
+   return res;
+}
+
+double GestionMesure::ecartType(string attributId, string sensorId, double moyenne)
+{
+    map<struct tm, map<string,double>> valeur = getMesure(sensorId);
+    double somme = 0;
+    double nombre = 0;
+    double res = -10;
     if(valeur.empty()) res = -10;
     else{
-	for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
-		map<string,double> :: iterator i2 = i->second.find(attributId);
-		somme += i2->second;
-		nombre++;
-	}
+				for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
+					map<string,double> :: iterator i2 = i->second.find(attributId);
+					somme += (i2->second - moyenne)*(i2->second - moyenne);
+					nombre++;
+				}
+				res = sqrt(somme/nombre);
    }
-   res = somme/nombre;
-   if(res == 0) res = -10;
-    return res;
+   return res;
 }
 
 void GestionMesure::ajouterAttribut(string id, string unite, string description)
@@ -207,11 +230,37 @@ vector<Attribut> GestionMesure::getListeAttribut(){
 	return listeTypeMesure;
 }
 
+bool GestionMesure::capteurProches(string idCapteur1, string idCapteur2, double certitude, string attribut){
+	//on prend chaque jour et on reccupère toutes les valeurs des capteurs sur les 2 capteurs
+	//Capteur1 est la référence
+	struct tab tabc1 = moyenneValAttribut(attribut, idCapteur1);
+	struct tab tabc2 = moyenneValAttribut(attribut, idCapteur2);
+	double etendueCapteur1 =  tabc1.etendue;
+	double etendueCapteur2 =  tabc2.etendue;
+	double moyenneCapteur1 = tabc1.moyenne;
+	double moyenneCapteur2 = tabc2.moyenne;
+	double ecartTypeCapteur1 = ecartType(attribut, idCapteur1, moyenneCapteur1);
+	double ecartTypeCapteur2 = ecartType(attribut, idCapteur2, moyenneCapteur2);
+	double borneInf = moyenneCapteur1 - moyenneCapteur1*(1-certitude);
+	double borneSup = moyenneCapteur1 + moyenneCapteur1*(1-certitude);
+
+	bool res = true;
+	if((moyenneCapteur1 == -10 && moyenneCapteur2 != -10) || (moyenneCapteur1 != -10 && moyenneCapteur2 == -10)) res = false;
+	if(moyenneCapteur2 > borneSup || moyenneCapteur2 < borneInf) res = false;
+	borneInf = ecartTypeCapteur1 - ecartTypeCapteur1*(1-certitude);
+	borneSup = ecartTypeCapteur1 + ecartTypeCapteur1*(1-certitude);
+	if(ecartTypeCapteur2 > borneSup || ecartTypeCapteur2 < borneInf) res = false;
+	borneInf = etendueCapteur1 - etendueCapteur1*(1-certitude);
+	borneSup = etendueCapteur1 + etendueCapteur1*(1-certitude);
+	if(etendueCapteur2 > borneSup || etendueCapteur2 < borneInf) res = false;
+	return res;
+}
+
 /* vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> arg) {
-    
+
     vector<Mesure> result;
     int i = 0;
-    
+
     string sensorId = "";
     float longitudeMin;
     float latitudeMin;
@@ -220,12 +269,12 @@ vector<Attribut> GestionMesure::getListeAttribut(){
     struct tm debut;
     struct tm fin;
     string attributeId;
-    
-    
+
+
     switch (i) {
-        
+
         case 0 : //sensorID
-            
+
             if(bitTab[0]) {
                 sensorId = arg[0];
                 i += 2; // on augmente i de 2 car on ne regarde pas le case 1, impossible puisque le capteur est caractérisé par son ID
@@ -234,9 +283,9 @@ vector<Attribut> GestionMesure::getListeAttribut(){
                 i++;
             }
             break;
-        
+
         case 1 : // coordonnées
-            
+
             if(bitTab[1]) {
                 latitudeMin = strtof(arg[1].c_str(),nullptr);
                 longitudeMin = strtof(arg[2].c_str(),nullptr);
@@ -244,30 +293,30 @@ vector<Attribut> GestionMesure::getListeAttribut(){
                 longitudeMax = strtof(arg[4].c_str(),nullptr);
             }
             i++;
-            
+
             break;
-            
+
         case 2 : // dates
-            
+
             if(bitTab[2]) {
                 //debut = arg[5];
                 //fin = arg[6];
             }
-            
-            
+
+
             break;
-            
+
         case 3 : // attributeId
-            
-            
+
+
             if(bitTab[2]) {
                 attributeId = arg[7];
             }
-            break;        
-        
+            break;
+
     }
-    
- 
+
+
     return result;
 }
 */

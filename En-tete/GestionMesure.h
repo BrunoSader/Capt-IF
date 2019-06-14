@@ -24,6 +24,11 @@ using namespace std;
 
 //------------------------------------------------------------------ Types
 
+typedef struct tab{
+	double moyenne;
+	double etendue;
+};
+
 //------------------------------------------------------------------------
 // R�le de la classe <GestionMesure>
 //
@@ -68,7 +73,11 @@ public:
 	
     void ajouterAttribut(string id, string unite, string description, int seuil);
 
-    double moyenneValAttribut(string attributId, string sensorId);
+    struct tab moyenneValAttribut(string attributId, string sensorId);
+
+    double ecartType(string attributId, string sensorId, double moyenne);
+
+    bool capteurProches(string idCapteur1, string idCapteur2, double certitude, string attribut);
 
     vector<Attribut> getListeAttribut();
 
