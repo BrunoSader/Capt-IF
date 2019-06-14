@@ -158,6 +158,12 @@ void GestionMesure::ajouterAttribut(string id, string unite, string description)
 	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
 }
 
+
+void GestionMesure::ajouterAttribut(string id, string unite, string description, int seuil)
+{
+	listeTypeMesure.push_back(Attribut(id, unite, description, seuil));
+}
+
 void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attributeId, double value)
 {
 	//map<string, map<time_t, map<string,double>>> listeMesure;
