@@ -60,13 +60,13 @@ public:
 		// Contrat :
 		//
 
-		bool calculerDonneePrevisionelle(map<struct tm, map<string,double>>listeMesurebyDate, string lAttribut, , vector<Attribut> listeTypeMesure);
+		bool calculerDonneePrevisionelle(map<struct tm, map<string,double>>listeMesurebyDate, string lAttribut, vector<Attribut> listeTypeMesure);
 		// Mode d'emploi :
 		//
 		// Contrat :
 		//
 
-		bool valeurAuDelaSeuil(string attribut, double val, , vector<Attribut> listeTypeMesure);
+		bool valeurAuDelaSeuil(string attribut, double val, vector<Attribut> listeTypeMesure);
 		// Mode d'emploi : Type true signifie que c'est pas previsionelles
 		//
 		// Contrat :
