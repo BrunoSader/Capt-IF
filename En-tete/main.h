@@ -43,6 +43,10 @@ const string RESET = "";
 
 	void promptConsole (const string& prompt, const string& color = RESET);
 	void promptConsole (const char* prompt, const string& color = RESET);
+	// Mode d'emploi :
+	// Cette méthode affiche un prompt sur cout
+	// avec la couleur donnée.
+
 	void getInput(const string& prompt, const string& color, string& result);
 	int getChoice (int range, const string& prompt, string* choices);
 	int getChoice (int start, int end, const string& prompt);

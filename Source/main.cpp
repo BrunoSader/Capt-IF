@@ -27,13 +27,13 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 
-
 #include "../En-tete/GestionCapteur.h"
 #include "../En-tete/GestionMesure.h"
 #include "../En-tete/Mesure.h"
 #include "../En-tete/Warning.h"
+#include "../En-tete/main.h"
 
-void menu(GestionCapteur* gc, GestionMesure* gm) ;
+void menu(GestionCapteur* gc, GestionMesure* gm);
 
 void gestionDesDecisions(Warning* wr, double valeur, string sensorId);
 
@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
 	string nomFichierDonnesCapteur = string(argv[3]);
 	/*rajouter le code qui execute cette commande dans le terminal : iconv -f utf-16 -t utf-8 fichier_original > nouveaufichier*/
 	execl("iconv", "-f",  "utf-16", "-t",  "utf-8", "../Ressources/FichierTest.csv", ">", "new3.csv");
+    
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
 	Warning *warning = new Warning();
@@ -72,9 +73,10 @@ int main(int argc, char *argv[])
 			gm->ajouterAttribut(id, unite, description);
 		}
 	}else{
-		cout<<"marche pas"<<endl;
+		cout<<"Ne fonctionne pas"<<endl;
 	}
-	cout<<gm->consulterType()<<endl;
+	// cout<<gm->consulterType()<<endl;
+    
 	//**********Stockage des Capteurs dans le tableau de gestion capteur
 	GestionCapteur *gc = new GestionCapteur();
 	fstream fichier2;
@@ -100,16 +102,16 @@ int main(int argc, char *argv[])
 			gc->ajouterCapteur(id, lattitude, longitude, description);
 		}
 	}else{
-		cout<<"marche pas"<<endl;
+		cout<<"Ne fonctionne pas"<<endl;
 	}
-	cout<<gc->afficherCapteur()<<endl;
+	// cout<<gc->afficherCapteur()<<endl;
 
 	//**********Stockage des données des capteurs
 	fstream fichier3;
 	fichier3.open(nomFichierDonnesCapteur, ios::in);
 	ofstream myfile;
-  myfile.open ("lectureAleatoire.csv");
-	for(int k=10; k<100000000; k=k*5)
+    myfile.open ("lectureAleatoire.csv");
+	for(int k=10; k>100000000; k=k*5)
 	{
 		if (fichier3)
 		{
@@ -173,28 +175,29 @@ int main(int argc, char *argv[])
 	return 0;
 } //----- fin de main
 
-
+/* Pour afficher un string d'une certaine couleur */
 void promptConsole (const string& prompt, const string& color) {
 #ifdef MAP
     cout << "Appel à la méthode promptConsole de <Application>" << endl;
 #endif
-    cout << color << prompt << /*RESET <<*/ endl;
+    cout << color << prompt << RESET << endl;
 } //----- Fin de prompt
 
 void promptConsole (const char* prompt, const string& color) {
 #ifdef MAP
     cout << "Appel à la méthode promptConsole de <Application>" << endl;
 #endif
-    cout << color << prompt << /*RESET << */endl;
+    cout << color << prompt << RESET << endl;
 } //----- Fin de prompt
 
+/* Pour lire l'entrée de l'utilisateur et la placer dans un string result */ 
 void getInput(const string& prompt, const string& color, string& result)
 {
 #ifdef MAP
     cout << "Appel à la méthode getInput de <Application>" << endl;
 #endif
     while (true) {
-        cout << color << prompt << /*RESET <<*/ endl << "> ";
+        cout << color << prompt << RESET << endl << "> ";
         getline(cin, result);
         if (!result.empty())
             return;
@@ -203,21 +206,21 @@ void getInput(const string& prompt, const string& color, string& result)
             return;
         }
         else
-            promptConsole("Entree Vide\n", "ROUGE");
+            promptConsole("Entree Vide\n", ROUGE);
     }
 } //----- Fin de getInput
 
+/* Pour renvoyer l'entier correspondant au choix d'un utilisateur, indiqué par un numéro entre 1 et le nombre de choix possibles */ 
 int getChoice (int range, const string& prompt, string* choices)
-// Algorithme : On donne les choix et on lire le choix d'utilisateur
 {
 #ifdef MAP
     cout << "Appel à la méthode getChoice de <Application>" << endl;
 #endif
     while (true) {
-        promptConsole(prompt, "BLEU");
+        promptConsole(prompt, BLEU);
         if (choices != NULL) {
             for (int i = 0; i < range; i++) {
-                promptConsole(to_string(i + 1) + ". " + choices[i], "Couleur");
+                promptConsole(to_string(i + 1) + ". " + choices[i], RESET);
             }
         }
         cout << "> ";
@@ -233,7 +236,7 @@ int getChoice (int range, const string& prompt, string* choices)
             return -1;
         }
         else {
-            promptConsole("Entrée invalide veuillez réessayer\n", "ROUGE");
+            promptConsole("Entrée invalide veuillez réessayer\n", ROUGE);
             cin.clear();
             cin.ignore(INT8_MAX, '\n');
         }
@@ -242,13 +245,12 @@ int getChoice (int range, const string& prompt, string* choices)
 } //----- Fin de getChoice
 
 int getChoice (int start, int end, const string& prompt)
-// Algorithme : On donne les choix et on lire le choix d'utilisateur
 {
 #ifdef MAP
     cout << "Appel à la méthode getChoice de <main>" << endl;
 #endif
     while (true) {
-        promptConsole(prompt, "BLEU");
+        promptConsole(prompt, BLEU);
         cout << "> ";
         int n;
         cin >> n;
@@ -262,7 +264,7 @@ int getChoice (int start, int end, const string& prompt)
             return INT8_MIN;
         }
         else {
-            promptConsole("Entrée invalide, veuillez réessayer \n", "ROUGE");
+            promptConsole("Entrée invalide, veuillez réessayer \n", ROUGE);
             cin.clear();
             cin.ignore(INT8_MAX, '\n');
         }
@@ -270,6 +272,7 @@ int getChoice (int start, int end, const string& prompt)
     }
 } //----- Fin de getChoice
 
+/* Pour sélectionner les paramètres de sélection des mesures/donées de la fonctionnalité getMesure */
 void paramDonnees()
 {
 #ifdef MAP
@@ -305,7 +308,7 @@ void paramDonnees()
 
                 string sensorId;
                 string prompt("Veuillez renseigner le sensorId : ");
-                getInput(prompt, "BLEU", sensorId);
+                getInput(prompt, BLEU, sensorId);
 
                 cout<<sensorId;
 
@@ -335,6 +338,7 @@ void paramDonnees()
     }
 } //----- Fin de paramDonnees
 
+/* Appels des fonctions de gestionCapteur */
 void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double confiance){
 	int rep;
 	int lattitude = 0;
@@ -382,6 +386,7 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 		} else cout <<"numéro invalide"<<endl;
 }
 
+/* LES DIFFERENTS ONGLETS DU MENU */
 
 void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 {
@@ -434,7 +439,7 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
                 break;
             case 7:
                 runCapteur = false;
-                promptConsole("Retour au menu", "VERT");
+                promptConsole("Retour au menu", VERT);
                 cout << endl << endl;
                 break;
         }
@@ -477,49 +482,13 @@ void menuGestionMesure(GestionMesure* gm)
                 break;
             case 6:
                 runMesure = false;
-                promptConsole("Retour au menu", "VERT");
+                promptConsole("Retour au menu", VERT);
                 cout << endl << endl;
                 break;
         }
         cout << endl << endl;
     }
 } //----- Fin de menuGestionMesure
-
-void menu(GestionCapteur* gc, GestionMesure* gm)
-{
-#ifdef MAP
-    cout << "Appel à la méthode menu de <main>" << endl;
-#endif
-    string prompt("Pour utiliser l'application Capt'air veuillez sélectionner une catégorie du menu :");
-    string choice1("Gestion Capteur");
-    string choice2("Gestion Mesures");
-    string choice3("Gestion Alertes");
-    string choice4("Quitter l'application");
-    string choices[4] = {choice1, choice2, choice3, choice4};
-
-    bool run = true;
-    while (run) {
-        int choice = getChoice(4, prompt, choices);
-        switch (choice) {
-            case 1:
-                cout << endl << endl;
-                menuGestionCapteur(gc, gm);
-                break;
-            case 2:
-                cout << endl << endl;
-                menuGestionMesure(gm);
-                break;
-            case 3:
-
-                break;
-            case 4:
-                run = false;
-                promptConsole("A bientôt", "VERT");
-                break;
-        }
-        cout << endl << endl;
-    }
-} //----- Fin de menu
 
 void gestionDesDecisions (Warning *wr, double valeur, string sensorId)
 {
@@ -564,6 +533,46 @@ void gestionDesDecisions (Warning *wr, double valeur, string sensorId)
 		}
 	}
 }
+
+/* MENU PRINCIPAL */
+
+void menu(GestionCapteur* gc, GestionMesure* gm)
+{
+#ifdef MAP
+    cout << "Appel à la méthode menu de <main>" << endl;
+#endif
+    string prompt("Pour utiliser l'application Capt'air veuillez sélectionner une catégorie du menu :");
+    string choice1("Gestion Capteur");
+    string choice2("Gestion Mesures");
+    string choice3("Gestion Alertes");
+    string choice4("Quitter l'application");
+    string choices[4] = {choice1, choice2, choice3, choice4};
+
+    bool run = true;
+    while (run) {
+        int choice = getChoice(4, prompt, choices);
+        switch (choice) {
+            case 1:
+                cout << endl << endl;
+                menuGestionCapteur(gc, gm);
+                break;
+            case 2:
+                cout << endl << endl;
+                menuGestionMesure(gm);
+                break;
+            case 3:
+
+                break;
+            case 4:
+                run = false;
+                promptConsole("A bientôt", VERT);
+                break;
+        }
+        cout << endl << endl;
+    }
+} //----- Fin de menu
+
+
 
 
 ////////// CODE TEST ///////////

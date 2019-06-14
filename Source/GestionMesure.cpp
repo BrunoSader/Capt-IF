@@ -12,6 +12,7 @@
 //-------------------------------------------------------- Include syst�me
 using namespace std;
 #include <iostream>
+#include <stdlib.h>
 
 //------------------------------------------------------ Include personnel
 #include "../En-tete/GestionMesure.h" 
@@ -200,7 +201,7 @@ vector<Attribut> GestionMesure::getListeAttribut(){
 	return listeTypeMesure;
 }
 
-vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> arg) {
+/* vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> arg) {
     
     vector<Mesure> result;
     int i = 0;
@@ -220,8 +221,8 @@ vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> a
         case 0 : //sensorID
             
             if(bitTab[0]) {
-                sensorId = arg[0]
-                i+=2; // on augmente i de 2 car on ne regarde pas le case 1, impossible puisque le capteur est caractérisé par son ID
+                sensorId = arg[0];
+                i += 2; // on augmente i de 2 car on ne regarde pas le case 1, impossible puisque le capteur est caractérisé par son ID
             }
             else {
                 i++;
@@ -231,10 +232,10 @@ vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> a
         case 1 : // coordonnées
             
             if(bitTab[1]) {
-                latitudeMin = arg[1];
-                longitudeMin = arg[2];
-                latitudeMax = arg[3];
-                longitudeMax = arg[4];
+                latitudeMin = strtof(arg[1].c_str(),nullptr);
+                longitudeMin = strtof(arg[2].c_str(),nullptr);
+                latitudeMax = strtof(arg[3].c_str(),nullptr);
+                longitudeMax = strtof(arg[4].c_str(),nullptr);
             }
             i++;
             
@@ -243,8 +244,8 @@ vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> a
         case 2 : // dates
             
             if(bitTab[2]) {
-                debut = arg[5];
-                fin = arg[6];
+                //debut = arg[5];
+                //fin = arg[6];
             }
             
             
@@ -263,7 +264,7 @@ vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> a
  
     return result;
 }
-
+*/
 
 //------------------------------------------------------------------ PRIVE
 
