@@ -37,10 +37,10 @@ class GestionMesure
 public:
 
 		map<string, map<struct tm, map<string,double>>> listeMesure;
-		/*SensorId
+		/* SensorId
 		Date
 		AttributeId
-		Valeure*/
+		Valeur mesure */
 		vector<Attribut> listeTypeMesure;
 //----------------------------------------------------- M�thodes publiques
 
@@ -62,9 +62,27 @@ public:
     // Contrat :
     //
     void ajouterAttribut(string id, string unite, string description);
+
     void ajouterMesure(struct tm tm, string sensorId, string attributeId, double value);
+
     double moyenneValAttribut(string attributId, string sensorId);
+
     vector<Attribut> getListeAttribut();
+
+	vector<Mesure> getMesureCapteur (bool * bitTab, vector<string> arg);
+    // Mode d'emploi :
+    // bitTab est un tableau de boolean. Les cases du tableau correspondent aux caractéristiques que l'utilisateur peut renseigner pour obtenir une mesure. Elles valent true si la caractéristique est renseignée, false sinon.
+	// case 0 : sensorID
+	// case 1 : intervalle de coordonnées (une latitudeMin et une longitudeMin ainsi qu'une latitudeMax et longitudeMax sont renseignées)
+	// case 2 : intervalle de dates (une date de début et une date de fin sont renseignées)		
+	// case 3 : attributeID
+	// arg est un vecteur de string qui correspond aux arguments renseignés par l'utilisateur
+	// il est de taille maximale 7 puisqu'il y a au plus 7 arguments renseignés
+	// la méthode consulte si l'argument est renseigné ou non (case de bitTab respectivement true ou false)
+	// 
+
+    // Contrat :
+    //
 
     //Warning alerterSurMesure(Mesure uneMesure);
     // Mode d'emploi :

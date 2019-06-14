@@ -184,6 +184,72 @@ void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attribut
 vector<Attribut> GestionMesure::getListeAttribut(){
 	return listeTypeMesure;
 }
+
+vector <Mesure> GestionMesure::getMesureCapteur (bool * bitTab, vector<string> arg) {
+    
+    vector<Mesure> result;
+    int i = 0;
+    
+    string sensorId = "";
+    float longitudeMin;
+    float latitudeMin;
+    float longitudeMax;
+    float latitudeMax;
+    struct tm debut;
+    struct tm fin;
+    string attributeId;
+    
+    
+    switch (i) {
+        
+        case 0 : //sensorID
+            
+            if(bitTab[0]) {
+                sensorId = arg[0]
+                i+=2; // on augmente i de 2 car on ne regarde pas le case 1, impossible puisque le capteur est caractérisé par son ID
+            }
+            else {
+                i++;
+            }
+            break;
+        
+        case 1 : // coordonnées
+            
+            if(bitTab[1]) {
+                latitudeMin = arg[1];
+                longitudeMin = arg[2];
+                latitudeMax = arg[3];
+                longitudeMax = arg[4];
+            }
+            i++;
+            
+            break;
+            
+        case 2 : // dates
+            
+            if(bitTab[2]) {
+                debut = arg[5];
+                fin = arg[6];
+            }
+            
+            
+            break;
+            
+        case 3 : // attributeId
+            
+            
+            if(bitTab[2]) {
+                attributeId = arg[7];
+            }
+            break;        
+        
+    }
+    
+ 
+    return result;
+}
+
+
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- M�thodes prot�g�es
