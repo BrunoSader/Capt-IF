@@ -19,7 +19,9 @@
 #include <vector>
 #include <cstring>
 #include <iomanip>
+#include <unistd.h>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -33,6 +35,8 @@ using namespace std;
 
 void menu(GestionCapteur* gc, GestionMesure* gm) ;
 
+void gestionDesDecisions(Warning* wr, double valeur, string sensorId);
+
 int main(int argc, char *argv[])
 {
 
@@ -42,8 +46,8 @@ int main(int argc, char *argv[])
 	string nomFichierDescriptionCapteur = string(argv[2]);
 	//le dernier correspond aux des données capteurs
 	string nomFichierDonnesCapteur = string(argv[3]);
-
 	/*rajouter le code qui execute cette commande dans le terminal : iconv -f utf-16 -t utf-8 fichier_original > nouveaufichier*/
+	execl("iconv", "-f",  "utf-16", "-t",  "utf-8", "../Ressources/FichierTest.csv", ">", "new3.csv");
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
 	Warning *warning = new Warning();
@@ -103,50 +107,64 @@ int main(int argc, char *argv[])
 	//**********Stockage des données des capteurs
 	fstream fichier3;
 	fichier3.open(nomFichierDonnesCapteur, ios::in);
-	if (fichier3)
+	ofstream myfile;
+  myfile.open ("lectureAleatoire.csv");
+	for(int k=10; k<100000000; k=k*5)
 	{
-		for(int i = 0; i < 15; getline(fichier3, chaine), i++){}
-		while (!fichier3.eof())
+		if (fichier3)
 		{
-			stringstream ss;
-			getline(fichier3, chaine);
-			ss << chaine;
-			int annee;
-			int mois;
-			int jour;
-			int heure;
-			int minutes;
-			double secondes;
-			string sensorId;
-			string attributeId;
-			double valueS;
-			ss >> annee;
-			getline(ss, sacrifie, '-');
-			ss >> mois;
-			getline(ss, sacrifie, '-');
-			ss >> jour;
-			getline(ss, sacrifie, 'T');
-			ss >> heure;
-			getline(ss, sacrifie, ':');
-			ss >> minutes;
-			getline(ss, sacrifie, ':');
-			ss >> secondes;
-			getline(ss, sacrifie, ';');
-			getline(ss, sensorId, ';');
-			getline(ss, attributeId, ';');
-			ss >> valueS;
-			getline(ss, sacrifie, ';');
-			struct tm tm {};
-			tm.tm_year = annee;
-			tm.tm_mon = mois ;
-			tm.tm_mday = jour ;
-			tm.tm_hour = heure;
-			tm.tm_min = minutes;
-			tm.tm_sec = secondes;
-			gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-			cout<<warning->valeurAuDelaSeuil(attributeId, valueS, true)<<endl;
+			int i=0;
+			while (!fichier3.eof() && i<k)
+			{
+				stringstream ss;
+				getline(fichier3, chaine);
+				ss << chaine;
+				int annee;
+				int mois;
+				int jour;
+				int heure;
+				int minutes;
+				double secondes;
+				string sensorId;
+				string attributeId;
+				double valueS;
+				ss >> annee;
+				getline(ss, sacrifie, '-');
+				ss >> mois;
+				getline(ss, sacrifie, '-');
+				ss >> jour;
+				getline(ss, sacrifie, 'T');
+				ss >> heure;
+				getline(ss, sacrifie, ':');
+				ss >> minutes;
+				getline(ss, sacrifie, ':');
+				ss >> secondes;
+				getline(ss, sacrifie, ';');
+				getline(ss, sensorId, ';');
+				getline(ss, attributeId, ';');
+				ss >> valueS;
+				getline(ss, sacrifie, ';');
+				struct tm tm {};
+				tm.tm_year = annee;
+				tm.tm_mon = mois ;
+				tm.tm_mday = jour ;
+				tm.tm_hour = heure;
+				tm.tm_min = minutes;
+				tm.tm_sec = secondes;
+				gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+				if(warning->valeurAuDelaSeuil(attributeId, valueS)){
+					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
+					gestionDesDecisions(warning, valueS, sensorId);
+				}
+				else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){
+					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;
+					gestionDesDecisions(warning, valueS, sensorId);
+				} else	warning->evaluerDecision(sensorId, valueS);
+				i++;
+			}
 		}
 	}
+	myfile.close();
 	//cout<<gm->consulterMesure()<<endl;
 
 	menu(gc, gm);
@@ -322,7 +340,10 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 	int lattitude = 0;
 	int longitude = 0;
 	string texte = " ";
-	cout<<"Voulez-vous supprimer un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 3) cout<<"Voulez-vous supprimer un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 4) cout<<"Voulez-vous surveiller un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 5) cout<<"Voulez-vous rechercher un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
+	if(numero == 6) cout<<"Voulez-vous trouver les capteurs similaires à l'aide des coordonnées (1) de votre capteur ou son Id (2) ?"<<endl;
 		cin>>rep;
                 if(rep == 1){
 			cout <<"Veuillez rentrer la lattiude"<<endl;
@@ -333,8 +354,14 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 				if(gc->supprimerCapteur(1, lattitude, longitude, texte)) cout<<"Le capteur a bien été supprimé"<<endl;
 				else cout<<"erreur lors de la suppression du capteur"<<endl;
 			}
-			if(numero == 4) cout<<gc->surveillerCapteur(1, lattitude, longitude, texte, gm)<<endl;
-			if(numero == 5) gc->rechercherCapteur(lattitude, longitude);
+			if(numero == 4) {
+				if(gc->surveillerCapteur(1, lattitude, longitude, texte, gm)){
+					cout<<"Le Capteur est ne présente pas d'anomalie"<<endl;
+				} else {
+					cout<<"Le Capteur n'est pas conforme et présente des anomalies."<<endl;
+				}
+			}
+			if(numero == 5) cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
 			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else if(rep == 2){
 			cout << "Veuillez rentrer l'Id du capteur" <<endl;
@@ -343,8 +370,14 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 				if(gc->supprimerCapteur(2, lattitude, longitude, texte)) cout<<"le capteur a bien été supprimé"<<endl;
 				else cout<<"erreur lors de la suppression"<<endl;
 			}
-			if (numero == 4) cout<<gc->surveillerCapteur(2, lattitude, longitude, texte, gm)<<endl;
-			if (numero == 5) gc->rechercherCapteur(texte);
+			if (numero == 4) {
+				if(gc->surveillerCapteur(2, lattitude, longitude, texte, gm)){
+					cout<<"Le Capteur ne présente pas d'anomalie"<<endl;
+				} else {
+					cout<<"Le Capteur n'est pas conforme et présente des anomalies"<<endl;
+				}
+			}
+			if (numero == 5) cout<<"La lattitude du capteur ayant l'identifiant que vous avez renseignés est " <<gc->rechercherCapteur(texte).getLattitude() << " et sa longitude est "<<gc->rechercherCapteur(texte).getLongitude();
 			if (numero == 6) cout<<gc->capteursSimilaires(2, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else cout <<"numéro invalide"<<endl;
 }
@@ -355,7 +388,7 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 #ifdef MAP
     cout << "Appel à la méthode menuGestionCapteur de <main>" << endl;
 #endif
-    string prompt("Veuillez choisir une des fonctionnalités suivantes :");
+    string prompt("Veuillez choisir une des suivantes :");
     string choice1("Consulter la liste des capteurs");
     string choice2("Ajouter un capteur");
     string choice3("Supprimer un capteur");
@@ -487,3 +520,66 @@ void menu(GestionCapteur* gc, GestionMesure* gm)
         cout << endl << endl;
     }
 } //----- Fin de menu
+
+void gestionDesDecisions (Warning *wr, double valeur, string sensorId)
+{
+	string read;
+	bool aucuneDecision = true;
+	cout<<"Voulez vous qu'on vous propose une solution? (oui)"<<endl;
+	cin>>read;
+	if(read=="oui")
+	{
+		Decision decision_propose=wr->proposerDecision();
+		if(decision_propose.getNote()>2)
+		{
+			bool* action = decision_propose.getAction();
+			cout<<"---On vous propose---"<<endl;
+			if(action[0]) cout<<"Alterner les voitures d'imatriculation paire ou impaire"<<endl;
+			if(action[1]) cout<<"Transport en commun gratuit pour tous pendant 3 jours"<<endl;
+			if(action[2]) cout<<"Favoriser le co-voiturage avec des payages gratuits"<<endl;
+			if(action[3]) cout<<"Augmenter les prix des polluants"<<endl;
+			aucuneDecision = false;
+		} else cout<<"Aucune proposition ne peut etre faite a ce moment"<<endl;
+	}
+		if(aucuneDecision){
+		cout<<"Voulez vous entrer une decision? (oui)"<<endl;
+		cin>>read;
+		if(read=="oui")
+		{
+			bool *action = new bool[4];
+			cout<<"Alterner les voitures d'imatriculation paire ou impaire (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[0]=true;
+			cout<<"Transport en commun gratuit pour tous pendant 3 jours (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[1]=true;
+			cout<<"Favoriser le co-voiturage avec des payages gratuits (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[2]=true;
+			cout<<"Augmenter les prix des polluants (oui)"<<endl;
+			cin>>read;
+			if(read=="oui") action[3]=true;
+			Decision *laDecision = new Decision(action,sensorId);
+			wr->entrerDecision(*laDecision,valeur);
+		}
+	}
+}
+
+
+////////// CODE TEST ///////////
+/*
+int nb_sensor = gc->listeCapteur.size();
+double time = 0;
+int j;
+for (j = 0; j < i/2; j++) {
+	int num = rand() % nb_sensor;
+	std::string id = std::to_string(num);
+	auto start = chrono::steady_clock::now();
+	gm->getMesure(id);
+	auto end = chrono::steady_clock::now();
+	time = time + chrono::duration_cast<chrono::microseconds>(end - start).count();
+}
+time = time/(j);
+cout << "Writing to file for n = " <<i<< "and average time is : "<<time<<endl;
+myfile <<"microseconds: "<<time<<" | N: "<<i<< endl;
+*/

@@ -27,20 +27,6 @@ using namespace std;
 //
 //
 //------------------------------------------------------------------------
-inline bool operator == (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min) return true;
-	else return false;
-}
-inline bool operator < (const struct tm & tm1, const struct tm & tm2)
-{
-	if(tm1.tm_year < tm2.tm_year){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon < tm2.tm_mon){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday < tm2.tm_mday){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour < tm2.tm_hour){return true;}
-	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min < tm2.tm_min){return true;}
-	else return false;
-}
 
 class Warning
 {
@@ -50,13 +36,15 @@ struct DecisionCompare
 {
    bool operator() (const Decision& decision1, const Decision& decision2) const
    {
-       return decision1.getNote() < decision2.getNote();
+		 if(decision1.getAction()[0]==decision2.getAction()[0] && decision1.getAction()[1]==decision2.getAction()[1] && decision1.getAction()[2]==decision2.getAction()[2] && decision1.getAction()[3]==decision2.getAction()[3])
+		 {
+       return decision1.getAction() == decision2.getAction();
+		 }
+		 return decision1.getAction() < decision2.getAction();
    }
 };
 
 public:
-
-	map<Decision,double,DecisionCompare> listeDecision;
 
 //----------------------------------------------------- M�thodes publiques
 
@@ -66,19 +54,19 @@ public:
 		// Contrat :
 		//
 
-		void evaluerDecision(double valeurActuel);
+		void evaluerDecision(string sensorId, double valeurActuel);
 		// Mode d'emploi :
 		//
 		// Contrat :
 		//
 
-		double calculerDonneePrevisionelle(string sensorID, map<string, map<struct tm, map<string,double>>>listeMesurebyCapteur, Attribut lAttribut);
+		bool calculerDonneePrevisionelle(map<struct tm, map<string,double>>listeMesurebyDate, string lAttribut);
 		// Mode d'emploi :
 		//
 		// Contrat :
 		//
 
-		bool valeurAuDelaSeuil(string attribut, double val, bool type);
+		bool valeurAuDelaSeuil(string attribut, double val);
 		// Mode d'emploi : Type true signifie que c'est pas previsionelles
 		//
 		// Contrat :
@@ -120,7 +108,7 @@ public:
 
 protected:
 //----------------------------------------------------- M�thodes prot�g�es
-
+map<Decision,double,DecisionCompare> listeDecision;
 private:
 //------------------------------------------------------- M�thodes priv�es
 

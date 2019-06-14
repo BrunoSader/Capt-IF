@@ -1,46 +1,58 @@
 ﻿#pragma once
 /*************************************************************************
-TestMain -  description
+TestGestionCapteur -  description
 -------------------
 d�but                : 22/05/2019
 copyright            : (C) 2019 par CLEMENCEAU
 *************************************************************************/
 
-//---------- Interface de la classe <TestMain> (fichier TestMain.h) ------
-#if ! defined ( TESTMAIN_H )
-#define TESTMAIN_H
+//---------- Interface de la classe <TestGestionCapteur> (fichier TestGestionCapteur.h) ------
+#if ! defined ( TESTGESTIONCAPTEURH )
+#define TESTGESTIONCAPTEUR_H
 
 //--------------------------------------------------- Interfaces utilis�es
-#include <iostream>
-#include "main.h"
 #include <string>
+#include "GestionCapteur.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// R�le de la classe <TestMain>
+// R�le de la classe <TestGestionCapteur>
 //
 //
 //------------------------------------------------------------------------
 
-class TestMain
+class TestGestionCapteur
 {
 	//----------------------------------------------------------------- PUBLIC
 
 public:
 
+    TestGestionCapteur();
+
+    virtual ~TestGestionCapteur();
 	//----------------------------------------------------- M�thodes publiques
 
-	void test();
+	void testUnitaire(string filename);
 	// Mode d'emploi :
-	// teste toutes les méthodes de la classe main
+	// teste toutes les méthodes de la classe GestionCapteur
 	// affiche les erreurs s'il y en a
 
 protected:
 	//----------------------------------------------------- M�thodes prot�g�es
+    void testFichier(string filename);
 
+    void testAjouter();
+
+    void testSuppressionID();
+
+    void testSuppressionLatLng();
+
+    void testRechercheID();
+
+    void testRechercheLatLng();
 private:
 	//------------------------------------------------------- M�thodes priv�es
 
@@ -59,4 +71,4 @@ private:
 };
 
 
-#endif // TESTMAIN_H
+#endif // TESTGESTIONCAPTEUR_H

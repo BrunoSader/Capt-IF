@@ -33,7 +33,7 @@ public:
 	// Contrat :
 	//
 
-	Decision(bool *action, int note);
+	Decision(bool *action, string sensorID, int note=0);
 	// Mode d'emploi :
 	//
 	// Contrat :
@@ -47,6 +47,7 @@ public:
 
 	void setNote(const int x) {note = x;}
 	int getNote() const {return note;}
+	string getSensorId() const {return sensorID;}
 	bool* getAction() const {return action;}
 
 
@@ -58,6 +59,7 @@ protected:
 	//----------------------------------------------------- Attributs prot�g�s
 	bool* action;
 	int note;
+	string sensorID;
 
 };
 

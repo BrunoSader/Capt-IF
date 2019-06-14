@@ -27,23 +27,26 @@ using namespace std;
 	{
 		this->action = uneDecision.action;
 		this->note = uneDecision.note;
+		this->sensorID = uneDecision.sensorID;
 	}
 	// Mode d'emploi (constructeur de copie) :
 	//
 	// Contrat :
 	//
 
-	Decision::Decision(bool *action, int note)
+	Decision::Decision(bool *action, string sensorID, int note)
 	{
 		this->action = action;
 		this->note = note;
+		this->sensorID = sensorID;
 	}
 	// Mode d'emploi :
 	//
 	// Contrat :
 	//
 
-	Decision::~Decision() {}
+	Decision::~Decision() {
+	}
 	// Mode d'emploi :
 	//
 	// Contrat :
