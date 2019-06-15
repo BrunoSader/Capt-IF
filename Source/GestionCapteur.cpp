@@ -127,7 +127,6 @@ bool GestionCapteur::supprimerCapteur(int choix, double lattitude, double longit
 
 bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longitude, string id, GestionMesure* gm)
 {
-    	bool res = true;
   bool res = true;
 	Capteur c;
 	if(choix == 1){
