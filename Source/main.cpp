@@ -45,8 +45,22 @@ int main(int argc, char *argv[])
 	//le second correspond à la description de capteurs
 	string nomFichierDescriptionCapteur = string(argv[2]);
 	//le dernier correspond aux des données capteurs
-	string nomFichierDonnesCapteur = string(argv[3]);
-
+/*	int rep = -1;
+	string nomFichier;
+	string nomFichierDonnesCapteur;
+	while(rep != 1 && rep !=2){
+					cout<<"Souhaitez vous rentrer un fichier pour les données en utf16 (1) ou utf8 (2) ?"<<endl;
+					cin >> rep;
+					cout<<"Veuillez entrer le nom du fichier"<<endl;
+					cin >> nomFichier;
+					if(rep == 1) {
+						string chemin = "iconv -f utf-16 -t utf-8 ../Ressources/" + nomFichier + " > new3.csv";
+						system(chemin.c_str());
+					  nomFichierDonnesCapteur = "new3.csv";
+					} else if(rep == 2) nomFichierDonnesCapteur = nomFichier;
+				  else cout<<"numero invalide"<<endl;
+ }*/
+ string nomFichierDonnesCapteur = string(argv[3]);
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
 	Warning *warning = new Warning();
@@ -106,13 +120,13 @@ int main(int argc, char *argv[])
 			getline(fichier2, chaine);
 			ss << chaine;
 			string id;
-			int lattitude;
-			int longitude;
+			double lattitude;
+			double longitude;
 			string description;
 			getline(ss, id, ';');
-			ss >> lattitude;
-			getline(ss, sacrifie, ';');
 			ss >> longitude;
+			getline(ss, sacrifie, ';');
+			ss >> lattitude;
 			getline(ss, sacrifie, ';');
 			getline(ss, description, ';');
 			if(id != "") gc->ajouterCapteur(id, lattitude, longitude, description);
@@ -120,19 +134,14 @@ int main(int argc, char *argv[])
 	}else{
 		cout<<"Ne fonctionne pas"<<endl;
 	}
-	// cout<<gc->afficherCapteur()<<endl;
 
 	//**********Stockage des données des capteurs
 	fstream fichier3;
 	fichier3.open(nomFichierDonnesCapteur, ios::in);
-	ofstream myfile;
-    myfile.open ("lectureAleatoire.csv");
-	for(int k=10; k>100000000; k=k*5)
-	{
+	int i = 0;
 		if (fichier3)
 		{
-			int i=0;
-			while (!fichier3.eof() && i<k)
+			while (!fichier3.eof() )
 			{
 				stringstream ss;
 				getline(fichier3, chaine);
@@ -170,6 +179,7 @@ int main(int argc, char *argv[])
 				tm.tm_min = minutes;
 				tm.tm_sec = secondes;
 			  if(sensorId != "") gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+				if(i++ < 3){
 				if(warning->valeurAuDelaSeuil(attributeId, valueS, gm->getListeAttribut())){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
@@ -178,11 +188,10 @@ int main(int argc, char *argv[])
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
 				} else	warning->evaluerDecision(sensorId, valueS);
-				i++;
 			}
 		}
 	}
-	myfile.close();
+//	myfile.close();
 	menu(gc, gm);
 	delete gm;
 	delete gc;
@@ -478,7 +487,7 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 					cout<<"Le Capteur n'est pas conforme et présente des anomalies."<<endl;
 				}
 			}
-			if(numero == 5 && gc->rechercherCapteur(texte).getSensorId() != "null") cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
+			if(numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() != "null") cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
 		  if(numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() == "null") cout<<"Ce SensorId n'existe pas"<<endl;
 			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else if(rep == 2){
@@ -495,8 +504,8 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 					cout<<"Le Capteur n'est pas conforme et présente des anomalies"<<endl;
 				}
 			}
-			if (numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() != "null") cout<<"L'id du sensor le plus proche des coordonnées que vous avez renseignés est " <<gc->rechercherCapteur(lattitude, longitude).getSensorId() << endl;
-			if(numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() == "null") cout<<"Ce SensorId n'existe pas"<<endl;
+			if (numero == 5 && gc->rechercherCapteur(texte).getSensorId() != "null") cout<<"La lattiude du sensor que vous avez renseigné est " <<gc->rechercherCapteur(texte).getLattitude()<<" et sa longitude est "<< gc->rechercherCapteur(texte).getLongitude() << endl;
+			if (numero == 5 && gc->rechercherCapteur(texte).getSensorId() == "null") cout<<"Ce SensorId n'existe pas"<<endl;
 			if (numero == 6) cout<<gc->capteursSimilaires(2, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else cout <<"numéro invalide"<<endl;
 }

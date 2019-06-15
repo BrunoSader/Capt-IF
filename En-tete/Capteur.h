@@ -10,15 +10,15 @@ class Capteur
 public:
   // Constructeurs
   Capteur();
-  Capteur(string sensorId, int longitude, int lattitude, string description);
+  Capteur(string sensorId, double longitude, double lattitude, string description);
 
   //Accesseurs et mutateurs
   void setSensorId(string sensorId);
-  void setLongitude(int longitude);
+  void setLongitude(double longitude);
   void setDescription(string description);
-  void setLattitude(int lattitude);
-  int getLongitude() const;
-  int getLattitude() const;
+  void setLattitude(double lattitude);
+  double getLongitude() const;
+  double getLattitude() const;
   string getSensorId() const;
   string getDescription() const;
 
@@ -29,8 +29,8 @@ public:
 
 private: 
   string sensorId;
-  int longitude;
-  int lattitude;
+  double longitude;
+  double lattitude;
   string description;
 };
 

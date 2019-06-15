@@ -44,39 +44,39 @@ public:
     // Contrat :
     //
 
-		void ajouterCapteur(string id, int lattitude, int longitude, string description );
+		void ajouterCapteur(string id, double lattitude, double longitude, string description );
     // Mode d'emploi :
     //
     // Contrat :
     //
 	
-		void ajouterCapteur(int lattitude, int longitude, string description );
+		void ajouterCapteur(double lattitude, double longitude, string description );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		bool supprimerCapteur(int choix, int lattitude, int longitude, string id);
+		bool supprimerCapteur(int choix, double lattitude, double longitude, string id);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		bool surveillerCapteur(int choix, int lattitude, int longitude, string id, GestionMesure* gm);
+		bool surveillerCapteur(int choix, double lattitude, double longitude, string id, GestionMesure* gm);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
 		Capteur rechercherCapteur(string id);
-		Capteur rechercherCapteur(int lattitude, int longitude);
+		Capteur rechercherCapteur(double lattitude, double longitude);
 
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		string capteursSimilaires(int choix, int lattitude, int longitude, string id, GestionMesure* gm, double confiance);
+		string capteursSimilaires(int choix, double lattitude, double longitude, string id, GestionMesure* gm, double confiance);
 
     // Mode d'emploi :
     //

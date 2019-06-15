@@ -92,20 +92,20 @@ string GestionCapteur::afficherCapteur( )
     return res;
 }
 
-void GestionCapteur::ajouterCapteur(string id, int lattitude, int longitude, string description )
+void GestionCapteur::ajouterCapteur(string id, double lattitude, double longitude, string description )
 {
 	listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
 	//L'ajouter aussi dans le fichier qu'on nous fourni ?
 }
 
-void GestionCapteur::ajouterCapteur(int lattitude, int longitude, string description )
+void GestionCapteur::ajouterCapteur(double lattitude, double longitude, string description )
 {
 	string id = "Sensor" + to_string(listeCapteur.size());
 	listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
 }
 
 
-bool GestionCapteur::supprimerCapteur(int choix, int lattitude, int longitude, string id)
+bool GestionCapteur::supprimerCapteur(int choix, double lattitude, double longitude, string id)
 {
 	Capteur c;
 	if(choix == 1) c = rechercherCapteur(lattitude, longitude);
@@ -125,7 +125,7 @@ bool GestionCapteur::supprimerCapteur(int choix, int lattitude, int longitude, s
 }
 
 
-bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, string id, GestionMesure* gm)
+bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longitude, string id, GestionMesure* gm)
 {
     	bool res = true;
 	Capteur c;
@@ -179,7 +179,7 @@ Capteur GestionCapteur::rechercherCapteur(string id)
 	return c;
 }
 
-Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
+Capteur GestionCapteur::rechercherCapteur(double lattitude, double longitude )
 {
 	Capteur c ("null", 0, 0, "null");
 	int indice = 1000;
@@ -194,7 +194,7 @@ Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
 	return c;
 }
 
-string GestionCapteur::capteursSimilaires(int choix, int lattitude, int longitude, string id, GestionMesure* gm, double confiance)
+string GestionCapteur::capteursSimilaires(int choix, double lattitude, double longitude, string id, GestionMesure* gm, double confiance)
 {
 
 	string res = "";
