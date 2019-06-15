@@ -128,6 +128,7 @@ bool GestionCapteur::supprimerCapteur(int choix, double lattitude, double longit
 bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longitude, string id, GestionMesure* gm)
 {
     	bool res = true;
+  bool res = true;
 	Capteur c;
 	if(choix == 1){
 		c = rechercherCapteur(lattitude, longitude);
@@ -161,6 +162,7 @@ bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longi
 			jour = jour - 1;
 			compteur ++;
 		}
+    if(jour <= 0) jour = 30;
 	}
 	if(compteur < 7) res = false;
 	}
