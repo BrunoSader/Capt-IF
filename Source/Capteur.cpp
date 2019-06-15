@@ -16,6 +16,7 @@ void Capteur::setSensorId(string sensorId)
     this->sensorId = sensorId;
 }
 
+
 void Capteur::setLongitude(double longitude)
 {
     this->longitude = longitude;

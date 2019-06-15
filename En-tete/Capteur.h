@@ -10,6 +10,7 @@ class Capteur
 public:
   // Constructeurs
   Capteur();
+
   Capteur(string sensorId, double longitude, double lattitude, string description);
 
   //Accesseurs et mutateurs

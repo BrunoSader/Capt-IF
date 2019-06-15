@@ -124,7 +124,6 @@ bool GestionCapteur::supprimerCapteur(int choix, double lattitude, double longit
 	return supp;
 }
 
-
 bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longitude, string id, GestionMesure* gm)
 {
   bool res = true;
@@ -136,7 +135,7 @@ bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longi
 	map<struct tm, map<string,double>> valeur = gm->getMesure(id);
 	if(valeur.empty()) return false;
 	else{
-/*On vérifie d'abord si les valeurs ne sont pas extrêmes
+    /*On vérifie d'abord si les valeurs ne sont pas extrêmes 
 	03 entre 0 et 300
 	S02 entre 0 et 600
 	NO2 entre 0 et 500
@@ -150,8 +149,9 @@ bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longi
 		}
 	}
 
-/*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
-	map<struct tm, map<string,double>> :: iterator i = valeur.end();
+    /*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
+	map<struct tm, map<string,double>> :: iterator i = valeur.end();	
+
 	i--;
 	int jour = i->first.tm_mday ;
 	int compteur = 0;
@@ -180,10 +180,12 @@ Capteur GestionCapteur::rechercherCapteur(string id)
 	return c;
 }
 
+
 Capteur GestionCapteur::rechercherCapteur(double lattitude, double longitude )
 {
-	Capteur c ("null", 0, 0, "null");
-	int indice = 1000;
+	Capteur c;
+	int indice = __INT_MAX__;
+
 	for(uint i = 0; i < listeCapteur.size(); i++){
 		if(listeCapteur[i].getLattitude() == lattitude && listeCapteur[i].getLongitude() == longitude){
 			return listeCapteur[i];
@@ -193,6 +195,23 @@ Capteur GestionCapteur::rechercherCapteur(double lattitude, double longitude )
 		}
 	}
 	return c;
+}
+
+vector<Capteur> GestionCapteur::rechercherCapteurParIntervalle(float latitude, float latitudeMax, float longitude, float longitudeMax) {
+  	vector<Capteur> c;
+	int indice = __INT_MAX__;
+    bool capteurDansZone = false;
+	for(uint i = 0; i < listeCapteur.size(); i++){
+		if(((listeCapteur[i].getLattitude() > latitude && listeCapteur[i].getLattitude() < latitudeMax) // cas classique latMin < latMax
+            || (listeCapteur[i].getLattitude() > latitude && listeCapteur[i].getLattitude() < 90) || (listeCapteur[i].getLattitude() > -90 && listeCapteur[i].getLattitude() < latitudeMax))
+            && ((listeCapteur[i].getLongitude() > longitude && listeCapteur[i].getLongitude() < longitudeMax)
+            || (listeCapteur[i].getLongitude() > longitude && listeCapteur[i].getLongitude() < 180) || (listeCapteur[i].getLongitude() > -180 && listeCapteur[i].getLongitude() < longitudeMax))){
+            
+			c.push_back(listeCapteur[i]);
+		}
+    }
+    
+    return c;  
 }
 
 string GestionCapteur::capteursSimilaires(int choix, double lattitude, double longitude, string id, GestionMesure* gm, double confiance)
