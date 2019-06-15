@@ -112,7 +112,7 @@ string GestionMesure::consulterMesure(map<string, map<struct tm, map<string,doub
     if (mesures.empty()) {
         res += " Aucun résultat correspondant à votre recherche n'a été trouvé ";
     }
-    
+
     // Cas où la map est valide, affichage
    for(map<string, map<struct tm, map<string,double>>>::iterator i=mesures.begin(); i!=mesures.end(); ++i) {
         res += "SensorId : " + i->first ;
@@ -170,7 +170,6 @@ struct tab GestionMesure::moyenneValAttribut(string attributId, string sensorId)
 			 	 else res.moyenne = somme/nombre;
 			 	 res.etendue = borneSup-borneInf;
    }
-   cout<<"pour le capteur "<<sensorId<< " avec l'attribut "<<attributId<<" la moyenne est "<< somme<<" " <<nombre<<" et l'étendue est "<<res.etendue<<endl;
    return res;
 }
 
@@ -244,11 +243,11 @@ vector<Attribut> GestionMesure::getListeAttribut(){
 }
 
 map<string,double> GestionMesure::getMesureAttribute(map<struct tm, map<string,double>>::iterator i2, bool * bitTab, string * arg) {
-    
+
     map<string,double> result;
-    
+
     map<string,double>::iterator i3;
-                 
+
     if (bitTab[4]) {
         for(map<string,double>::iterator i3=i2->second.begin(); i3!=i2->second.end(); ++i3) { // parcours 3eme map
             if (!i3->first.compare(arg[6]) && i3!=i2->second.end()) {
@@ -264,25 +263,25 @@ map<string,double> GestionMesure::getMesureAttribute(map<struct tm, map<string,d
             result.insert(make_pair(i3->first,i3->second));
         }
     }
-    
+
     return result;
 }
 
 map<struct tm, map<string,double>>  GestionMesure::getMesureDate (map<string, map<struct tm, map<string,double>>>::iterator i, bool * bitTab, string * arg) {
-    
+
     map<struct tm, map<string,double>> result;
-    
+
     if (bitTab[3]) {
         struct tm t1;
         t1.tm_year=stoi(arg[0]);
         t1.tm_mon=stoi(arg[1]);
         t1.tm_mday=stoi(arg[2]);
-        
+
         struct tm t2;
         t2.tm_year=stoi(arg[3]);
         t2.tm_mon=stoi(arg[4]);
         t2.tm_mday=stoi(arg[5]);
-            
+
         for(map<struct tm, map<string,double>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) { //parcours 2eme map
             if(i2->first < t2 && i2->first > t1){
                 map<string,double> resultAtt = getMesureAttribute(i2,bitTab,arg);
@@ -295,7 +294,7 @@ map<struct tm, map<string,double>>  GestionMesure::getMesureDate (map<string, ma
             }
         }
     } else {
-        
+
         for(map<struct tm, map<string,double>>::iterator i2=i->second.begin(); i2!=i->second.end(); ++i2) { //parcours 2eme map
             map<string,double> resultAtt = getMesureAttribute(i2,bitTab,arg);
             if (!resultAtt.empty()) {
@@ -303,22 +302,22 @@ map<struct tm, map<string,double>>  GestionMesure::getMesureDate (map<string, ma
             }
         }
     }
-    
+
     return result;
 }
-            
+
 map<string, map<struct tm, map<string,double>>> GestionMesure::getMesureCapteur (bool * bitTab, string * arg, string sensorId) {
-    
+
     map<string, map<struct tm, map<string,double>>> result;
-    
+
     map<string, map<struct tm, map<string,double>>>::iterator i; //Premier itérateur sur la map
-    
+
     if (!sensorId.empty()) {
         i = listeMesure.find(sensorId);
         if (i!=listeMesure.end()) {
             map<struct tm, map<string,double>> resultDate = getMesureDate(i,bitTab,arg);
             if (!resultDate.empty()) {
-                result.insert(make_pair(sensorId,resultDate)); 
+                result.insert(make_pair(sensorId,resultDate));
             }
         }
     }
@@ -331,7 +330,7 @@ map<string, map<struct tm, map<string,double>>> GestionMesure::getMesureCapteur 
         }
     }
 }
- 
+
 bool GestionMesure::capteurProches(string idCapteur1, string idCapteur2, double certitude, string attribut){
 	//on prend chaque jour et on reccupère toutes les valeurs des capteurs sur les 2 capteurs
 	//Capteur1 est la référence
@@ -347,6 +346,7 @@ bool GestionMesure::capteurProches(string idCapteur1, string idCapteur2, double 
 	double borneSup = moyenneCapteur1 + moyenneCapteur1*(1-certitude);
 
 	bool res = true;
+	if(moyenneCapteur1 == -10 && moyenneCapteur2 == -10) return true;
 	if((moyenneCapteur1 == -10 && moyenneCapteur2 != -10) || (moyenneCapteur1 != -10 && moyenneCapteur2 == -10)) res = false;
 	if(moyenneCapteur2 > borneSup || moyenneCapteur2 < borneInf) res = false;
 	borneInf = ecartTypeCapteur1 - ecartTypeCapteur1*(1-certitude);

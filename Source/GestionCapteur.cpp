@@ -107,7 +107,7 @@ void GestionCapteur::ajouterCapteur(double lattitude, double longitude, string d
      if(rechercherCapteur(id).getSensorId() == "null"){
 	      listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
         nomCorrect = true;
-      } 
+      }
   }
 }
 
@@ -223,6 +223,7 @@ string GestionCapteur::capteursSimilaires(int choix, double lattitude, double lo
 {
 
 	string res = "";
+  string res2 = "";
 	Capteur ca;
 	Capteur comp;
 	int size = gm->getListeAttribut().size();
@@ -240,14 +241,18 @@ string GestionCapteur::capteursSimilaires(int choix, double lattitude, double lo
 		//on calcule les moyennes pour chaque attribut
     for(uint i = 0; i < listeCapteur.size(); i++){
       similaire = true;
-  	   for(int j = 0; j < size; j++){
-  			    if(gm->capteurProches(id, listeCapteur[i].getSensorId(), confiance,  gm->getListeAttribut()[j].getAttributeId()))
-              	cout<<"Pour l'attribut "<< gm->getListeAttribut()[j].getAttributeId() <<" avec le capteur "<<listeCapteur[i].getSensorId() << " similaire vaut true "<<endl;
-            else {cout<<"Pour l'attribut "<< gm->getListeAttribut()[j].getAttributeId() <<" avec le capteur "<<listeCapteur[i].getSensorId() << " similaire vaut false "<<endl;
-            similaire = false;}
-       }
-       if(similaire == true) res += "Le capteur " + listeCapteur[i].getSensorId() + " est similaire au capteur que vous avez demandé\n";
-       else res += "Le capteur " + listeCapteur[i].getSensorId() + " n'est pas similaire au capteur que vous avez demandé\n";
+      if (id != listeCapteur[i].getSensorId()){
+        	   for(int j = 0; j < size; j++){
+        			    if(!gm->capteurProches(id, listeCapteur[i].getSensorId(), confiance,  gm->getListeAttribut()[j].getAttributeId()))
+                  {
+                    res2 += "     pour l'attribut " +gm->getListeAttribut()[j].getAttributeId()+"\n";
+                    similaire = false;
+                  }
+             }
+             if(similaire == true) res += "Le capteur " + listeCapteur[i].getSensorId() + " est similaire au capteur que vous avez demandé\n";
+             else res += "Le capteur " + listeCapteur[i].getSensorId() + " n'est pas similaire au capteur que vous avez demandé\n" + res2;
+             res2 = "";
+           }
      }
    }
 	return res;
