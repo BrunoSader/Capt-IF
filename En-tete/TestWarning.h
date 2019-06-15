@@ -44,6 +44,7 @@ protected:
     void testValeurSeuil();
 
     void testCreerDecision();
+
 private:
 	//------------------------------------------------------- M�thodes priv�es
 

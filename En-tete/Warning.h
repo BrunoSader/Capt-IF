@@ -78,6 +78,8 @@ public:
 		// Contrat :
 		//
 
+		map<Decision,double,DecisionCompare> getListeDecision() { return listeDecision; }
+
 //------------------------------------------------- Surcharge d'op�rateurs
     Warning & operator = ( const Warning & unWarning );
     // Mode d'emploi :
