@@ -95,13 +95,20 @@ string GestionCapteur::afficherCapteur( )
 void GestionCapteur::ajouterCapteur(string id, double lattitude, double longitude, string description )
 {
 	listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
-	//L'ajouter aussi dans le fichier qu'on nous fourni ?
 }
 
 void GestionCapteur::ajouterCapteur(double lattitude, double longitude, string description )
 {
-	string id = "Sensor" + to_string(listeCapteur.size());
-	listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
+  bool nomCorrect = false;
+  int taille = listeCapteur.size();
+  while(!nomCorrect){
+	   string id = "Sensor" + to_string(taille++);
+     cout<<id<<endl;
+     if(rechercherCapteur(id).getSensorId() == "null"){
+	      listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
+        nomCorrect = true;
+      } 
+  }
 }
 
 
@@ -111,15 +118,13 @@ bool GestionCapteur::supprimerCapteur(int choix, double lattitude, double longit
 	if(choix == 1) c = rechercherCapteur(lattitude, longitude);
 	if(choix == 2) c = rechercherCapteur(id);
 	bool supp = false;
-	int compte = 0;
 	deque<Capteur> :: iterator it;
 
 	for(it = listeCapteur.begin(); it != listeCapteur.end(); it++){
-		if(listeCapteur[compte].getSensorId() == c.getSensorId()){
+		if(it->getSensorId() == c.getSensorId()){
 			listeCapteur.erase(it);
 			supp = true;
 		}
-		compte++;
 	}
 	return supp;
 }
@@ -135,7 +140,7 @@ bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longi
 	map<struct tm, map<string,double>> valeur = gm->getMesure(id);
 	if(valeur.empty()) return false;
 	else{
-    /*On vérifie d'abord si les valeurs ne sont pas extrêmes 
+    /*On vérifie d'abord si les valeurs ne sont pas extrêmes
 	03 entre 0 et 300
 	S02 entre 0 et 600
 	NO2 entre 0 et 500
@@ -150,7 +155,7 @@ bool GestionCapteur::surveillerCapteur(int choix, double lattitude, double longi
 	}
 
     /*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
-	map<struct tm, map<string,double>> :: iterator i = valeur.end();	
+	map<struct tm, map<string,double>> :: iterator i = valeur.end();
 
 	i--;
 	int jour = i->first.tm_mday ;
@@ -206,12 +211,12 @@ vector<Capteur> GestionCapteur::rechercherCapteurParIntervalle(float latitude, f
             || (listeCapteur[i].getLattitude() > latitude && listeCapteur[i].getLattitude() < 90) || (listeCapteur[i].getLattitude() > -90 && listeCapteur[i].getLattitude() < latitudeMax))
             && ((listeCapteur[i].getLongitude() > longitude && listeCapteur[i].getLongitude() < longitudeMax)
             || (listeCapteur[i].getLongitude() > longitude && listeCapteur[i].getLongitude() < 180) || (listeCapteur[i].getLongitude() > -180 && listeCapteur[i].getLongitude() < longitudeMax))){
-            
+
 			c.push_back(listeCapteur[i]);
 		}
     }
-    
-    return c;  
+
+    return c;
 }
 
 string GestionCapteur::capteursSimilaires(int choix, double lattitude, double longitude, string id, GestionMesure* gm, double confiance)
@@ -221,7 +226,6 @@ string GestionCapteur::capteursSimilaires(int choix, double lattitude, double lo
 	Capteur ca;
 	Capteur comp;
 	int size = gm->getListeAttribut().size();
-	double tabref [size];
 	bool similaire = true;
 	if(choix == 1){
 		ca = rechercherCapteur(lattitude, longitude);
