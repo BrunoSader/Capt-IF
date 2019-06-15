@@ -24,6 +24,7 @@ using namespace std;
 
 #include "../En-tete/TestGestionCapteur.h"
 #include "../En-tete/TestGestionMesure.h"
+#include "../En-tete/TestWarning.h"
 void testGlobalManuel();
 
 void testPerf();
@@ -46,8 +47,13 @@ int main(int argc, char *argv[])
     tgm -> testUnitaire(string(argv[2]), string(argv[3]));
     delete tgm;*/
 
-    cout << "Tests système" << endl << endl;
-    testGlobalManuel();
+    cout << "Tests de Warning" << endl << endl;
+    TestWarning *tw = new TestWarning();
+    tw -> testUnitaire();
+    delete tw;
+
+   /* cout << "Tests système" << endl << endl;
+    testGlobalManuel();*/
 
 	testPerf();
 	return 0;
