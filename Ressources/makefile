@@ -1,5 +1,5 @@
 CPFLAGS = -Wall -ansi -pedantic -std=c++11  -g
-EXECUTABLE = Attribut.o Capteur.o Decision.o GestionCapteur.o GestionMesure.o Mesure.o Warning.o
+EXECUTABLE = Attribut.o Capteur.o Decision.o GestionCapteur.o GestionMesure.o Mesure.o Warning.o LectureFichier.o
 ENTETES = ../En-tete/*.h
 EXECUTABLETEST = TestGestionCapteur.o TestGestionMesure.o TestWarning.o
 
