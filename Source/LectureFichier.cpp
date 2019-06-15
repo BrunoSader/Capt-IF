@@ -29,8 +29,9 @@ using namespace std;
 //****************************************************** Variables globales
 string chaine;
 string sacrifie;
+bool warningbool = false;
 //constructeur
-LectureFichier::LectureFichier(GestionMesure* gm, GestionCapteur* gc, string nomFichierAttribut, string nomFichierDonnesCapteur, string nomFichierDescriptionCapteur, Warning* warning) : gm(gm), gc(gc), nomFichierAttribut(nomFichierAttribut), nomFichierDonnesCapteur(nomFichierDonnesCapteur), nomFichierDescriptionCapteur(nomFichierDescriptionCapteur), warning(warning)
+LectureFichier::LectureFichier(GestionMesure* gm, GestionCapteur* gc, string nomFichierAttribut, string nomFichierDonnesCapteur, string nomFichierDescriptionCapteur, Warning* warning, int nombreLignes) : gm(gm), gc(gc), nomFichierAttribut(nomFichierAttribut), nomFichierDonnesCapteur(nomFichierDonnesCapteur), nomFichierDescriptionCapteur(nomFichierDescriptionCapteur), warning(warning), nombreLignes(nombreLignes)
 {}
 
 //Lecture du fichier Attribut
@@ -158,72 +159,73 @@ void gestionDesDecisions (Warning *wr, double valeur, string sensorId)
 						fstream fichier3;
 						fichier3.open(nomFichierDonnesCapteur, ios::in);
 
-						ofstream myfile;
-					  myfile.open ("lectureAleatoire.csv");
-						for(int k=10; k<100000000; k=k*5)
-						{
-
 						int i = 0;
 							if (fichier3)
 							{
+
 								while (!fichier3.eof() )
 								{
 									stringstream ss;
 									getline(fichier3, chaine);
 									if(i++ > 15){
-									ss << chaine;
-									int annee;
-									int mois;
-									int jour;
-									int heure;
-									int minutes;
-									double secondes;
-									string sensorId;
-									string attributeId;
-									double valueS;
-									ss >> annee;
-									getline(ss, sacrifie, '-');
-									ss >> mois;
-									getline(ss, sacrifie, '-');
-									ss >> jour;
-									getline(ss, sacrifie, 'T');
-									ss >> heure;
-									getline(ss, sacrifie, ':');
-									ss >> minutes;
-									getline(ss, sacrifie, ':');
-									ss >> secondes;
-									getline(ss, sacrifie, ';');
-									getline(ss, sensorId, ';');
-									getline(ss, attributeId, ';');
-									ss >> valueS;
-									getline(ss, sacrifie, ';');
-									struct tm tm {};
-									tm.tm_year = annee;
-									tm.tm_mon = mois ;
-									tm.tm_mday = jour ;
-									tm.tm_hour = heure;
-									tm.tm_min = minutes;
-									tm.tm_sec = secondes;
+												ss << chaine;
+												int annee;
+												int mois;
+												int jour;
+												int heure;
+												int minutes;
+												double secondes;
+												string sensorId;
+												string attributeId;
+												double valueS;
+												ss >> annee;
+												getline(ss, sacrifie, '-');
+												ss >> mois;
+												getline(ss, sacrifie, '-');
+												ss >> jour;
+												getline(ss, sacrifie, 'T');
+												ss >> heure;
+												getline(ss, sacrifie, ':');
+												ss >> minutes;
+												getline(ss, sacrifie, ':');
+												ss >> secondes;
+												getline(ss, sacrifie, ';');
+												getline(ss, sensorId, ';');
+												getline(ss, attributeId, ';');
+												ss >> valueS;
+												getline(ss, sacrifie, ';');
+												struct tm tm {};
+												tm.tm_year = annee;
+												tm.tm_mon = mois ;
+												tm.tm_mday = jour ;
+												tm.tm_hour = heure;
+												tm.tm_min = minutes;
+												tm.tm_sec = secondes;
 
-									if(sensorId != "")gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+												if(sensorId != "")gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+
 
 									if(warning->valeurAuDelaSeuil(attributeId, valueS, gm->getListeAttribut())){
 
-											if(i < 3){
+											if(i < nombreLignes){
 														if(warning->valeurAuDelaSeuil(attributeId, valueS, gm->getListeAttribut())){
 															cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
 															gestionDesDecisions(warning, valueS, sensorId);
+															warningbool = true;
 														}
 														else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId, gm->getListeAttribut())){
 															cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;
 															gestionDesDecisions(warning, valueS, sensorId);
+															warningbool = true;
 
 														} else	warning->evaluerDecision(sensorId, valueS);
 
+										} else if(warningbool == false){
+											cout<<"Il n'y avait pas de warning sur les valeurs testées."<<endl;
+											warningbool = true;
 										}
 									}
+								}
 							}
 						}
 					}
-				}
-			}

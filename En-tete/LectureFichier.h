@@ -29,7 +29,7 @@ class LectureFichier{
 //---------------------------------------------------- Fonctions publiques
 
   public :
-		LectureFichier(GestionMesure* gm, GestionCapteur* gc, string nomFichierAttribut, string nomFichierDonnesCapteur, string nomFichierDescriptionCapteur, Warning *warning);
+		LectureFichier(GestionMesure* gm, GestionCapteur* gc, string nomFichierAttribut, string nomFichierDonnesCapteur, string nomFichierDescriptionCapteur, Warning *warning, int nombreLignes);
 		int lectureAttribut();
 		void lectureCapteur();
 		void lectureDonneesCapteur();
@@ -41,6 +41,7 @@ class LectureFichier{
 		string nomFichierDonnesCapteur;
 		string nomFichierDescriptionCapteur;
 		Warning* warning;
+		int nombreLignes;
 
 };
 #endif // LECTUREFICHIER_H

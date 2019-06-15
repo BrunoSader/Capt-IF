@@ -36,7 +36,7 @@ bool Warning::valeurAuDelaSeuil(string attribut, double val, vector<Attribut> li
         {
             if(val > a.getValeurSeuil())
             {
-            cout << a.getAttributeId() << " | " << a.getValeurSeuil() << endl;
+          //  cout << a.getAttributeId() << " | " << a.getValeurSeuil() << endl;
                 return true;
             }
             else
@@ -45,7 +45,7 @@ bool Warning::valeurAuDelaSeuil(string attribut, double val, vector<Attribut> li
             }
         }
     }
-    cout << "Attribut hors base" << endl;
+  //  cout << "Attribut hors base" << endl;
     return false;
 
 	/*if(attribut == "O3")

@@ -63,11 +63,14 @@ int main(int argc, char *argv[])
 				  else cout<<"numero invalide"<<endl;
  }*/
  string nomFichierDonnesCapteur = string(argv[3]);
+ int nombreLignes;
+ cout<<"Sur combien de lignes voulez vous activer les warnings ?"<<endl;
+ cin>>nombreLignes;
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
 	Warning *warning = new Warning();
 	GestionCapteur* gc = new GestionCapteur();
-	LectureFichier* lF = new LectureFichier(gm, gc, nomFichierAttribut, nomFichierDonnesCapteur, nomFichierDescriptionCapteur, warning);
+	LectureFichier* lF = new LectureFichier(gm, gc, nomFichierAttribut, nomFichierDonnesCapteur, nomFichierDescriptionCapteur, warning, nombreLignes);
 	lF->lectureCapteur();
 	lF->lectureAttribut();
 	lF->lectureDonneesCapteur();
