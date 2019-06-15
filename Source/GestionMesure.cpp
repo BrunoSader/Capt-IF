@@ -330,6 +330,7 @@ map<string, map<struct tm, map<string,double>>> GestionMesure::getMesureCapteur 
             }
         }
     }
+}
  
 bool GestionMesure::capteurProches(string idCapteur1, string idCapteur2, double certitude, string attribut){
 	//on prend chaque jour et on reccupère toutes les valeurs des capteurs sur les 2 capteurs

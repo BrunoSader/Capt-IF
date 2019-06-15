@@ -24,6 +24,11 @@ using namespace std;
 
 //------------------------------------------------------------------ Types
 
+typedef struct tab{
+	double moyenne;
+	double etendue;
+};
+
 //------------------------------------------------------------------------
 // R�le de la classe <GestionMesure>
 //
@@ -50,7 +55,7 @@ public:
     // Contrat :
     //
 
-		string consulterMesure(map<string, map<struct tm, map <string, double>>> mesures);
+		string consulterMesure(map<string, map<struct tm, map<string,double>>> listeMesure);
     // Mode d'emploi :
     //
     // Contrat :
@@ -64,10 +69,18 @@ public:
     void ajouterAttribut(string id, string unite, string description);
 
     void ajouterMesure(struct tm tm, string sensorId, string attributeId, double value);
+	
+	
+    void ajouterAttribut(string id, string unite, string description, int seuil);
 
-    double moyenneValAttribut(string attributId, string sensorId);
+    struct tab moyenneValAttribut(string attributId, string sensorId);
+
+    double ecartType(string attributId, string sensorId, double moyenne);
+
+    bool capteurProches(string idCapteur1, string idCapteur2, double certitude, string attribut);
 
     vector<Attribut> getListeAttribut();
+
 
 	map<string, map<struct tm, map<string,double>>> getMesureCapteur (bool * bitTab, string * arg, string sensorId="");
     // Mode d'emploi :
@@ -92,6 +105,8 @@ public:
     //
     // Contrat :
     //
+
+	
 
 //------------------------------------------------- Surcharge d'op�rateurs
     GestionMesure & operator = ( const GestionMesure & unGestionMesure );

@@ -368,15 +368,15 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     string promptLon("Longitude (comprise entre -180 et +180) :");
                     getInput(promptLon, RESET, arg[1]); // arg[0] correspond à la longitude renseignée
 
-                    c = gc->rechercherCapteur(stof(arg[0]),stof(arg[1]));
+                    c = gc->rechercherCapteur(stod(arg[0]),stod(arg[1]));
                     
-                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-180|| stof(arg[1])>180) {
+                    if (stod(arg[0])<-90 || stod(arg[0])>90 || stod(arg[1])<-180|| stod(arg[1])>180) {
                             promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90 pour la latitude et -180 et +180 pour la longitude",ROUGE);
                             valide = false;
                     }
                 } while (!valide);
 
-                c = gc->rechercherCapteur(stof(arg[0]),stof(arg[1]));
+                c = gc->rechercherCapteur(stod(arg[0]),stod(arg[1]));
                 
                 break;
             case 3:
@@ -396,14 +396,14 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     string promptLongMax("Longitude max :");
                     getInput(promptLongMax, RESET, arg[3]); // arg[3] correspond à la longitude max
                     
-                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-90 || stof(arg[1])>90 || stof(arg[2])<-180 || stof(arg[2])>180 || stof(arg[3])<-180 || stof(arg[3])>180) {
+                    if (stod(arg[0])<-90 || stod(arg[0])>90 || stod(arg[1])<-90 || stod(arg[1])>90 || stod(arg[2])<-180 || stod(arg[2])>180 || stod(arg[3])<-180 || stod(arg[3])>180) {
                         promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90 pour la latitude et -180 et +180 pour la longitude",ROUGE);
                         valide = false;
                     }
 
                 } while (!valide);
                 
-                capt = gc->rechercherCapteurParIntervalle(stof(arg[0]),stof(arg[1]),stof(arg[2]),stof(arg[3]));
+                capt = gc->rechercherCapteurParIntervalle(stod(arg[0]),stod(arg[1]),stod(arg[2]),stod(arg[3]));
                 if (capt.empty()) {
                    promptConsole("Il n'y a aucun capteur compris dans l'intervalle que vous avez sélectionné",ROUGE);
                 }
@@ -505,8 +505,8 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
 /* Appels des fonctions de gestionCapteur */
 void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double confiance){
 	int rep;
-	int lattitude = 0;
-	int longitude = 0;
+	double lattitude = 0;
+	double longitude = 0;
 	string texte = " ";
 	if(numero == 3) cout<<"Voulez-vous supprimer un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
 	if(numero == 4) cout<<"Voulez-vous surveiller un capteur à l'aide de ses coordonnées (1) ou son Id (2) ?"<<endl;
@@ -529,7 +529,9 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 					cout<<"Le Capteur n'est pas conforme et présente des anomalies."<<endl;
 				}
 			}
-			if(numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() != "null") cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
+			if(numero == 5 && (gc->rechercherCapteur(lattitude, longitude)).getSensorId() != "null") {
+                cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
+            }
 		  if(numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() == "null") cout<<"Ce SensorId n'existe pas"<<endl;
 			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else if(rep == 2){
