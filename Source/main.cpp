@@ -447,11 +447,11 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                         valide = false;
                         promptConsole("La date de début doit être avant la date de fin");
                     }
-                    else if (stoi(arg[1]) > stoi(arg[4])) {
+                    else if (stoi(arg[0]) == stoi(arg[3]) && stoi(arg[1]) > stoi(arg[4])) {
                         valide = false;
                         promptConsole("La date de début doit être avant la date de fin");
                     }
-                    else if (stoi(arg[2]) > stoi(arg[5])) {
+                    else if (stoi(arg[0]) == stoi(arg[3]) && stoi(arg[1]) == stoi(arg[4]) & stoi(arg[2]) > stoi(arg[5])) {
                         valide = false;
                         promptConsole("La date de début doit être avant la date de fin");
                     }
