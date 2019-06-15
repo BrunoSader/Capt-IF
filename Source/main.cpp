@@ -148,9 +148,10 @@ int main(int argc, char *argv[])
 		if (fichier3)
 		{
 			while (!fichier3.eof() )
-			{
+			{ 
 				stringstream ss;
 				getline(fichier3, chaine);
+				if(i++ > 15){
 				ss << chaine;
 				int annee;
 				int mois;
@@ -185,11 +186,11 @@ int main(int argc, char *argv[])
 				tm.tm_min = minutes;
 				tm.tm_sec = secondes;
 
-				gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+				if(sensorId != "")gm->ajouterMesure(tm, sensorId, attributeId, valueS);
 				/* if(warning->valeurAuDelaSeuil(attributeId, valueS)){
 
 			  if(sensorId != "") gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-				if(i++ < 3){
+				if(i < 3){
 				if(warning->valeurAuDelaSeuil(attributeId, valueS, gm->getListeAttribut())){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
@@ -199,8 +200,8 @@ int main(int argc, char *argv[])
 					gestionDesDecisions(warning, valueS, sensorId);
 
 				} else	warning->evaluerDecision(sensorId, valueS); */
-				i++;
 
+			}
 			}
 		}
 	}
@@ -369,7 +370,7 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     getInput(promptLon, RESET, arg[1]); // arg[0] correspond à la longitude renseignée
 
                     c = gc->rechercherCapteur(stod(arg[0]),stod(arg[1]));
-                    
+
                     if (stod(arg[0])<-90 || stod(arg[0])>90 || stod(arg[1])<-180|| stod(arg[1])>180) {
                             promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90 pour la latitude et -180 et +180 pour la longitude",ROUGE);
                             valide = false;
@@ -377,11 +378,11 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                 } while (!valide);
 
                 c = gc->rechercherCapteur(stod(arg[0]),stod(arg[1]));
-                
+
                 break;
             case 3:
                 boolTab[2]=1;
-     
+
                 promptConsole("Veuillez renseigner l'intervalle de coordonées (sachant que la latitude (-90 à +90) et la longitude (-180 à +180) : ",BLEU);
 
                 do {
@@ -395,19 +396,19 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     getInput(promptLonMin, RESET, arg[2]); // arg[2] correspond à la longitude min
                     string promptLongMax("Longitude max :");
                     getInput(promptLongMax, RESET, arg[3]); // arg[3] correspond à la longitude max
-                    
+
                     if (stod(arg[0])<-90 || stod(arg[0])>90 || stod(arg[1])<-90 || stod(arg[1])>90 || stod(arg[2])<-180 || stod(arg[2])>180 || stod(arg[3])<-180 || stod(arg[3])>180) {
                         promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90 pour la latitude et -180 et +180 pour la longitude",ROUGE);
                         valide = false;
                     }
 
                 } while (!valide);
-                
+
                 capt = gc->rechercherCapteurParIntervalle(stod(arg[0]),stod(arg[1]),stod(arg[2]),stod(arg[3]));
                 if (capt.empty()) {
                    promptConsole("Il n'y a aucun capteur compris dans l'intervalle que vous avez sélectionné",ROUGE);
                 }
-                
+
                 break;
             case 4: // dates
 
@@ -424,7 +425,7 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     string promptJour("Jour (1-31):");
 
                     getInput(promptJour, RESET, arg[2]); // arg[2] jour début
-                    
+
                     promptConsole("Date de fin: ",BLEU);
                     string promptAnneeF("Année (1900-020) :");
                     getInput(promptAnneeF, RESET, arg[3]); // arg[3] correspond à l'année de fin
@@ -433,10 +434,10 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     string promptJourF("Jour (1-31):");
 
                     getInput(promptJourF, RESET, arg[5]); // arg[5] jour fin
-                    
+
                     if (stoi(arg[0]) < 1900 || stoi(arg[0]) > 2020 || stoi(arg[3]) < 1900 || stoi(arg[3]) > 2020 // vérif année
-                        || stoi(arg[1]) < 1 || stoi(arg[1]) > 12 || stoi(arg[4]) < 1 || stoi(arg[4]) > 12 // vérif mois 
-                        || stoi(arg[2]) < 1 || stoi(arg[2]) > 31 || stoi(arg[5]) < 1 || stoi(arg[5]) > 31) 
+                        || stoi(arg[1]) < 1 || stoi(arg[1]) > 12 || stoi(arg[4]) < 1 || stoi(arg[4]) > 12 // vérif mois
+                        || stoi(arg[2]) < 1 || stoi(arg[2]) > 31 || stoi(arg[5]) < 1 || stoi(arg[5]) > 31)
 
                     {
                         valide = false;

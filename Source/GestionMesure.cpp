@@ -49,7 +49,7 @@ bool operator < (const struct tm & tm1, const struct tm & tm2)
 	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour < tm2.tm_hour){return true;}
 	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min < tm2.tm_min){return true;}
 	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min && tm1.tm_sec < tm2.tm_sec){return true;}
-	else return false;
+	else  return true;
 }
 
 bool operator > (const struct tm & tm1, const struct tm & tm2)
@@ -60,7 +60,8 @@ bool operator > (const struct tm & tm1, const struct tm & tm2)
 	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour > tm2.tm_hour){return true;}
 	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min > tm2.tm_min){return true;}
 	else if(tm1.tm_year == tm2.tm_year && tm1.tm_mon == tm2.tm_mon && tm1.tm_mday == tm2.tm_mday && tm1.tm_hour == tm2.tm_hour && tm1.tm_min == tm2.tm_min && tm1.tm_sec > tm2.tm_sec){return true;}
-	else return false;
+	else
+	return false;
 }
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -221,7 +222,7 @@ void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attribut
 			map<struct tm, map<string,double>>::iterator it2 = it->second.end();
 			//recodage de .find
 			 for(map<struct tm, map<string,double>>::iterator it3=it->second.begin(); it3!=it->second.end(); ++it3) {
-				if(it3->first.tm_mday+1 == tm.tm_mday+1 && it3->first.tm_mon+1 == tm.tm_mon+1 && it3->first.tm_hour == tm.tm_hour){
+				if(it3->first.tm_mday+1 == tm.tm_mday+1 && it3->first.tm_mon+1 == tm.tm_mon+1 && it3->first.tm_hour == tm.tm_hour && it3->first.tm_year == tm.tm_year && it3->first.tm_min == tm.tm_min && it3->first.tm_sec == tm.tm_sec){
 					it2 = it3;
 					break;
 				}
