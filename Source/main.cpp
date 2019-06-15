@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 				seuil=50;
 			    }
 			    else{ seuil = 0; }
-					if(id != "") gm->ajouterAttribut(id, unite, description);
+					if(id != "") gm->ajouterAttribut(id, unite, description, seuil);
 		}
 	}else{
 		cout<<"Ne fonctionne pas"<<endl;
