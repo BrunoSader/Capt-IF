@@ -191,7 +191,6 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-//	myfile.close();
 	   //	myfile.close();
 	menu(gc, gm);
 	delete gm;
