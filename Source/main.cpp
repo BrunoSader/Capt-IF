@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 	fichier3.open(nomFichierDonnesCapteur, ios::in);
 	ofstream myfile;
     myfile.open ("lectureAleatoire.csv");
-	for(int k=10; k>100000000; k=k*5)
+	for(int k=10; k<100000000; k=k*5)
 	{
 		if (fichier3)
 		{
@@ -154,14 +154,14 @@ int main(int argc, char *argv[])
 				tm.tm_min = minutes;
 				tm.tm_sec = secondes;
 				gm->ajouterMesure(tm, sensorId, attributeId, valueS);
-				if(warning->valeurAuDelaSeuil(attributeId, valueS)){
+				/* if(warning->valeurAuDelaSeuil(attributeId, valueS)){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
 				}
 				else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
-				} else	warning->evaluerDecision(sensorId, valueS);
+				} else	warning->evaluerDecision(sensorId, valueS); */
 				i++;
 			}
 		}
@@ -273,15 +273,15 @@ int getChoice (int start, int end, const string& prompt)
 } //----- Fin de getChoice
 
 /* Pour sélectionner les paramètres de sélection des mesures/donées de la fonctionnalité getMesure */
-void paramDonnees()
+void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
 {
 #ifdef MAP
     cout << "Appel à la méthode paramDonnees de <main>" << endl;
 #endif
 
-    string * arg = new string[10];
+    string * arg = new string[7];
     int taille = 5;
-    int * boolTab = new int[taille];
+    bool * boolTab = new bool[taille];
     for (int i = 0; i<taille; i++) {
         boolTab[i]=0;
     }
@@ -302,6 +302,9 @@ void paramDonnees()
     bool valide; // utilisé pour valider les entrées
     
     bool runParam = true;
+    Capteur c;
+    vector<Capteur> capt;
+    map<string, map<struct tm, map<string,double>>> result;
     while (runParam) {
         int choice = getChoice(7, prompt, choices);
         switch (choice) {
@@ -311,6 +314,8 @@ void paramDonnees()
 
                 string prompt("Veuillez renseigner le sensorId (ex. : Sensor2) : ");
                 getInput(prompt, BLEU, arg[0]); // arg[0] correspond au SensorId renseigné
+                c = gc->rechercherCapteur(arg[0]);
+                cout << c.getSensorId() << endl;
             }
                 break;
             case 2:
@@ -324,20 +329,23 @@ void paramDonnees()
                     
                     string promptLat("Latitude (comprise entre -90 et +90) :");
                     getInput(promptLat, RESET, arg[0]); // arg[0] correspond à la latitude renseignée
-                    string promptLon("Longitude (comprise entre -90 et +90) :");
+                    string promptLon("Longitude (comprise entre -180 et +180) :");
                     getInput(promptLon, RESET, arg[1]); // arg[0] correspond à la longitude renseignée
+                    c = gc->rechercherCapteur(stof(arg[0]),stof(arg[1]));
                     
-                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-90 || stof(arg[1])>90) {
-                            promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90",ROUGE);
+                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-180|| stof(arg[1])>180) {
+                            promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90 pour la latitude et -180 et +180 pour la longitude",ROUGE);
                             valide = false;
                     }
                 } while (!valide);
 
+                c = gc->rechercherCapteur(stof(arg[0]),stof(arg[1]));
+                
                 break;
             case 3:
                 boolTab[2]=1;
                 
-                promptConsole("Veuillez renseigner l'intervalle de coordonées (sachant que la latitude et la longitude sont comprises entre -90 et +90) : ",BLEU);
+                promptConsole("Veuillez renseigner l'intervalle de coordonées (sachant que la latitude (-90 à +90) et la longitude (-180 à +180) : ",BLEU);
                 
                 do {
                     valide = true;
@@ -351,16 +359,18 @@ void paramDonnees()
                     string promptLongMax("Longitude max :");
                     getInput(promptLongMax, RESET, arg[3]); // arg[3] correspond à la longitude max
                     
-                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-90 || stof(arg[1])>90 || stof(arg[2])<-90 || stof(arg[2])>90 || stof(arg[3])<-90 || stof(arg[3])>90) {
-                        promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90",ROUGE);
-                        valide = false;
-                    }
-                    else if (stof(arg[0]) >= stof(arg[1]) && stof(arg[2]) >= stof(arg[3])) {
-                        promptConsole("Attention les coordonnées min doivent être strictement inférieures aux coordonnées max",ROUGE);
+                    if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-90 || stof(arg[1])>90 || stof(arg[2])<-180 || stof(arg[2])>180 || stof(arg[3])<-180 || stof(arg[3])>180) {
+                        promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90 pour la latitude et -180 et +180 pour la longitude",ROUGE);
                         valide = false;
                     }
                     
                 } while (!valide);
+                
+                
+                capt = gc->rechercherCapteurParIntervalle(stof(arg[0]),stof(arg[1]),stof(arg[2]),stof(arg[3]));
+                if (capt.empty()) {
+                   promptConsole("Il n'y a aucun capteur compris dans l'intervalle que vous avez sélectionné",ROUGE);
+                }
                 
                 break;
             case 4: // dates
@@ -372,36 +382,36 @@ void paramDonnees()
                     valide = true;
                     promptConsole("Date de début: ",BLEU);
                     string promptAnnee("Année (1900-020) :");
-                    getInput(promptAnnee, RESET, arg[4]); // arg[4] correspond à l'année de début
+                    getInput(promptAnnee, RESET, arg[0]); // arg[0] correspond à l'année de début
                     string promptMois("Mois (1-12) :");
-                    getInput(promptMois, RESET, arg[5]); // arg[5] mois début
+                    getInput(promptMois, RESET, arg[1]); // arg[1] mois début
                     string promptJour("Jour (1-31):");
-                    getInput(promptJour, RESET, arg[6]); // arg[6] jour début
+                    getInput(promptJour, RESET, arg[2]); // arg[2] jour début
                     
                     promptConsole("Date de fin: ",BLEU);
                     string promptAnneeF("Année (1900-020) :");
-                    getInput(promptAnneeF, RESET, arg[7]); // arg[7] correspond à l'année de fin
+                    getInput(promptAnneeF, RESET, arg[3]); // arg[3] correspond à l'année de fin
                     string promptMoisF("Mois (1-12) :");
-                    getInput(promptMoisF, RESET, arg[8]); // arg[8] mois fin
+                    getInput(promptMoisF, RESET, arg[4]); // arg[4] mois fin
                     string promptJourF("Jour (1-31):");
-                    getInput(promptJourF, RESET, arg[9]); // arg[9] jour fin
+                    getInput(promptJourF, RESET, arg[5]); // arg[5] jour fin
                     
-                    if (stoi(arg[4]) < 1900 || stoi(arg[4]) > 2020 || stoi(arg[7]) < 1900 || stoi(arg[7]) > 2020 // vérif année
-                        || stoi(arg[5]) < 1 || stoi(arg[5]) > 12 || stoi(arg[8]) < 1 || stoi(arg[8]) > 12 // vérif mois 
-                        || stoi(arg[6]) < 1 || stoi(arg[6]) > 31 || stoi(arg[9]) < 1 || stoi(arg[9]) > 31) 
+                    if (stoi(arg[0]) < 1900 || stoi(arg[0]) > 2020 || stoi(arg[3]) < 1900 || stoi(arg[3]) > 2020 // vérif année
+                        || stoi(arg[1]) < 1 || stoi(arg[1]) > 12 || stoi(arg[4]) < 1 || stoi(arg[4]) > 12 // vérif mois 
+                        || stoi(arg[2]) < 1 || stoi(arg[2]) > 31 || stoi(arg[5]) < 1 || stoi(arg[5]) > 31) 
                     {
                         valide = false;
                         promptConsole("Format de date invalide, veuillez réessayer");
                     }
-                    else if (stoi(arg[4]) > stoi(arg[7])) {
+                    else if (stoi(arg[0]) > stoi(arg[3])) {
                         valide = false;
                         promptConsole("La date de début doit être avant la date de fin");
                     }
-                    else if (stoi(arg[5]) > stoi(arg[8])) {
+                    else if (stoi(arg[1]) > stoi(arg[4])) {
                         valide = false;
                         promptConsole("La date de début doit être avant la date de fin");
                     }
-                    else if (stoi(arg[6]) > stoi(arg[9])) {
+                    else if (stoi(arg[2]) > stoi(arg[5])) {
                         valide = false;
                         promptConsole("La date de début doit être avant la date de fin");
                     }
@@ -413,23 +423,38 @@ void paramDonnees()
             case 5: // attributeId
                 { boolTab[4]=1;
                 string prompt("Veuillez renseigner l'attributeId (ex. : O3) :");
-                getInput(prompt, BLEU, arg[10]); // arg[10] correspond à l'attributeId
+                getInput(prompt, BLEU, arg[6]); // arg[6] correspond à l'attributeId
                 }
                 break;
             case 6: //valider
                 { 
                     if ((boolTab[0]==1 && boolTab[1]==1) || (boolTab[0]==1 && boolTab[2]==1) || (boolTab[1]==1 && boolTab[2]==1)) {
-                        promptConsole("Vous ne pouvez pas combiner une recherche par SensorId et coordonnées ou par intervalle de coordonnées et coordonnées. \r\n Veuillez annuler votre opération et recommencer");
+                        promptConsole("Vous ne pouvez pas combiner une recherche par SensorId et coordonnées ou par intervalle de coordonnées et coordonnées. \r\n Veuillez annuler votre opération et recommencer",ROUGE);
                     }
                     else {
-                        //vector <Mesure> result = gm->getMesureCapteur();
-                        
-                        // affichage du résultat
+                        runParam = false;
+                        if (boolTab[0] || boolTab[1]) {
+                            result = gm->getMesureCapteur(boolTab,arg,c.getSensorId());
+                            cout << gm->consulterMesure(result) << endl;
+                        }
+                        else if (boolTab[2]) {
+                            // map<string, map<struct tm, map<string,double>>> map;
+                            for (unsigned int i = 0; i<capt.size(); i++) {
+                                result = gm->getMesureCapteur(boolTab,arg,capt[i].getSensorId());
+                                cout << gm->consulterMesure(result) << endl;
+                            }
+                        }
+                        else {
+                            result = gm->getMesureCapteur(boolTab,arg);
+                            cout << gm->consulterMesure(result) << endl;
+                        }
+
                     }
                 }
                 break;
             case 7: //annuler
                 {
+                    runParam = false;
                 }
                 break;
         }
@@ -546,17 +571,17 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
     }
 } //----- Fin de menuGestionCapteur
 
-void menuGestionMesure(GestionMesure* gm)
+void menuGestionMesure(GestionMesure* gm, GestionCapteur* gc)
 {
 #ifdef MAP
     cout << "Appel à la méthode menuGestionMesure de <main>" << endl;
 #endif
     string prompt("Veuillez choisir une des fonctionnalités suivantes :");
-    string choice1("Consulter la liste des attributs");
-    string choice2("Consulter les données");
-    string choice3("Données similaires");
+    string choice1("Afficher la liste des attributs");
+    string choice2("Afficher toutes les données");
+    string choice3("Trouver données similaires");
     string choice4("Consulter mesure(s)");
-    string choice5("Calculer moyenne de valeurs");
+    string choice5("Calculer une moyenne de valeurs");
     string choice6("Retour au Menu de départ");
     string choices[6] = {choice1, choice2, choice3, choice4, choice5, choice6};
 
@@ -568,13 +593,13 @@ void menuGestionMesure(GestionMesure* gm)
                 cout<<gm->consulterType()<<endl;
                 break;
             case 2:
-                cout<<gm->consulterMesure()<<endl;
+                cout<<gm->consulterMesure(gm->listeMesure)<<endl;
                 break;
             case 3:
 
                 break;
             case 4:
-                paramDonnees();
+                paramDonnees(gc, gm);
                 break;
             case 5:
 
@@ -657,7 +682,7 @@ void menu(GestionCapteur* gc, GestionMesure* gm)
                 break;
             case 2:
                 cout << endl << endl;
-                menuGestionMesure(gm);
+                menuGestionMesure(gm,gc);
                 break;
             case 3:
 

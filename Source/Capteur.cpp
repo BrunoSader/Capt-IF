@@ -8,7 +8,7 @@ using namespace std;
 Capteur::Capteur() : sensorId(" "), longitude(-1000), lattitude(-1000), description(" ")
 {}
 
-Capteur::Capteur(string sensorId, int longitude, int lattitude, string description) : sensorId(sensorId), longitude(longitude), lattitude(lattitude), description(description)
+Capteur::Capteur(string sensorId, float longitude, float latitude, string description) : sensorId(sensorId), longitude(longitude), lattitude(latitude), description(description)
 {}
 
 void Capteur::setSensorId(string sensorId)
@@ -16,7 +16,7 @@ void Capteur::setSensorId(string sensorId)
     this->sensorId = sensorId;
 }
 
-void Capteur::setLongitude(int longitude)
+void Capteur::setLongitude(float longitude)
 {
     this->longitude = longitude;
 }
@@ -26,17 +26,17 @@ void Capteur::setDescription(string description)
     this->description = description;
 }
 
-void Capteur::setLattitude(int lattitude)
+void Capteur::setLattitude(float lattitude)
 {
     this->lattitude = lattitude;
 }
 
-int Capteur::getLongitude() const
+float Capteur::getLongitude() const
 {
     return longitude;
 } 
 
-int Capteur::getLattitude() const
+float Capteur::getLattitude() const
 {
     return lattitude;
 }

@@ -92,20 +92,20 @@ string GestionCapteur::afficherCapteur( )
     return res;
 }
 
-void GestionCapteur::ajouterCapteur(string id, int lattitude, int longitude, string description )
+void GestionCapteur::ajouterCapteur(string id, float lattitude, float longitude, string description )
 { 
 	listeCapteur.push_back(Capteur(id, lattitude, longitude, description)); 
 	//L'ajouter aussi dans le fichier qu'on nous fourni ?
 }
 
-void GestionCapteur::ajouterCapteur(int lattitude, int longitude, string description )
+void GestionCapteur::ajouterCapteur(float lattitude, float longitude, string description )
 { 
 	string id = "Sensor" + to_string(listeCapteur.size());
 	listeCapteur.push_back(Capteur(id, lattitude, longitude, description)); 
 }
 
 
-bool GestionCapteur::supprimerCapteur(int choix, int lattitude, int longitude, string id)
+bool GestionCapteur::supprimerCapteur(int choix, float lattitude, float longitude, string id)
 {
 	Capteur c;
 	if(choix == 1) c = rechercherCapteur(lattitude, longitude);
@@ -125,7 +125,7 @@ bool GestionCapteur::supprimerCapteur(int choix, int lattitude, int longitude, s
 }
 
 
-bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, string id, GestionMesure* gm)
+bool GestionCapteur::surveillerCapteur(int choix, float lattitude, float longitude, string id, GestionMesure* gm)
 {
     	bool res = true;
 	Capteur c;
@@ -136,7 +136,7 @@ bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, 
 	map<struct tm, map<string,double>> valeur = gm->getMesure(id);
 	if(valeur.empty()) return false;
 	else{
-/*On vérifie d'abord si les valeurs ne sont pas extrêmes 
+    /*On vérifie d'abord si les valeurs ne sont pas extrêmes 
 	03 entre 0 et 300
 	S02 entre 0 et 600
 	NO2 entre 0 et 500
@@ -150,7 +150,7 @@ bool GestionCapteur::surveillerCapteur(int choix, int lattitude, int longitude, 
 		}
 	}
 
-/*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
+    /*Puis si le Capteur a fait au moins un relevé par jour. Sur la dernière semaine*/
 	map<struct tm, map<string,double>> :: iterator i = valeur.end();	
 	i--;
 	int jour = i->first.tm_mday ;  
@@ -179,10 +179,10 @@ Capteur GestionCapteur::rechercherCapteur(string id )
 	return c;
 }
 
-Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
+Capteur GestionCapteur::rechercherCapteur(float lattitude, float longitude )
 {
 	Capteur c;
-	int indice = 1000;
+	int indice = __INT_MAX__;
 	for(uint i = 0; i < listeCapteur.size(); i++){
 		if(listeCapteur[i].getLattitude() == lattitude && listeCapteur[i].getLongitude() == longitude){
 			return listeCapteur[i];
@@ -194,7 +194,24 @@ Capteur GestionCapteur::rechercherCapteur(int lattitude, int longitude )
 	return c;
 }
 
-string GestionCapteur::capteursSimilaires(int choix, int lattitude, int longitude, string id, GestionMesure* gm, double confiance)
+vector<Capteur> GestionCapteur::rechercherCapteurParIntervalle(float latitude, float latitudeMax, float longitude, float longitudeMax) {
+  	vector<Capteur> c;
+	int indice = __INT_MAX__;
+    bool capteurDansZone = false;
+	for(uint i = 0; i < listeCapteur.size(); i++){
+		if(((listeCapteur[i].getLattitude() > latitude && listeCapteur[i].getLattitude() < latitudeMax) // cas classique latMin < latMax
+            || (listeCapteur[i].getLattitude() > latitude && listeCapteur[i].getLattitude() < 90) || (listeCapteur[i].getLattitude() > -90 && listeCapteur[i].getLattitude() < latitudeMax))
+            && ((listeCapteur[i].getLongitude() > longitude && listeCapteur[i].getLongitude() < longitudeMax)
+            || (listeCapteur[i].getLongitude() > longitude && listeCapteur[i].getLongitude() < 180) || (listeCapteur[i].getLongitude() > -180 && listeCapteur[i].getLongitude() < longitudeMax))){
+            
+			c.push_back(listeCapteur[i]);
+		}
+    }
+    
+    return c;  
+}
+
+string GestionCapteur::capteursSimilaires(int choix, float lattitude, float longitude, string id, GestionMesure* gm, double confiance)
 { 
 	//Possible de faire bien mieux avec un intervalle de confiance et tout !!
 	//Obligé de changer la manière de vérifier car pour l'instant toutes les moyennes sont vraiment très proches ce n'est pas un bon moyen de comparaison.

@@ -50,7 +50,7 @@ public:
     // Contrat :
     //
 
-		string consulterMesure( );
+		string consulterMesure(map<string, map<struct tm, map <string, double>>> mesures);
     // Mode d'emploi :
     //
     // Contrat :
@@ -69,7 +69,7 @@ public:
 
     vector<Attribut> getListeAttribut();
 
-	vector<Mesure> getMesureCapteur (bool * bitTab, vector<string> arg);
+	map<string, map<struct tm, map<string,double>>> getMesureCapteur (bool * bitTab, string * arg, string sensorId="");
     // Mode d'emploi :
     // bitTab est un tableau de boolean. Les cases du tableau correspondent aux caractéristiques que l'utilisateur peut renseigner pour obtenir une mesure. Elles valent true si la caractéristique est renseignée, false sinon.
 	// case 0 : sensorID
@@ -84,6 +84,9 @@ public:
     // Contrat :
     //
 
+	map<struct tm, map<string,double>> getMesureDate (map<string, map<struct tm, map<string,double>>>::iterator i, bool * bitTab, string * arg);
+
+	map<string,double> getMesureAttribute (map<struct tm, map<string,double>>::iterator i2, bool * bitTab, string * arg);
     //Warning alerterSurMesure(Mesure uneMesure);
     // Mode d'emploi :
     //
