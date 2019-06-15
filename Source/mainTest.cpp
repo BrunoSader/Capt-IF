@@ -37,23 +37,31 @@ int main(int argc, char *argv[])
     cout << "Ce qui est parfois bien, on ne veut pas pouvoir supprmer un capteur inexistant" << endl;
     cout << "Appuyez sur <RETURN> pour continuer" << endl << endl;
     getchar();
-    /*cout << "Tests de Gestion de Capteurs" << endl << endl;
+   /* cout << "Tests de Gestion de Capteurs" << endl << endl;
     TestGestionCapteur *tgc = new TestGestionCapteur();
     tgc -> testUnitaire(string(argv[1]));
-    delete tgc;*/
+    delete tgc;
+    cout << "Appuyez sur <RETURN> pour continuer" << endl << endl;
+    getchar();*/
 
-   /* cout << "Tests de Gestion de Mesures" << endl << endl;
+    /*cout << "Tests de Gestion de Mesures" << endl << endl;
     TestGestionMesure *tgm = new TestGestionMesure();
     tgm -> testUnitaire(string(argv[2]), string(argv[3]));
-    delete tgm;*/
+    delete tgm;
+    cout << "Appuyez sur <RETURN> pour continuer" << endl << endl;
+    getchar();*/
 
     cout << "Tests de Warning" << endl << endl;
     TestWarning *tw = new TestWarning();
     tw -> testUnitaire();
     delete tw;
+    cout << "Appuyez sur <RETURN> pour continuer" << endl << endl;
+    getchar();
 
-   /* cout << "Tests système" << endl << endl;
-    testGlobalManuel();*/
+    cout << "Tests système" << endl << endl;
+    testGlobalManuel();
+    cout << "Appuyez sur <RETURN> pour continuer" << endl << endl;
+    getchar();
 
 	testPerf();
 	return 0;
@@ -93,7 +101,7 @@ void testGlobalManuel()
     }
 
     cout << "Etat des donnees enregistrees au debut" << endl << endl;
-    cout << gm ->consulterMesure() << endl<< endl; // L'affichage a l'air chelou
+    cout << gm ->consulterMesure(gm->listeMesure) << endl<< endl; // L'affichage a l'air chelou
     cout << gm ->consulterType() << endl<< endl;
     cout << gc->afficherCapteur() << endl<< endl;
 
@@ -108,31 +116,31 @@ void testGlobalManuel()
 
     cout << "Capteur : Sensor1 | Attribut : 04" << endl;
     cout << "Valeur attendue : " << moyenne[0] << " | Valeur obtenue : ";
-    cout << (result = gm ->moyenneValAttribut("O4", "Sensor1")) << endl << endl;
+    cout << (result = gm ->moyenneValAttribut("O4", "Sensor1").moyenne) << endl << endl;
     if (result == moyenne[0]) noteMoyenne++;
     cout << "Capteur : Sensor0 | Attribut : 02" << endl;
     cout << "Valeur attendue : " << moyenne[1] << " | Valeur obtenue : ";
-    cout << (result = gm ->moyenneValAttribut("O2", "Sensor0")) << endl<< endl;
+    cout << (result = gm ->moyenneValAttribut("O2", "Sensor0").moyenne) << endl<< endl;
     if (result == moyenne[1]) noteMoyenne++;
     cout << "Capteur : Sensor2 | Attribut : 04" << endl;
     cout << "Valeur attendue : " << moyenne[2] << " | Valeur obtenue : ";
-    cout << (result = gm ->moyenneValAttribut("O4", "Sensor2")) << endl<< endl;
+    cout << (result = gm ->moyenneValAttribut("O4", "Sensor2").moyenne) << endl<< endl;
     if (result == moyenne[2]) noteMoyenne++;
     cout << "Capteur : Sensor1 | Attribut : 05 (inexistant)" << endl;
     cout << "Valeur attendue : " << moyenne[3] << " | Valeur obtenue : ";
-    cout << (result = gm ->moyenneValAttribut("O5", "Sensor2")) << endl<< endl;
+    cout << (result = gm ->moyenneValAttribut("O5", "Sensor2").moyenne) << endl<< endl;
     if (result == moyenne[3]) noteMoyenne++;
     cout << "Capteur : unSensorId (inexistant) | Attribut : 01 (inexistant)" << endl;
     cout << "Valeur attendue : " << moyenne[4] << " | Valeur obtenue : ";
-    cout << (result = gm ->moyenneValAttribut("O1", "unSensorId")) << endl<< endl;
+    cout << (result = gm ->moyenneValAttribut("O1", "unSensorId").moyenne) << endl<< endl;
     if (result == moyenne[4]) noteMoyenne++;
     cout << "Capteur : Sensor1 | Attribut : 03" << endl;
     cout << "Valeur attendue : " << moyenne[5] << " | Valeur obtenue : ";
-    cout << (result = gm ->moyenneValAttribut("O3", "Sensor1")) << endl<< endl;
+    cout << (result = gm ->moyenneValAttribut("O3", "Sensor1").moyenne) << endl<< endl;
     if (result == moyenne[5]) noteMoyenne++;
     cout << "Capteur : Sensor2 | Attribut : 01" << endl;
     cout << "Valeur attendue : " << moyenne[6] << " | Valeur obtenue : ";
-    cout << (result =  gm ->moyenneValAttribut("O1", "Sensor2")) << endl<< endl;
+    cout << (result =  gm ->moyenneValAttribut("O1", "Sensor2").moyenne) << endl<< endl;
     if (result == moyenne[6]) noteMoyenne++;
 
     cout << endl << "Score : " << noteMoyenne << "/7" << endl <<endl;
@@ -157,7 +165,7 @@ void testGlobalManuel()
         tm.tm_sec = 2*(i+1);
         gm->ajouterMesure(tm, "Sensor2", "03", 15);
     }
-    cout << gm ->consulterMesure() << endl<< endl; // L'affichage a l'air chelou
+    cout << gm ->consulterMesure(gm->listeMesure) << endl<< endl; // L'affichage a l'air chelou
 
     cout << "On a rajoute assez de mesures a Sensor2 pour qu'il puisse passer le test" << endl << endl;
     int noteSur(0);

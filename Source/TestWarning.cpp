@@ -78,6 +78,7 @@ void TestWarning::testValeurSeuil()
     delete w;
 }
 
+
 void TestWarning::testCreerDecision()
 {
     bool action1[] = {true, true, false, false};

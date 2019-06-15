@@ -234,7 +234,7 @@ void TestGestionMesure::testFichierMes(string filename)
             gm->ajouterMesure(tm, sensorId, attributeId, valueS);
         }
 
-        myfile << gm -> consulterMesure();
+        myfile << gm -> consulterMesure(gm->listeMesure);
         myfile.close();
         ifstream myFileRead;
         myFileRead.open("lectureAleatoire.csv");
