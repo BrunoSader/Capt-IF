@@ -237,7 +237,7 @@ string GestionCapteur::capteursSimilaires(int choix, double lattitude, double lo
 		res = "Le Capteur renseigné n'a pas de mesures ou n'existe pas, et donc pas de capteur similaire";
 		return res;
 	}  else{
-		//on calcule les moyennes pour chaque attribut
+ 
     for(uint i = 0; i < listeCapteur.size(); i++){
       similaire = true;
       if (id != listeCapteur[i].getSensorId()){
