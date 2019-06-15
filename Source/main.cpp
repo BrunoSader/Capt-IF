@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 		if (fichier3)
 		{
 			while (!fichier3.eof() )
-			{ 
+			{
 				stringstream ss;
 				getline(fichier3, chaine);
 				if(i++ > 15){
@@ -427,7 +427,7 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     getInput(promptJour, RESET, arg[2]); // arg[2] jour début
 
                     promptConsole("Date de fin: ",BLEU);
-                    string promptAnneeF("Année (1900-020) :");
+                    string promptAnneeF("Année (1900-2020) :");
                     getInput(promptAnneeF, RESET, arg[3]); // arg[3] correspond à l'année de fin
                     string promptMoisF("Mois (1-12) :");
                     getInput(promptMoisF, RESET, arg[4]); // arg[4] mois fin
@@ -624,15 +624,14 @@ void menuGestionMesure(GestionMesure* gm, GestionCapteur* gc)
     string prompt("Veuillez choisir une des fonctionnalités suivantes :");
     string choice1("Afficher la liste des attributs");
     string choice2("Afficher toutes les données");
-    string choice3("Trouver données similaires");
-    string choice4("Consulter mesure(s)");
-    string choice5("Calculer une moyenne de valeurs");
-    string choice6("Retour au Menu de départ");
-    string choices[6] = {choice1, choice2, choice3, choice4, choice5, choice6};
+    string choice3("Consulter mesure(s)");
+    string choice4("Calculer une moyenne de valeurs");
+    string choice5("Retour au Menu de départ");
+    string choices[5] = {choice1, choice2, choice3, choice4, choice5};
 
     bool runMesure = true;
     while (runMesure) {
-        int choice = getChoice(6, prompt, choices);
+        int choice = getChoice(5, prompt, choices);
         switch (choice) {
             case 1:
                 cout<<gm->consulterType()<<endl;
@@ -641,15 +640,12 @@ void menuGestionMesure(GestionMesure* gm, GestionCapteur* gc)
                 cout<<gm->consulterMesure(gm->listeMesure)<<endl;
                 break;
             case 3:
-
-                break;
-            case 4:
                 paramDonnees(gc, gm);
                 break;
-            case 5:
+            case 4:
 
                 break;
-            case 6:
+            case 5:
                 runMesure = false;
                 promptConsole("Retour au menu", VERT);
                 cout << endl << endl;

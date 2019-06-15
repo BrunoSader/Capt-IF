@@ -103,7 +103,6 @@ void GestionCapteur::ajouterCapteur(double lattitude, double longitude, string d
   int taille = listeCapteur.size();
   while(!nomCorrect){
 	   string id = "Sensor" + to_string(taille++);
-     cout<<id<<endl;
      if(rechercherCapteur(id).getSensorId() == "null"){
 	      listeCapteur.push_back(Capteur(id, lattitude, longitude, description));
         nomCorrect = true;
