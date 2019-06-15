@@ -45,10 +45,22 @@ int main(int argc, char *argv[])
 	//le second correspond à la description de capteurs
 	string nomFichierDescriptionCapteur = string(argv[2]);
 	//le dernier correspond aux des données capteurs
-	string nomFichierDonnesCapteur = string(argv[3]);
-	/*rajouter le code qui execute cette commande dans le terminal : iconv -f utf-16 -t utf-8 fichier_original > nouveaufichier*/
-	execl("iconv", "-f",  "utf-16", "-t",  "utf-8", "../Ressources/FichierTest.csv", ">", "new3.csv");
-    
+/*	int rep = -1;
+	string nomFichier;
+	string nomFichierDonnesCapteur;
+	while(rep != 1 && rep !=2){
+					cout<<"Souhaitez vous rentrer un fichier pour les données en utf16 (1) ou utf8 (2) ?"<<endl;
+					cin >> rep;
+					cout<<"Veuillez entrer le nom du fichier"<<endl;
+					cin >> nomFichier;
+					if(rep == 1) {
+						string chemin = "iconv -f utf-16 -t utf-8 ../Ressources/" + nomFichier + " > new3.csv";
+						system(chemin.c_str());
+					  nomFichierDonnesCapteur = "new3.csv";
+					} else if(rep == 2) nomFichierDonnesCapteur = nomFichier;
+				  else cout<<"numero invalide"<<endl;
+ }*/
+ string nomFichierDonnesCapteur = string(argv[3]);
 	//**********Stockage des Attributs dans le tableau de gestion mesure
 	GestionMesure *gm = new GestionMesure();
 	Warning *warning = new Warning();
@@ -58,6 +70,7 @@ int main(int argc, char *argv[])
 	fichier.open(nomFichierAttribut, ios::in);
 	if (fichier)
 	{
+		int seuil;
 		getline(fichier, chaine);
 		while (!fichier.eof())
 		{
@@ -70,13 +83,30 @@ int main(int argc, char *argv[])
 			getline(ss, id, ';');
 			getline(ss, unite, ';');
 			getline(ss, description, ';');
-			gm->ajouterAttribut(id, unite, description);
+			    if ("O3"==id)
+			    {
+				seuil=180;
+			    }
+			    else if ("NO2"==id)
+			    {
+				seuil=200;
+				    }
+			    else if ("SO2"==id)
+			    {
+				seuil=300;
+			    }
+			    else if ("PM10"==id)
+			    {
+				seuil=50;
+			    }
+			    else{ seuil = 0; }
+					if(id != "") gm->ajouterAttribut(id, unite, description);
 		}
 	}else{
 		cout<<"Ne fonctionne pas"<<endl;
 	}
 	// cout<<gm->consulterType()<<endl;
-    
+
 	//**********Stockage des Capteurs dans le tableau de gestion capteur
 	GestionCapteur *gc = new GestionCapteur();
 	fstream fichier2;
@@ -90,33 +120,34 @@ int main(int argc, char *argv[])
 			getline(fichier2, chaine);
 			ss << chaine;
 			string id;
-			int lattitude;
-			int longitude;
+			double lattitude;
+			double longitude;
 			string description;
 			getline(ss, id, ';');
-			ss >> lattitude;
-			getline(ss, sacrifie, ';');
 			ss >> longitude;
 			getline(ss, sacrifie, ';');
+			ss >> lattitude;
+			getline(ss, sacrifie, ';');
 			getline(ss, description, ';');
-			gc->ajouterCapteur(id, lattitude, longitude, description);
+			if(id != "") gc->ajouterCapteur(id, lattitude, longitude, description);
 		}
 	}else{
 		cout<<"Ne fonctionne pas"<<endl;
 	}
-	// cout<<gc->afficherCapteur()<<endl;
 
 	//**********Stockage des données des capteurs
 	fstream fichier3;
 	fichier3.open(nomFichierDonnesCapteur, ios::in);
+
 	ofstream myfile;
     myfile.open ("lectureAleatoire.csv");
 	for(int k=10; k<100000000; k=k*5)
 	{
+
+	int i = 0;
 		if (fichier3)
 		{
-			int i=0;
-			while (!fichier3.eof() && i<k)
+			while (!fichier3.eof() )
 			{
 				stringstream ss;
 				getline(fichier3, chaine);
@@ -153,22 +184,27 @@ int main(int argc, char *argv[])
 				tm.tm_hour = heure;
 				tm.tm_min = minutes;
 				tm.tm_sec = secondes;
+
 				gm->ajouterMesure(tm, sensorId, attributeId, valueS);
 				/* if(warning->valeurAuDelaSeuil(attributeId, valueS)){
+
+			  if(sensorId != "") gm->ajouterMesure(tm, sensorId, attributeId, valueS);
+				if(i++ < 3){
+				if(warning->valeurAuDelaSeuil(attributeId, valueS, gm->getListeAttribut())){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depasse le seuil de l'attribut "<<attributeId<<" avec une valeur de "<<valueS<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
 				}
-				else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId)){
+				else if(warning->calculerDonneePrevisionelle(gm->getMesure(sensorId),attributeId, gm->getListeAttribut())){
 					cout<<"WARNING!!! Votre capteur "<<sensorId<<" depassera le seuil de l'attribut "<<attributeId<<" dans 5 temps"<<endl;
 					gestionDesDecisions(warning, valueS, sensorId);
+
 				} else	warning->evaluerDecision(sensorId, valueS); */
 				i++;
+
 			}
 		}
 	}
-	myfile.close();
-	//cout<<gm->consulterMesure()<<endl;
-
+//	myfile.close();
 	menu(gc, gm);
 	delete gm;
 	delete gc;
@@ -190,7 +226,7 @@ void promptConsole (const char* prompt, const string& color) {
     cout << color << prompt << RESET << endl;
 } //----- Fin de prompt
 
-/* Pour lire l'entrée de l'utilisateur et la placer dans un string result */ 
+/* Pour lire l'entrée de l'utilisateur et la placer dans un string result */
 void getInput(const string& prompt, const string& color, string& result)
 {
 #ifdef MAP
@@ -210,7 +246,7 @@ void getInput(const string& prompt, const string& color, string& result)
     }
 } //----- Fin de getInput
 
-/* Pour renvoyer l'entier correspondant au choix d'un utilisateur, indiqué par un numéro entre 1 et le nombre de choix possibles */ 
+/* Pour renvoyer l'entier correspondant au choix d'un utilisateur, indiqué par un numéro entre 1 et le nombre de choix possibles */
 int getChoice (int range, const string& prompt, string* choices)
 {
 #ifdef MAP
@@ -300,7 +336,7 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
     string choices[7] = {choice1, choice2, choice3, choice4, choice5, choice6, choice7};
 
     bool valide; // utilisé pour valider les entrées
-    
+
     bool runParam = true;
     Capteur c;
     vector<Capteur> capt;
@@ -322,15 +358,16 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                 boolTab[1]=1;
 
                 promptConsole("Veuillez renseigner les coordonnées (ex. : latitude=38, longitude =-89) : ",BLEU);
-                
-                do { 
-                    
+
+                do {
+
                     valide = true;
-                    
+
                     string promptLat("Latitude (comprise entre -90 et +90) :");
                     getInput(promptLat, RESET, arg[0]); // arg[0] correspond à la latitude renseignée
                     string promptLon("Longitude (comprise entre -180 et +180) :");
                     getInput(promptLon, RESET, arg[1]); // arg[0] correspond à la longitude renseignée
+
                     c = gc->rechercherCapteur(stof(arg[0]),stof(arg[1]));
                     
                     if (stof(arg[0])<-90 || stof(arg[0])>90 || stof(arg[1])<-180|| stof(arg[1])>180) {
@@ -344,12 +381,12 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                 break;
             case 3:
                 boolTab[2]=1;
-                
+     
                 promptConsole("Veuillez renseigner l'intervalle de coordonées (sachant que la latitude (-90 à +90) et la longitude (-180 à +180) : ",BLEU);
-                
+
                 do {
                     valide = true;
-                    
+
                     string promptLatMin("Latitude min :");
                     getInput(promptLatMin, RESET, arg[0]); // arg[0] correspond à la latitude min
                     string promptLatMax("Latitude max :");
@@ -363,9 +400,8 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                         promptConsole("Attention les coordonnées doivent être comprises entre -90 et +90 pour la latitude et -180 et +180 pour la longitude",ROUGE);
                         valide = false;
                     }
-                    
+
                 } while (!valide);
-                
                 
                 capt = gc->rechercherCapteurParIntervalle(stof(arg[0]),stof(arg[1]),stof(arg[2]),stof(arg[3]));
                 if (capt.empty()) {
@@ -374,10 +410,10 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                 
                 break;
             case 4: // dates
-                
+
                 boolTab[3]=1;
                 promptConsole("Veuillez renseigner les deux dates entre lesquelles vous voulez considérer les mesures en précisant les entiers correspondant à l'année, le mois et le jour : ",BLEU);
-                
+
                 do {
                     valide = true;
                     promptConsole("Date de début: ",BLEU);
@@ -386,6 +422,7 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     string promptMois("Mois (1-12) :");
                     getInput(promptMois, RESET, arg[1]); // arg[1] mois début
                     string promptJour("Jour (1-31):");
+
                     getInput(promptJour, RESET, arg[2]); // arg[2] jour début
                     
                     promptConsole("Date de fin: ",BLEU);
@@ -394,11 +431,13 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                     string promptMoisF("Mois (1-12) :");
                     getInput(promptMoisF, RESET, arg[4]); // arg[4] mois fin
                     string promptJourF("Jour (1-31):");
+
                     getInput(promptJourF, RESET, arg[5]); // arg[5] jour fin
                     
                     if (stoi(arg[0]) < 1900 || stoi(arg[0]) > 2020 || stoi(arg[3]) < 1900 || stoi(arg[3]) > 2020 // vérif année
                         || stoi(arg[1]) < 1 || stoi(arg[1]) > 12 || stoi(arg[4]) < 1 || stoi(arg[4]) > 12 // vérif mois 
                         || stoi(arg[2]) < 1 || stoi(arg[2]) > 31 || stoi(arg[5]) < 1 || stoi(arg[5]) > 31) 
+
                     {
                         valide = false;
                         promptConsole("Format de date invalide, veuillez réessayer");
@@ -415,9 +454,9 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                         valide = false;
                         promptConsole("La date de début doit être avant la date de fin");
                     }
-                    
+
                 } while (!valide);
-                
+
 
                 break;
             case 5: // attributeId
@@ -427,11 +466,12 @@ void paramDonnees(GestionCapteur* gc, GestionMesure* gm)
                 }
                 break;
             case 6: //valider
-                { 
+                {
                     if ((boolTab[0]==1 && boolTab[1]==1) || (boolTab[0]==1 && boolTab[2]==1) || (boolTab[1]==1 && boolTab[2]==1)) {
                         promptConsole("Vous ne pouvez pas combiner une recherche par SensorId et coordonnées ou par intervalle de coordonnées et coordonnées. \r\n Veuillez annuler votre opération et recommencer",ROUGE);
                     }
                     else {
+
                         runParam = false;
                         if (boolTab[0] || boolTab[1]) {
                             result = gm->getMesureCapteur(boolTab,arg,c.getSensorId());
@@ -489,7 +529,8 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 					cout<<"Le Capteur n'est pas conforme et présente des anomalies."<<endl;
 				}
 			}
-			if(numero == 5) cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
+			if(numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() != "null") cout<<"L'identifiant du capteur ayant les coordonnées les plus proches de celles que vous avez renseignés est " << gc->rechercherCapteur(lattitude, longitude).getSensorId()<<endl;
+		  if(numero == 5 && gc->rechercherCapteur(lattitude, longitude).getSensorId() == "null") cout<<"Ce SensorId n'existe pas"<<endl;
 			if(numero == 6) cout<<gc->capteursSimilaires(1, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else if(rep == 2){
 			cout << "Veuillez rentrer l'Id du capteur" <<endl;
@@ -505,7 +546,8 @@ void choixCapteur(int numero, GestionMesure* gm, GestionCapteur* gc, double conf
 					cout<<"Le Capteur n'est pas conforme et présente des anomalies"<<endl;
 				}
 			}
-			if (numero == 5) cout<<"La lattitude du capteur ayant l'identifiant que vous avez renseignés est " <<gc->rechercherCapteur(texte).getLattitude() << " et sa longitude est "<<gc->rechercherCapteur(texte).getLongitude();
+			if (numero == 5 && gc->rechercherCapteur(texte).getSensorId() != "null") cout<<"La lattiude du sensor que vous avez renseigné est " <<gc->rechercherCapteur(texte).getLattitude()<<" et sa longitude est "<< gc->rechercherCapteur(texte).getLongitude() << endl;
+			if (numero == 5 && gc->rechercherCapteur(texte).getSensorId() == "null") cout<<"Ce SensorId n'existe pas"<<endl;
 			if (numero == 6) cout<<gc->capteursSimilaires(2, lattitude, longitude, texte, gm, confiance)<<endl;
 		} else cout <<"numéro invalide"<<endl;
 }
@@ -522,7 +564,7 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
     string choice2("Ajouter un capteur");
     string choice3("Supprimer un capteur");
     string choice4("Surveiller un capteur");
-    string choice5("Rechercher un capteur");	//On en fait quoi du capteur qu'il a rechercher ? on affiche ses infos? ses mesures ?
+    string choice5("Rechercher un capteur");
     string choice6("Capteurs similaires");
     string choice7("Retour au menu de départ");
     string choices[7] = {choice1, choice2, choice3, choice4, choice5, choice6, choice7};
@@ -557,7 +599,7 @@ void menuGestionCapteur(GestionCapteur* gc, GestionMesure* gm)
 		choixCapteur(5, gm, gc, rep);
                 break;
             case 6:
-		cout<<"Veuillez entrer le poucentage de precision que vous souhaitez (entre 0 et 1)"<<endl;
+		cout<<"Veuillez entrer le poucentage de precision que vous souhaitez (entre 0 et 1), 1 étant une correspondance parfaite"<<endl;
 		cin >> rep;
                 choixCapteur(6, gm, gc, rep);
                 break;

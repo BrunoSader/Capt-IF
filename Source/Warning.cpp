@@ -28,9 +28,27 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-bool Warning::valeurAuDelaSeuil(string attribut, double val)
+bool Warning::valeurAuDelaSeuil(string attribut, double val, vector<Attribut> listeTypeMesure)
 {
-	if(attribut == "O3")
+    for (Attribut a : listeTypeMesure)
+    {
+        if (attribut == a.getAttributeId())
+        {
+            if(val > a.getValeurSeuil())
+            {
+            cout << a.getAttributeId() << " | " << a.getValeurSeuil() << endl;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    cout << "Attribut hors base" << endl;
+    return false;
+
+	/*if(attribut == "O3")
 	{
 		if(val>=180)
 		{
@@ -58,9 +76,10 @@ bool Warning::valeurAuDelaSeuil(string attribut, double val)
 			return true;
 		}
 	}
-	return false;
+	return false;*/
 
 }
+
 
 void Warning::entrerDecision(Decision laDecision,double valeur)
 // Algorithme :
@@ -129,7 +148,7 @@ Decision Warning::proposerDecision()
 }
 
 
-bool Warning::calculerDonneePrevisionelle (map<struct tm, map<string,double>>listeMesurebyDate, string lAttribut)
+bool Warning::calculerDonneePrevisionelle (map<struct tm, map<string,double>>listeMesurebyDate, string lAttribut, vector<Attribut> listeTypeMesure)
 // Algorithme :
 //
 {
@@ -138,7 +157,7 @@ bool Warning::calculerDonneePrevisionelle (map<struct tm, map<string,double>>lis
 	map<string,double>::iterator attribut_it;
 	double* values = new double [5];
 	int cpt=0;
-	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend() && cpt<6; ++date_it)
+	for (date_it=listeMesurebyDate.rbegin(); date_it!=listeMesurebyDate.rend() && cpt<5; ++date_it)
 	{
 		attribut_it = date_it->second.find(lAttribut);
 		//On trouve l'attribut sur lequel on aimerait calculer les donnees previsionelles
@@ -149,7 +168,7 @@ bool Warning::calculerDonneePrevisionelle (map<struct tm, map<string,double>>lis
 		double coef = (values[0]-values[4])/5;
 		double ordo_ori = values[0]-(coef*5);
 		double valeur_futur= coef*10+ordo_ori;
-		return valeurAuDelaSeuil(lAttribut, valeur_futur);
+		return valeurAuDelaSeuil(lAttribut, valeur_futur, listeTypeMesure);
 	}else return false;
 }
 //----- Fin de M�thode

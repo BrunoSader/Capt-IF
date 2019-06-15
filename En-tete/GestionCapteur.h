@@ -44,40 +44,49 @@ public:
     // Contrat :
     //
 
-		void ajouterCapteur(string id, float lattitude, float longitude, string description );
+		void ajouterCapteur(string id, double lattitude, double longitude, string description );
+
     // Mode d'emploi :
     //
     // Contrat :
     //
 	
-		void ajouterCapteur(float lattitude, float longitude, string description );
+		void ajouterCapteur(double lattitude, double longitude, string description );
+
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		bool supprimerCapteur(int choix, float lattitude, float longitude, string id);
+		bool supprimerCapteur(int choix, double lattitude, double longitude, string id);
+
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		bool surveillerCapteur(int choix, float lattitude, float longitude, string id, GestionMesure* gm);
+		bool surveillerCapteur(int choix, double lattitude, double longitude, string id, GestionMesure* gm);
+
     // Mode d'emploi :
     //
     // Contrat :
     //
 
 		Capteur rechercherCapteur(string id);
+
 		Capteur rechercherCapteur(float latitude, float longitude);
 		vector <Capteur> rechercherCapteurParIntervalle(float latitude, float longitude, float latMax, float longMax);
+
+		Capteur rechercherCapteur(double lattitude, double longitude);
+
 
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-		string capteursSimilaires(int choix, float lattitude, float longitude, string id, GestionMesure* gm, double confiance);
+		string capteursSimilaires(int choix, double lattitude, double longitude, string id, GestionMesure* gm, double confiance);
+
 
     // Mode d'emploi :
     //

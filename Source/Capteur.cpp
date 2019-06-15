@@ -8,7 +8,7 @@ using namespace std;
 Capteur::Capteur() : sensorId(" "), longitude(-1000), lattitude(-1000), description(" ")
 {}
 
-Capteur::Capteur(string sensorId, float longitude, float latitude, string description) : sensorId(sensorId), longitude(longitude), lattitude(latitude), description(description)
+Capteur::Capteur(string sensorId, double longitude, double lattitude, string description) : sensorId(sensorId), longitude(longitude), lattitude(lattitude), description(description)
 {}
 
 void Capteur::setSensorId(string sensorId)
@@ -16,7 +16,8 @@ void Capteur::setSensorId(string sensorId)
     this->sensorId = sensorId;
 }
 
-void Capteur::setLongitude(float longitude)
+
+void Capteur::setLongitude(double longitude)
 {
     this->longitude = longitude;
 }
@@ -26,17 +27,17 @@ void Capteur::setDescription(string description)
     this->description = description;
 }
 
-void Capteur::setLattitude(float lattitude)
+void Capteur::setLattitude(double lattitude)
 {
     this->lattitude = lattitude;
 }
 
-float Capteur::getLongitude() const
+double Capteur::getLongitude() const
 {
     return longitude;
-} 
+}
 
-float Capteur::getLattitude() const
+double Capteur::getLattitude() const
 {
     return lattitude;
 }
@@ -44,17 +45,17 @@ float Capteur::getLattitude() const
 string Capteur::getSensorId() const
 {
     return sensorId;
-} 
+}
 
 string Capteur::getDescription() const
 {
     return description;
-} 
+}
 
 string Capteur:: caracteristiqueDeLair() const
 {
     //aller dans gestionMesure chercher les infos
-    return ""; 
+    return "";
 }
 
 void Capteur::afficher() const

@@ -13,9 +13,10 @@
 using namespace std;
 #include <iostream>
 #include <stdlib.h>
+#include <math.h>
 
 //------------------------------------------------------ Include personnel
-#include "../En-tete/GestionMesure.h" 
+#include "../En-tete/GestionMesure.h"
 
 
 //------------------------------------------------------------- Constantes
@@ -139,10 +140,6 @@ string GestionMesure::consulterMesure(map<string, map<struct tm, map<string,doub
 map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
 {
     map<struct tm, map<string,double>> res;
-    struct tm tm;
-    map<string, double> res2;
-    res2.insert(make_pair(" ", 0.0));
-    res.insert(make_pair(tm, res2));
     map<string, map<struct tm, map<string,double>>>::iterator i=listeMesure.find(id);
     if(i != listeMesure.end()) return i->second;
     return res;
@@ -150,28 +147,60 @@ map<struct tm, map<string,double>> GestionMesure::getMesure(string id)
 
 
 
-double GestionMesure::moyenneValAttribut(string attributId, string sensorId)
+struct tab GestionMesure::moyenneValAttribut(string attributId, string sensorId)
 {
     map<struct tm, map<string,double>> valeur = getMesure(sensorId);
     double somme = 0;
     double nombre = 0;
-    double res = 0;
+    struct tab res;
+		double borneInf = 1000;
+		double borneSup = 0;
+		res.moyenne = -10;
+		res.etendue = -10;
+    if(!valeur.empty()){
+				for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
+						map<string,double> :: iterator i2 = i->second.find(attributId);
+						somme += i2->second;
+						if(i2->second > borneSup) borneSup = i2->second;
+						if(i2->second < borneInf) borneInf = i2->second;
+						nombre++;
+					}
+				 if(nombre == 0) nombre = 1;
+				 if(somme/nombre == 0 )res.moyenne = -10;
+			 	 else res.moyenne = somme/nombre;
+			 	 res.etendue = borneSup-borneInf;
+   }
+   cout<<"pour le capteur "<<sensorId<< " avec l'attribut "<<attributId<<" la moyenne est "<< somme<<" " <<nombre<<" et l'étendue est "<<res.etendue<<endl;
+   return res;
+}
+
+double GestionMesure::ecartType(string attributId, string sensorId, double moyenne)
+{
+    map<struct tm, map<string,double>> valeur = getMesure(sensorId);
+    double somme = 0;
+    double nombre = 0;
+    double res = -10;
     if(valeur.empty()) res = -10;
     else{
-	for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
-		map<string,double> :: iterator i2 = i->second.find(attributId);
-		somme += i2->second;
-		nombre++;
-	}
+				for(map<struct tm, map<string,double>>::iterator i = valeur.begin(); i != valeur.end(); i++){
+					map<string,double> :: iterator i2 = i->second.find(attributId);
+					somme += (i2->second - moyenne)*(i2->second - moyenne);
+					nombre++;
+				}
+				res = sqrt(somme/nombre);
    }
-   res = somme/nombre;
-   if(res == 0) res = -10;
-    return res;
+   return res;
 }
 
 void GestionMesure::ajouterAttribut(string id, string unite, string description)
 {
 	listeTypeMesure.push_back(Attribut(id, unite, description, 0));
+}
+
+
+void GestionMesure::ajouterAttribut(string id, string unite, string description, int seuil)
+{
+	listeTypeMesure.push_back(Attribut(id, unite, description, seuil));
 }
 
 void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attributeId, double value)
@@ -213,13 +242,6 @@ void GestionMesure::ajouterMesure(struct tm tm, string sensorId, string attribut
 vector<Attribut> GestionMesure::getListeAttribut(){
 	return listeTypeMesure;
 }
-
-
-            /* map<string, double> mp;
-			mp.insert(make_pair(attributeId, value));
-			map<struct tm, map<string,double>> mp2;
-			mp2.insert(make_pair(tm, mp));
-			listeMesure.insert(make_pair(sensorId, mp2)); */
 
 map<string,double> GestionMesure::getMesureAttribute(map<struct tm, map<string,double>>::iterator i2, bool * bitTab, string * arg) {
     
@@ -309,10 +331,31 @@ map<string, map<struct tm, map<string,double>>> GestionMesure::getMesureCapteur 
         }
     }
  
-    return result;
+bool GestionMesure::capteurProches(string idCapteur1, string idCapteur2, double certitude, string attribut){
+	//on prend chaque jour et on reccupère toutes les valeurs des capteurs sur les 2 capteurs
+	//Capteur1 est la référence
+	struct tab tabc1 = moyenneValAttribut(attribut, idCapteur1);
+	struct tab tabc2 = moyenneValAttribut(attribut, idCapteur2);
+	double etendueCapteur1 =  tabc1.etendue;
+	double etendueCapteur2 =  tabc2.etendue;
+	double moyenneCapteur1 = tabc1.moyenne;
+	double moyenneCapteur2 = tabc2.moyenne;
+	double ecartTypeCapteur1 = ecartType(attribut, idCapteur1, moyenneCapteur1);
+	double ecartTypeCapteur2 = ecartType(attribut, idCapteur2, moyenneCapteur2);
+	double borneInf = moyenneCapteur1 - moyenneCapteur1*(1-certitude);
+	double borneSup = moyenneCapteur1 + moyenneCapteur1*(1-certitude);
+
+	bool res = true;
+	if((moyenneCapteur1 == -10 && moyenneCapteur2 != -10) || (moyenneCapteur1 != -10 && moyenneCapteur2 == -10)) res = false;
+	if(moyenneCapteur2 > borneSup || moyenneCapteur2 < borneInf) res = false;
+	borneInf = ecartTypeCapteur1 - ecartTypeCapteur1*(1-certitude);
+	borneSup = ecartTypeCapteur1 + ecartTypeCapteur1*(1-certitude);
+	if(ecartTypeCapteur2 > borneSup || ecartTypeCapteur2 < borneInf) res = false;
+	borneInf = etendueCapteur1 - etendueCapteur1*(1-certitude);
+	borneSup = etendueCapteur1 + etendueCapteur1*(1-certitude);
+	if(etendueCapteur2 > borneSup || etendueCapteur2 < borneInf) res = false;
+	return res;
 }
-
-
 
 //------------------------------------------------------------------ PRIVE
 
